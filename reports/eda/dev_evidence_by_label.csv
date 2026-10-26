@@ -1,0 +1,4 @@
+label,rows,rows_with_actual_evidence,mean_annotation_groups,mean_actual_evidence_groups,mean_actual_evidence_items
+NOT ENOUGH INFO,6666,0,1.0,0.0,0.0
+REFUTES,6666,6666,1.834,1.834,2.103
+SUPPORTS,6666,6666,1.875,1.875,2.191

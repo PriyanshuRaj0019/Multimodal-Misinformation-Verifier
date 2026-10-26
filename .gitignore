@@ -218,3 +218,24 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+# Local Python environment
+.venv/
+
+# Raw datasets: keep local, do not commit to Git
+data/raw/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Local environment variables and secrets
+.env
+.env.*
+!.env.example
+
+
+# Detailed row-level audit outputs; regenerate locally
+reports/eda/*conflicting_claims.csv
+reports/eda/train_dev_claim_overlap.csv
