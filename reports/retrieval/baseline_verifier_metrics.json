@@ -1,0 +1,196 @@
+{
+  "task": "Three-class FEVER claim-only verification baseline",
+  "training_data": "data\\raw\\fever\\train.jsonl",
+  "evaluation_data": "data\\raw\\fever\\shared_task_dev.jsonl",
+  "training_rows": 145449,
+  "dev_rows": 19998,
+  "label_order": [
+    "SUPPORTS",
+    "REFUTES",
+    "NOT ENOUGH INFO"
+  ],
+  "train_label_distribution": {
+    "SUPPORTS": 80035,
+    "REFUTES": 29775,
+    "NOT ENOUGH INFO": 35639
+  },
+  "dev_label_distribution": {
+    "NOT ENOUGH INFO": 6666,
+    "SUPPORTS": 6666,
+    "REFUTES": 6666
+  },
+  "majority_baseline": {
+    "name": "majority_baseline",
+    "accuracy": 0.3333333333333333,
+    "macro_f1": 0.16666666666666666,
+    "classification_report": {
+      "SUPPORTS": {
+        "precision": 0.3333333333333333,
+        "recall": 1.0,
+        "f1-score": 0.5,
+        "support": 6666.0
+      },
+      "REFUTES": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 6666.0
+      },
+      "NOT ENOUGH INFO": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 6666.0
+      },
+      "accuracy": 0.3333333333333333,
+      "macro avg": {
+        "precision": 0.1111111111111111,
+        "recall": 0.3333333333333333,
+        "f1-score": 0.16666666666666666,
+        "support": 19998.0
+      },
+      "weighted avg": {
+        "precision": 0.1111111111111111,
+        "recall": 0.3333333333333333,
+        "f1-score": 0.16666666666666666,
+        "support": 19998.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        6666,
+        0,
+        0
+      ],
+      [
+        6666,
+        0,
+        0
+      ],
+      [
+        6666,
+        0,
+        0
+      ]
+    ]
+  },
+  "experiments": {
+    "tfidf_logistic_regression": {
+      "name": "tfidf_logistic_regression",
+      "accuracy": 0.5239023902390239,
+      "macro_f1": 0.5066227959047337,
+      "classification_report": {
+        "SUPPORTS": {
+          "precision": 0.4406685236768802,
+          "recall": 0.8306330633063307,
+          "f1-score": 0.5758410899069211,
+          "support": 6666.0
+        },
+        "REFUTES": {
+          "precision": 0.7635383484440088,
+          "recall": 0.46744674467446745,
+          "f1-score": 0.5798827579789709,
+          "support": 6666.0
+        },
+        "NOT ENOUGH INFO": {
+          "precision": 0.5441527446300716,
+          "recall": 0.27362736273627364,
+          "f1-score": 0.364144539828309,
+          "support": 6666.0
+        },
+        "accuracy": 0.5239023902390239,
+        "macro avg": {
+          "precision": 0.5827865389169868,
+          "recall": 0.523902390239024,
+          "f1-score": 0.5066227959047337,
+          "support": 19998.0
+        },
+        "weighted avg": {
+          "precision": 0.5827865389169868,
+          "recall": 0.5239023902390239,
+          "f1-score": 0.5066227959047337,
+          "support": 19998.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          5537,
+          369,
+          760
+        ],
+        [
+          2782,
+          3116,
+          768
+        ],
+        [
+          4246,
+          596,
+          1824
+        ]
+      ]
+    },
+    "tfidf_logistic_regression_balanced": {
+      "name": "tfidf_logistic_regression_balanced",
+      "accuracy": 0.5537553755375537,
+      "macro_f1": 0.5544374033931692,
+      "classification_report": {
+        "SUPPORTS": {
+          "precision": 0.5156208277703604,
+          "recall": 0.5793579357935793,
+          "f1-score": 0.5456343599886974,
+          "support": 6666.0
+        },
+        "REFUTES": {
+          "precision": 0.6560208570963011,
+          "recall": 0.6039603960396039,
+          "f1-score": 0.6289150980239007,
+          "support": 6666.0
+        },
+        "NOT ENOUGH INFO": {
+          "precision": 0.500078480615288,
+          "recall": 0.47794779477947796,
+          "f1-score": 0.48876275216690956,
+          "support": 6666.0
+        },
+        "accuracy": 0.5537553755375537,
+        "macro avg": {
+          "precision": 0.5572400551606499,
+          "recall": 0.5537553755375537,
+          "f1-score": 0.5544374033931692,
+          "support": 19998.0
+        },
+        "weighted avg": {
+          "precision": 0.5572400551606499,
+          "recall": 0.5537553755375537,
+          "f1-score": 0.5544374033931692,
+          "support": 19998.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          3862,
+          967,
+          1837
+        ],
+        [
+          1292,
+          4026,
+          1348
+        ],
+        [
+          2336,
+          1144,
+          3186
+        ]
+      ]
+    }
+  },
+  "elapsed_seconds": 21.66,
+  "limitations": [
+    "Both classifiers use claim text only and do not retrieve evidence.",
+    "Predictions do not establish factual truth.",
+    "Class balancing may improve some classes while reducing others.",
+    "Dev results are validation results, not final test-set results."
+  ]
+}
