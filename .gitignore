@@ -239,3 +239,7 @@ __pycache__/
 # Detailed row-level audit outputs; regenerate locally
 reports/eda/*conflicting_claims.csv
 reports/eda/train_dev_claim_overlap.csv
+# Generated Wikipedia retrieval index
+data/processed/wiki_sentence_index.sqlite3
+data/processed/wiki_sentence_index.sqlite3-shm
+data/processed/wiki_sentence_index.sqlite3-wal

@@ -1,0 +1,2126 @@
+{
+  "evaluation": {
+    "dataset": "shared_task_dev.jsonl",
+    "index": "D:\\COMEBACK\\PROJECTS\\Multimodal Misinformation Verifier\\data\\processed\\wiki_sentence_index.sqlite3",
+    "method": "SQLite FTS5 BM25 with iterative AND queries",
+    "sample_size": 200,
+    "sampling": "Random sample from claims with gold evidence",
+    "random_seed": 42,
+    "top_k": 10,
+    "evaluated_successfully": 200,
+    "category_counts": {
+      "complete_hit": 56,
+      "partial_hit": 5,
+      "no_hit": 139,
+      "no_results": 0,
+      "retrieval_errors": 0
+    },
+    "strategy_counts": {
+      "and_5_terms": 24,
+      "and_1_terms": 27,
+      "and_2_terms": 70,
+      "and_3_terms": 47,
+      "and_4_terms": 32
+    },
+    "elapsed_seconds": 2.37
+  },
+  "sample_metrics": {
+    "complete_hit_rate": 0.28,
+    "any_gold_evidence_hit_rate": 0.305,
+    "no_hit_rate": 0.695
+  },
+  "examples": {
+    "complete_hit": [
+      {
+        "claim_id": 95417,
+        "label": "SUPPORTS",
+        "claim": "South Island is referred to as the \"mainland\" by South Island residents.",
+        "category": "complete_hit",
+        "query_strategy": "and_5_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "South_Island",
+              "sentence_id": 5
+            }
+          ],
+          [
+            {
+              "page_title": "South_Island",
+              "sentence_id": 5
+            }
+          ],
+          [
+            {
+              "page_title": "South_Island",
+              "sentence_id": 5
+            }
+          ],
+          [
+            {
+              "page_title": "South_Island",
+              "sentence_id": 5
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "South_Island",
+            "sentence_id": 5,
+            "text": "It has a 32 percent larger landmass than the North Island so is sometimes referred to as the `` mainland '' of New Zealand , especially by South Island residents , but only 23 percent of New Zealand 's million inhabitants live there .",
+            "is_gold_evidence": true
+          }
+        ]
+      },
+      {
+        "claim_id": 214262,
+        "label": "SUPPORTS",
+        "claim": "DJ Quik is a recording artist.",
+        "category": "complete_hit",
+        "query_strategy": "and_3_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "DJ_Quik",
+              "sentence_id": 0
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "DJ_Quik",
+            "sentence_id": 0,
+            "text": "David Marvin Blake -LRB- born January 18 , 1970 -RRB- , better known by his stage name DJ Quik , is an American hip hop recording artist , DJ and record producer .",
+            "is_gold_evidence": true
+          },
+          {
+            "rank": 2,
+            "page_title": "Rhythm-al-ism",
+            "sentence_id": 0,
+            "text": "Rhythm-al-ism is the fourth studio album by American West Coast hip hop recording artist and producer DJ Quik , released on November 24 , 1998 , by Arista Records and was certified Gold by the RIAA on July 7 , 1999 .",
+            "is_gold_evidence": false
+          }
+        ]
+      },
+      {
+        "claim_id": 93621,
+        "label": "REFUTES",
+        "claim": "The Armenian Genocide was the Ottoman government's systematic extermination of 1.5 million Jews.",
+        "category": "complete_hit",
+        "query_strategy": "and_5_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Armenian_Genocide",
+              "sentence_id": 0
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Armenian_Genocide",
+            "sentence_id": 0,
+            "text": "The Armenian Genocide -LRB- Հայոց ցեղասպանություն , Hayots tseghaspanutyun -RRB- , also known as the Armenian Holocaust , was the Ottoman government 's systematic extermination of 1.5 million Armenians , mostly Ottoman citizens within the Ottoman Empire and its successor state , the Republic of Turkey .",
+            "is_gold_evidence": true
+          }
+        ]
+      },
+      {
+        "claim_id": 183447,
+        "label": "SUPPORTS",
+        "claim": "Henry III of France was murdered.",
+        "category": "complete_hit",
+        "query_strategy": "and_4_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Henry_III_of_France",
+              "sentence_id": 23
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Henry_III_of_France",
+            "sentence_id": 23,
+            "text": "In 1589 , Jacques Clément , a Catholic fanatic , murdered Henry III , who was succeeded by the King of Navarre who , as Henry IV , would assume the throne of France after converting to Catholicism , and become the first French king of the House of Bourbon .",
+            "is_gold_evidence": true
+          }
+        ]
+      },
+      {
+        "claim_id": 179825,
+        "label": "SUPPORTS",
+        "claim": "Vic Mensa is an American Grammy-nominated rapper.",
+        "category": "complete_hit",
+        "query_strategy": "and_5_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Vic_Mensa",
+              "sentence_id": 0
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Vic_Mensa",
+            "sentence_id": 0,
+            "text": "Victor Kwesi Mensah -LRB- born June 6 , 1993 -RRB- , better known by his stage name Vic Mensa , is a Grammy-nominated American rapper from Chicago , Illinois .",
+            "is_gold_evidence": true
+          }
+        ]
+      },
+      {
+        "claim_id": 69178,
+        "label": "SUPPORTS",
+        "claim": "The Catcher in the Rye never deals with issues of innocence and connection.",
+        "category": "complete_hit",
+        "query_strategy": "and_2_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "The_Catcher_in_the_Rye",
+              "sentence_id": 6
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "The_Catcher_in_the_Rye",
+            "sentence_id": 6,
+            "text": "The novel also deals with complex issues of innocence , identity , belonging , loss , and connection .",
+            "is_gold_evidence": true
+          }
+        ]
+      },
+      {
+        "claim_id": 39605,
+        "label": "SUPPORTS",
+        "claim": "Neil Diamond is a musician.",
+        "category": "complete_hit",
+        "query_strategy": "and_3_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Neil_Diamond",
+              "sentence_id": 0
+            }
+          ],
+          [
+            {
+              "page_title": "Neil_Diamond",
+              "sentence_id": 2
+            }
+          ],
+          [
+            {
+              "page_title": "Neil_Diamond",
+              "sentence_id": 3
+            }
+          ],
+          [
+            {
+              "page_title": "Neil_Diamond",
+              "sentence_id": 6
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Neil_Diamond",
+            "sentence_id": 0,
+            "text": "Neil Leslie Diamond -LRB- born January 24 , 1941 -RRB- is an American singer-songwriter , musician and actor .",
+            "is_gold_evidence": true
+          },
+          {
+            "rank": 2,
+            "page_title": "Pat_McLaughlin",
+            "sentence_id": 25,
+            "text": "As a studio musician he has contributed guitar to projects by Jamie Hartford , Rosanne Cash , Julie Roberts , Don Williams , Al Cooper , Shawn Camp , Cowboy Jack Clement , Neil Diamond , Johnny Cash and many more .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 3,
+            "page_title": "Russ_Kunkel",
+            "sentence_id": 0,
+            "text": "Russell `` Russ '' Kunkel -LRB- born September 27 , 1948 -RRB- is an American drummer and producer who has worked as a session musician with many well-known artists , including Linda Ronstadt , James Taylor , Dan Fogelberg , Stephen Stills , Bob Dylan , Neil Young , Stevie Nicks , Carole King , Jackson Browne , Joe Walsh , Neil Diamond , Glenn Frey , and Carly Simon .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 4,
+            "page_title": "Nathan_Gershman",
+            "sentence_id": 7,
+            "text": "He was frequently active as a session player and studio musician for television , theater , and recordings in and around Los Angeles from the 1960s into the 1990s , and played on albums by David Axelrod , The Beach Boys , Geronimo Black , David Bromberg , Neil Diamond , Lee Hazlewood , Wayne Henderson , Van Dyke Parks , Esther Phillips , and Pleasure .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 5,
+            "page_title": "Dustin_Diamond",
+            "sentence_id": 0,
+            "text": "Dustin Neil Diamond -LRB- born January 7 , 1977 -RRB- is an American actor , musician , director , and stand-up comedian widely known for his role as Samuel `` Screech '' Powers in the television shows Saved by the Bell ; Good Morning , Miss Bliss ; Saved by the Bell : The College Years ; and Saved by the Bell : The New Class .",
+            "is_gold_evidence": false
+          }
+        ]
+      },
+      {
+        "claim_id": 155647,
+        "label": "REFUTES",
+        "claim": "Warcraft premiered in America on June 10, 2016.",
+        "category": "complete_hit",
+        "query_strategy": "and_2_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Warcraft_-LRB-film-RRB-",
+              "sentence_id": 7
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Warcraft_-LRB-film-RRB-",
+            "sentence_id": 7,
+            "text": "Warcraft premiered in Paris on May 24 , 2016 , and was released by Universal Pictures in the United States on June 10 , 2016 .",
+            "is_gold_evidence": true
+          }
+        ]
+      },
+      {
+        "claim_id": 159701,
+        "label": "SUPPORTS",
+        "claim": "Edgar Wright is a director.",
+        "category": "complete_hit",
+        "query_strategy": "and_3_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Edgar_Wright",
+              "sentence_id": 0
+            }
+          ],
+          [
+            {
+              "page_title": "Edgar_Wright",
+              "sentence_id": 0
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Dead_Right_-LRB-film-RRB-",
+            "sentence_id": 0,
+            "text": "Dead Right is an early short film from Spaced and Shaun of the Dead director Edgar Wright .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 2,
+            "page_title": "Edgar_Wright",
+            "sentence_id": 0,
+            "text": "Edgar Howard Wright -LRB- born 18 April 1974 -RRB- is an English director , screenwriter , producer , and actor .",
+            "is_gold_evidence": true
+          },
+          {
+            "rank": 3,
+            "page_title": "Daddy_Maxfield",
+            "sentence_id": 5,
+            "text": "The song remains a favorite of film and television director Edgar Wright , as well as many other notables .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 4,
+            "page_title": "Chris_Dickens",
+            "sentence_id": 5,
+            "text": "He worked in television for a number of years , including a stint with the director Edgar Wright on the television series Spaced .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 5,
+            "page_title": "15th_Empire_Awards",
+            "sentence_id": 8,
+            "text": "The team of judges consisted of Empire editor-in-chief Mark Dinning , English actor Jason Issacs and English film director and television director Edgar Wright , which selected from a shortlist of 20 nominees the five Done In 60 Seconds Award finalists that were invited to the Empire Awards where the winner was announced .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 6,
+            "page_title": "UFO_conspiracy_theory",
+            "sentence_id": 8,
+            "text": "Notable persons to have publicly stated that UFO evidence is being suppressed include Senator Barry Goldwater , Admiral Lord Hill-Norton -LRB- former NATO head and chief of the British Defence Staff -RRB- , Brigadier General Arthur Exon -LRB- former commanding officer of Wright-Patterson AFB -RRB- , Vice Admiral Roscoe H. Hillenkoetter -LRB- first CIA director -RRB- , astronauts Gordon Cooper and Edgar Mitchell , and former Canadian Defence Minister Paul Hellyer .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 7,
+            "page_title": "Popcorn_Taxi",
+            "sentence_id": 8,
+            "text": "Some of Popcorn Taxi 's on-stage guests have included Quentin Tarantino , Baz Luhrmann , Guillermo Del Toro , Kevin Spacey , Rob Zombie , Terry Gilliam , John Cleese , Vince Gilligan , Wes Anderson , Eddie Izzard , Andrew Stanton , Ben Burtt , Richard Kelly -LRB- director -RRB- , Kevin Smith , George Miller , Dennis Hopper , Wim Wenders , Tim Robbins , Danny Boyle , Errol Morris , Roger Corman , Richard Linklater , Philip Glass , Ewan McGregor , Adam Yauch , Jerry Lewis , Ang Lee , Andrew Dominik , Karen Allen , Tom Hiddleston , Simon Pegg , Nick Frost , Edgar Wright , Richard Armitage ,",
+            "is_gold_evidence": false
+          }
+        ]
+      },
+      {
+        "claim_id": 155383,
+        "label": "SUPPORTS",
+        "claim": "A Floppy disk is a disk storage type.",
+        "category": "complete_hit",
+        "query_strategy": "and_4_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Floppy_disk",
+              "sentence_id": 0
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Floppy_disk",
+            "sentence_id": 0,
+            "text": "A floppy disk , also called a floppy , diskette or just disk , is a type of disk storage composed of a disk of thin and flexible magnetic storage medium , sealed in a rectangular plastic enclosure lined with fabric that removes dust particles .",
+            "is_gold_evidence": true
+          }
+        ]
+      },
+      {
+        "claim_id": 47768,
+        "label": "REFUTES",
+        "claim": "Ed Gein's hometown is not Plainfield, Wisconsin.",
+        "category": "complete_hit",
+        "query_strategy": "and_4_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Ed_Gein",
+              "sentence_id": 1
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Ed_Gein",
+            "sentence_id": 1,
+            "text": "His crimes , committed around his hometown of Plainfield , Wisconsin , gathered widespread notoriety after authorities discovered that Gein had exhumed corpses from local graveyards and fashioned trophies and keepsakes from their bones and skin .",
+            "is_gold_evidence": true
+          }
+        ]
+      },
+      {
+        "claim_id": 204033,
+        "label": "SUPPORTS",
+        "claim": "Down With Love is a 2003 comedy film.",
+        "category": "complete_hit",
+        "query_strategy": "and_5_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Down_with_Love",
+              "sentence_id": 0
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Down_with_Love",
+            "sentence_id": 0,
+            "text": "Down with Love is a 2003 romantic comedy film .",
+            "is_gold_evidence": true
+          }
+        ]
+      },
+      {
+        "claim_id": 171899,
+        "label": "SUPPORTS",
+        "claim": "Research is used to test the validity of procedures.",
+        "category": "complete_hit",
+        "query_strategy": "and_4_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Research",
+              "sentence_id": 4
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Research",
+            "sentence_id": 4,
+            "text": "To test the validity of instruments , procedures , or experiments , research may replicate elements of prior projects or the project as a whole .",
+            "is_gold_evidence": true
+          }
+        ]
+      },
+      {
+        "claim_id": 37625,
+        "label": "SUPPORTS",
+        "claim": "A polynomial consists of indeterminates.",
+        "category": "complete_hit",
+        "query_strategy": "and_2_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Polynomial",
+              "sentence_id": 0
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Generic_polynomial",
+            "sentence_id": 0,
+            "text": "In mathematics , a generic polynomial refers usually to a polynomial whose coefficients are indeterminates .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 2,
+            "page_title": "Generic_polynomial",
+            "sentence_id": 1,
+            "text": "For example , if , , and are indeterminates , the generic polynomial of degree two in is",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 3,
+            "page_title": "Polynomial_identity_ring",
+            "sentence_id": 3,
+            "text": "Strictly the Xi here are `` non-commuting indeterminates '' , and so `` polynomial identity '' is a slight abuse of language , since `` polynomial '' here stands for what is usually called a `` non-commutative polynomial '' .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 4,
+            "page_title": "Diagonal_form",
+            "sentence_id": 0,
+            "text": "In mathematics , a diagonal form is an algebraic form -LRB- homogeneous polynomial -RRB- without cross-terms involving different indeterminates .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 5,
+            "page_title": "Polynomial",
+            "sentence_id": 0,
+            "text": "In mathematics , a polynomial is an expression consisting of variables -LRB- or indeterminates -RRB- and coefficients , that involves only the operations of addition , subtraction , multiplication , and non-negative integer exponents .",
+            "is_gold_evidence": true
+          },
+          {
+            "rank": 6,
+            "page_title": "Bracket_ring",
+            "sentence_id": 8,
+            "text": "There is a homomorphism Φ -LRB- n , d -RRB- from K -LSB- Λ -LRB- n , d -RRB- -RSB- to the polynomial ring K -LSB- xi , j -RSB- in nd indeterminates given by mapping",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 7,
+            "page_title": "Polynomial_ring",
+            "sentence_id": 0,
+            "text": "In mathematics , especially in the field of abstract algebra , a polynomial ring or polynomial algebra is a ring -LRB- which is also a commutative algebra -RRB- formed from the set of polynomials in one or more indeterminates -LRB- traditionally also called variables -RRB- with coefficients in another ring , often a field .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 8,
+            "page_title": "Generic_polynomial",
+            "sentence_id": 4,
+            "text": "However in Galois theory , a branch of algebra , and in this article , the term generic polynomial has a different , although related , meaning : a generic polynomial for a finite group G and a field F is a monic polynomial P with coefficients in the field of rational functions L = F -LRB- t1 , ... , tn -RRB- in n indeterminates over F , such that the splitting field M of P has Galois group G over L , and such that every extension K/F with Galois group G can be obtained as the splitting field of a polynomial which is the specialization of P resulting from setting the n indeterminates to n elements of F .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 9,
+            "page_title": "Hilbert's_syzygy_theorem",
+            "sentence_id": 5,
+            "text": "As the relations form a module , one may consider the relations between the relations ; Hilbert 's syzygy theorem asserts that , if one continues in this way , starting with a module over a polynomial ring in indeterminates over a field , one eventually finds a zero module of relations , after at most steps .",
+            "is_gold_evidence": false
+          }
+        ]
+      },
+      {
+        "claim_id": 160985,
+        "label": "REFUTES",
+        "claim": "French Indochina is never abbreviated.",
+        "category": "complete_hit",
+        "query_strategy": "and_3_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "French_Indochina",
+              "sentence_id": 0
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "French_Indochina",
+            "sentence_id": 0,
+            "text": "French Indochina -LRB- previously spelled as French Indo-China -RRB- -LRB- Indochine française សហភ ពឥណ ឌ ច ន Đông Dương thuộc Pháp , -LSB- ɗə̄wŋm jɨ̄əŋ tʰûək fǎp -RSB- , frequently abbreviated to Đông Pháp ; ຝຣັ່ງແຫຼັມອິນດູຈີນ Cantonese : -RRB- , officially known as the Indochinese Union -LRB- Union indochinoise -RRB- after 1887 and the Indochinese Federation -LRB- Fédération indochinoise -RRB- after 1947 , was a grouping of French colonial territories in Southeast Asia .",
+            "is_gold_evidence": true
+          },
+          {
+            "rank": 2,
+            "page_title": "Bordel_militaire_de_campagne",
+            "sentence_id": 0,
+            "text": "Bordels Mobiles de Campagne or Bordel Militaire de Campagne -LRB- both abbreviated to BMC -RRB- is a French term for the mobile brothels which were used during World War I , Second World War , and First Indochina War to supply prostitution services to French soldiers who were facing combat in areas where brothels were unusual , such as at the front line or in isolated garrisons .",
+            "is_gold_evidence": false
+          }
+        ]
+      }
+    ],
+    "partial_hit": [
+      {
+        "claim_id": 139302,
+        "label": "REFUTES",
+        "claim": "A near-Earth object is a small star.",
+        "category": "partial_hit",
+        "query_strategy": "and_4_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Near-Earth_object",
+              "sentence_id": 0
+            },
+            {
+              "page_title": "Small_Solar_System_body",
+              "sentence_id": 0
+            },
+            {
+              "page_title": "Small_Solar_System_body",
+              "sentence_id": 4
+            },
+            {
+              "page_title": "Small_Solar_System_body",
+              "sentence_id": 5
+            }
+          ],
+          [
+            {
+              "page_title": "Near-Earth_object",
+              "sentence_id": 0
+            },
+            {
+              "page_title": "Small_Solar_System_body",
+              "sentence_id": 0
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "2001_GO2",
+            "sentence_id": 0,
+            "text": "is a small asteroid that is a near-Earth object , an Earth coorbital , and an Apollo asteroid .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 2,
+            "page_title": "1993_DA",
+            "sentence_id": 0,
+            "text": "is a small asteroid that is a Near-Earth object and an Aten asteroid .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 3,
+            "page_title": "-LRB-153201-RRB-_2000_WO107",
+            "sentence_id": 0,
+            "text": "is a small asteroid that is a Near-Earth object and an Aten asteroid .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 4,
+            "page_title": "2011_GA",
+            "sentence_id": 0,
+            "text": "is a small asteroid that is a Near-Earth object and an Apollo asteroid .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 5,
+            "page_title": "2001_AV43",
+            "sentence_id": 0,
+            "text": "is a small asteroid that is a Near-Earth object and an Apollo asteroid .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 6,
+            "page_title": "2012_UE34",
+            "sentence_id": 0,
+            "text": "is a small asteroid that is a Near-Earth object and an Apollo asteroid .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 7,
+            "page_title": "2007_UW1",
+            "sentence_id": 0,
+            "text": "is a small asteroid that is a Near-Earth object and an Aten asteroid .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 8,
+            "page_title": "2009_BD",
+            "sentence_id": 0,
+            "text": "is a very small asteroid that is a Near-Earth object -LRB- NEO -RRB- , and an Earth co-orbital .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 9,
+            "page_title": "2003_YN107",
+            "sentence_id": 0,
+            "text": ", also written 2003 YN107 , is a very small near-Earth object moving in a 1:1 mean-motion resonance with Earth .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 10,
+            "page_title": "Near-Earth_object",
+            "sentence_id": 0,
+            "text": "A near-Earth object -LRB- NEO -RRB- is any small Solar System body whose orbit brings it into proximity with Earth .",
+            "is_gold_evidence": true
+          }
+        ]
+      },
+      {
+        "claim_id": 20026,
+        "label": "SUPPORTS",
+        "claim": "Aphrodite is the daughter of a Titaness in Homer's Iliad.",
+        "category": "partial_hit",
+        "query_strategy": "and_5_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Aphrodite",
+              "sentence_id": 7
+            },
+            {
+              "page_title": "Dione_-LRB-Titaness-RRB-",
+              "sentence_id": 0
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Dione_-LRB-Titaness-RRB-",
+            "sentence_id": 0,
+            "text": "Dione -LRB- -LSB- daɪˈoʊni -RSB- Διώνη , Diōnē -RRB- was an ancient Greek goddess , an oracular Titaness primarily known from Book V of Homer 's Iliad , where she tends to the wounds suffered by her daughter Aphrodite .",
+            "is_gold_evidence": true
+          }
+        ]
+      },
+      {
+        "claim_id": 166487,
+        "label": "REFUTES",
+        "claim": "Roswell is a science fiction TV series on Fox.",
+        "category": "partial_hit",
+        "query_strategy": "and_4_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Roswell_-LRB-TV_series-RRB-",
+              "sentence_id": 0
+            },
+            {
+              "page_title": "Roswell_-LRB-TV_series-RRB-",
+              "sentence_id": 1
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Max_Evans",
+            "sentence_id": 9,
+            "text": "Max Evans -LRB- Roswell -RRB- , a fictional character in the American science fiction television series Roswell",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 2,
+            "page_title": "Roswell_-LRB-TV_series-RRB-",
+            "sentence_id": 0,
+            "text": "Roswell is an American science fiction television series developed , produced , and co-written by Jason Katims .",
+            "is_gold_evidence": true
+          },
+          {
+            "rank": 3,
+            "page_title": "Brody_Davis",
+            "sentence_id": 0,
+            "text": "Brody Davis is a fictional character created by Jason Katims for the 1999-2002 American science fiction television series Roswell .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 4,
+            "page_title": "Tess_Harding",
+            "sentence_id": 0,
+            "text": "Tess Harding is a fictional character created by Jason Katims for the 1999-2002 American science fiction television series Roswell .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 5,
+            "page_title": "Isabel_Evans",
+            "sentence_id": 0,
+            "text": "Isabel Evans is a fictional character created by Melinda Metz for the young adults book series Roswell High and adapted by Jason Katims for the 1999-2002 American science fiction television series Roswell .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 6,
+            "page_title": "Kyle_Valenti",
+            "sentence_id": 0,
+            "text": "Kyle Valenti is a fictional character created by Melinda Metz for the young adults book series Roswell High and adapted by Jason Katims for the 1999-2002 American science fiction television series Roswell .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 7,
+            "page_title": "Maria_DeLuca",
+            "sentence_id": 0,
+            "text": "Maria DeLuca is a fictional character created by Melinda Metz for the young adults book series Roswell High and adapted by Jason Katims for the 1999-2002 American science fiction television series Roswell .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 8,
+            "page_title": "Michael_Guerin",
+            "sentence_id": 0,
+            "text": "Michael Guerin is a fictional character created by Melinda Metz for the young adults book series Roswell High and adapted by Jason Katims for the 1999-2002 American science fiction television series Roswell .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 9,
+            "page_title": "Max_Evans_-LRB-Roswell-RRB-",
+            "sentence_id": 0,
+            "text": "Maxwell `` Max '' Evans is a fictional character created by Melinda Metz for the young adults book series Roswell High and adapted by Jason Katims for the 1999-2002 American science fiction television series Roswell .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 10,
+            "page_title": "Roswell_High",
+            "sentence_id": 2,
+            "text": "The Roswell High books served as inspiration for the American science fiction television series Roswell -LRB- 1999 -- 2002 -RRB- , also known as Roswell High in some countries , which in turn spawned eleven spin-off books of its own .",
+            "is_gold_evidence": false
+          }
+        ]
+      },
+      {
+        "claim_id": 66371,
+        "label": "SUPPORTS",
+        "claim": "Kerplunk was the last album by Green Day released through Lookout Records.",
+        "category": "partial_hit",
+        "query_strategy": "and_3_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Kerplunk_-LRB-album-RRB-",
+              "sentence_id": 0
+            },
+            {
+              "page_title": "Kerplunk_-LRB-album-RRB-",
+              "sentence_id": 2
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Kerplunk_-LRB-album-RRB-",
+            "sentence_id": 0,
+            "text": "Kerplunk is the second studio album by American punk rock band Green Day , released on December 17 , 1991 by Lookout !",
+            "is_gold_evidence": true
+          },
+          {
+            "rank": 2,
+            "page_title": "Green_Day_discography",
+            "sentence_id": 2,
+            "text": "Green Day released their first two studio albums , 1,039 / Smoothed Out Slappy Hours -LRB- 1991 -RRB- -LRB- consisting of the original `` 39/Smooth '' as well as their first two EP 's `` 1,000 Hours '' and `` Slappy '' -RRB- and Kerplunk -LRB- 1991 -RRB- , through the independent label Lookout !",
+            "is_gold_evidence": false
+          }
+        ]
+      },
+      {
+        "claim_id": 73974,
+        "label": "REFUTES",
+        "claim": "In states still using the electric chair to execute people, the prisoner is denied the choice of lethal injection as an alternative method.",
+        "category": "partial_hit",
+        "query_strategy": "and_2_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Electric_chair",
+              "sentence_id": 13
+            },
+            {
+              "page_title": "Electric_chair",
+              "sentence_id": 14
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Tunnel_injection",
+            "sentence_id": 7,
+            "text": "An alternative to tunnel injection is the spin injection .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 2,
+            "page_title": "Cardiomyoplasty",
+            "sentence_id": 29,
+            "text": "Other alternative injection routes have been studied , namely injection via sternotomy , endomyocardial and intracoronary routes .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 3,
+            "page_title": "Electric_chair",
+            "sentence_id": 14,
+            "text": "They allow the prisoner to choose lethal injection as an alternative method .",
+            "is_gold_evidence": true
+          },
+          {
+            "rank": 4,
+            "page_title": "Pen_needles",
+            "sentence_id": 11,
+            "text": "Injection pen and pen needles are an alternative drug delivery method to the traditional vial/syringe method .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 5,
+            "page_title": "Nasal_spray",
+            "sentence_id": 1,
+            "text": "In some situations , nasal delivery route is preferred because it provides an agreeable alternative to injection or pills .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 6,
+            "page_title": "GM_small_gasoline_engine",
+            "sentence_id": 4,
+            "text": "To achieve this , it features lightweight design and advanced technologies like gasoline direct injection , turbocharging , variable length intake manifold and alternative fuel compatibility .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 7,
+            "page_title": "Prolotherapy",
+            "sentence_id": 0,
+            "text": "Prolotherapy , also called proliferation therapy or regenerative injection therapy , is an alternative medicine treatment that uses injection of an irritant solution into a joint space , ligaments , or tendon insertion in an effort to relieve pain or address ligament laxity .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 8,
+            "page_title": "Discolysis",
+            "sentence_id": 0,
+            "text": "Discolysis is an alternative medicine in which practitioners believe they can treat a herniated disc by injection with an O2-O3 -LRB- ozone -RRB- solution .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 9,
+            "page_title": "Tree_injection",
+            "sentence_id": 6,
+            "text": "Trunk injection for tree protection is viewed as environmentally safer alternative for pesticide application since the compound is delivered within the tree , thus allowing for selective exposure to plant pests .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 10,
+            "page_title": "Parking_orbit",
+            "sentence_id": 2,
+            "text": "The alternative to a parking orbit is direct injection , where the rocket fires continuously -LRB- except during staging -RRB- until its fuel is exhausted , ending with the payload on the final trajectory .",
+            "is_gold_evidence": false
+          }
+        ]
+      }
+    ],
+    "no_hit": [
+      {
+        "claim_id": 42213,
+        "label": "SUPPORTS",
+        "claim": "John Deighton had no choice but to pursue other lines of work.",
+        "category": "no_hit",
+        "query_strategy": "and_1_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "John_Deighton",
+              "sentence_id": 24
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "List_of_RAF_Cadets",
+            "sentence_id": 13,
+            "text": "Len Deighton",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 2,
+            "page_title": "List_of_Special_Areas_of_Conservation_in_England",
+            "sentence_id": 211,
+            "text": "Kirk Deighton",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 3,
+            "page_title": "Deighton",
+            "sentence_id": 7,
+            "text": "Deighton , West Yorkshire",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 4,
+            "page_title": "Deighton",
+            "sentence_id": 20,
+            "text": "Len Deighton , author",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 5,
+            "page_title": "Deighton",
+            "sentence_id": 24,
+            "text": "Michelle Deighton , model",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 6,
+            "page_title": "Deighton",
+            "sentence_id": 0,
+            "text": "Deighton may refer to :",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 7,
+            "page_title": "Deighton",
+            "sentence_id": 5,
+            "text": "Deighton , Hambleton , North Yorkshire",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 8,
+            "page_title": "Deighton",
+            "sentence_id": 9,
+            "text": "Deighton , York , North Yorkshire",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 9,
+            "page_title": "Deighton",
+            "sentence_id": 14,
+            "text": "Ernest Deighton , flying ace",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 10,
+            "page_title": "Deighton",
+            "sentence_id": 18,
+            "text": "John Deighton , bar owner",
+            "is_gold_evidence": false
+          }
+        ]
+      },
+      {
+        "claim_id": 223349,
+        "label": "REFUTES",
+        "claim": "The principal photography of The Disaster Artist (film) started on the 9th.",
+        "category": "no_hit",
+        "query_strategy": "and_2_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "The_Disaster_Artist_-LRB-film-RRB-",
+              "sentence_id": 5
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Padman",
+            "sentence_id": 2,
+            "text": "Principal photography started in Delhi .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 2,
+            "page_title": "Adiós_Amigo",
+            "sentence_id": 7,
+            "text": "Principal photography took only nine days .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 3,
+            "page_title": "Anonymous_Noise_-LRB-film-RRB-",
+            "sentence_id": 3,
+            "text": "Principal photography began in November 2016 .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 4,
+            "page_title": "Damian_Jones",
+            "sentence_id": 8,
+            "text": "Principal photography began in September 2016 .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 5,
+            "page_title": "Fantastic_Beasts_and_Where_to_Find_Them_-LRB-film-RRB-",
+            "sentence_id": 7,
+            "text": "Principal photography began at Warner Bros. .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 6,
+            "page_title": "Fidaa",
+            "sentence_id": 2,
+            "text": "Principal photography commenced in August 2016 .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 7,
+            "page_title": "Hichki",
+            "sentence_id": 1,
+            "text": "Principal photography began in April 2017 .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 8,
+            "page_title": "Junooniyat",
+            "sentence_id": 5,
+            "text": "Principal photography commenced in November 2014 .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 9,
+            "page_title": "Nakshatram_-LRB-film-RRB-",
+            "sentence_id": 3,
+            "text": "Principal photography commenced in April 2016 .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 10,
+            "page_title": "Nannaku_Prematho",
+            "sentence_id": 7,
+            "text": "Principal photography commenced in August 2015 .",
+            "is_gold_evidence": false
+          }
+        ]
+      },
+      {
+        "claim_id": 135340,
+        "label": "REFUTES",
+        "claim": "Moves Like Jagger is on Overexposed.",
+        "category": "no_hit",
+        "query_strategy": "and_1_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Moves_like_Jagger",
+              "sentence_id": 0
+            },
+            {
+              "page_title": "Overexposed_-LRB-album-RRB-",
+              "sentence_id": 1
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Overexposed_-LRB-film-RRB-",
+            "sentence_id": 0,
+            "text": "Overexposed is a 1990 American thriller film .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 2,
+            "page_title": "Maroon_5",
+            "sentence_id": 23,
+            "text": "The band released their fourth album , Overexposed , on June 26 , 2012 .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 3,
+            "page_title": "Maroon_5_discography",
+            "sentence_id": 24,
+            "text": "The band released their fourth studio album Overexposed in June 2012 .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 4,
+            "page_title": "Overexposed_Tour",
+            "sentence_id": 0,
+            "text": "The Overexposed Tour was the fourth worldwide tour by the American pop rock band Maroon 5 , in support of their fourth studio album , Overexposed -LRB- 2012 -RRB- .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 5,
+            "page_title": "Ticket",
+            "sentence_id": 33,
+            "text": "`` Tickets '' -LRB- song -RRB- , a song by Maroon 5 from their album Overexposed",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 6,
+            "page_title": "Data_breach",
+            "sentence_id": 8,
+            "text": "Most data breaches involve overexposed and vulnerable unstructured data - files , documents , and sensitive information .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 7,
+            "page_title": "Overexposed_-LRB-album-RRB-",
+            "sentence_id": 21,
+            "text": "To promote the album , the band started the Overexposed Tour , which lasted from 2012 to 2014 .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 8,
+            "page_title": "Daylight_-LRB-Maroon_5_song-RRB-",
+            "sentence_id": 1,
+            "text": "The song was released as the third single from their fourth studio album , Overexposed -LRB- 2012 -RRB- .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 9,
+            "page_title": "Radiocontrolledrobot",
+            "sentence_id": 6,
+            "text": "The single `` Overexposed '' was used as the theme song for FHM World 's Hottest Woman short film .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 10,
+            "page_title": "Maps_-LRB-Maroon_5_song-RRB-",
+            "sentence_id": 5,
+            "text": "However , some criticized the song for being similar to their previous lead single on their last album , Overexposed .",
+            "is_gold_evidence": false
+          }
+        ]
+      },
+      {
+        "claim_id": 209872,
+        "label": "REFUTES",
+        "claim": "In a Lonely Place is only a book without a script.",
+        "category": "no_hit",
+        "query_strategy": "and_2_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "In_a_Lonely_Place",
+              "sentence_id": 0
+            }
+          ],
+          [
+            {
+              "page_title": "In_a_Lonely_Place",
+              "sentence_id": 1
+            }
+          ],
+          [
+            {
+              "page_title": "In_a_Lonely_Place",
+              "sentence_id": 11
+            }
+          ],
+          [
+            {
+              "page_title": "In_a_Lonely_Place",
+              "sentence_id": 12
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Sterilization_of_deaf_people_in_Nazi_Germany",
+            "sentence_id": 56,
+            "text": "and `` Do you feel lonely without children ? ''",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 2,
+            "page_title": "Lovey-Dovey_-LRB-T-ara_song-RRB-",
+            "sentence_id": 7,
+            "text": "The lyrics are about the protagonist feeling lonely without , as well as seeking for , their love interest .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 3,
+            "page_title": "Colin_Gawel",
+            "sentence_id": 3,
+            "text": "Colin also has a solo career both with and without his backing band - Colin Gawel and the Lonely Bones .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 4,
+            "page_title": "Psychological_effects_of_sterilization_and_forced_abortions_on_Deaf_Germans_during_World_War_II",
+            "sentence_id": 26,
+            "text": "Others still feeling extremely lonely today without having children and , it is hard for them to see others with children .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 5,
+            "page_title": "Aranyani",
+            "sentence_id": 4,
+            "text": "In the hymn , the supplicant entreats her to explain how she wanders so far from the fringe of civilization without becoming afraid or lonely .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 6,
+            "page_title": "Within_You_Without_You",
+            "sentence_id": 0,
+            "text": "`` Within You Without You '' is a song written by George Harrison and released on the Beatles ' 1967 album Sgt. Pepper 's Lonely Hearts Club Band .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 7,
+            "page_title": "Heath_Brothers",
+            "sentence_id": 8,
+            "text": "The 2009 CD Endurance was the first without Percy , and features seven original numbers by Jimmy , including `` From a Lonely Bass '' , composed in memory of his late brother .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 8,
+            "page_title": "Act_Naturally",
+            "sentence_id": 4,
+            "text": "The song tells the tale of someone who has been jilted and because of that , can play a film part of someone sad and lonely without knowing anything about acting .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 9,
+            "page_title": "Maya_Bulgakovа",
+            "sentence_id": 65,
+            "text": "The actress suffered greatly from the death of her husband , feeling lonely and not being able to imagine life without her loved one with whom she lived long and well .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 10,
+            "page_title": "Swarmandal",
+            "sentence_id": 16,
+            "text": "The Beatles ' 1967 single `` Strawberry Fields Forever '' features a swarmandal , played by George Harrison , as does `` Within You Without You '' , from the band 's Sgt. Pepper 's Lonely Hearts Club Band album .",
+            "is_gold_evidence": false
+          }
+        ]
+      },
+      {
+        "claim_id": 155212,
+        "label": "SUPPORTS",
+        "claim": "Taran Killam is a person.",
+        "category": "no_hit",
+        "query_strategy": "and_1_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Taran_Killam",
+              "sentence_id": 0
+            }
+          ],
+          [
+            {
+              "page_title": "Taran_Killam",
+              "sentence_id": 1
+            }
+          ],
+          [
+            {
+              "page_title": "Taran_Killam",
+              "sentence_id": 2
+            }
+          ],
+          [
+            {
+              "page_title": "Taran_Killam",
+              "sentence_id": 5
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Killam-Sedgewick/Flagstaff_Regional_Airport",
+            "sentence_id": 0,
+            "text": "Killam/Killam-Sedgewick Airport , , is located 3 NM east of Killam , Alberta , Canada .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 2,
+            "page_title": "Index_of_World_War_II_articles_-LRB-R-RRB-",
+            "sentence_id": 46,
+            "text": "Radcliffe Killam",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 3,
+            "page_title": "Killam",
+            "sentence_id": 0,
+            "text": "Killam is a surname .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 4,
+            "page_title": "Killam",
+            "sentence_id": 8,
+            "text": "Frank Killam , Canadian politician",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 5,
+            "page_title": "Killam",
+            "sentence_id": 12,
+            "text": "Radcliffe Killam , Texas businessman",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 6,
+            "page_title": "Killam",
+            "sentence_id": 4,
+            "text": "Albert Clements Killam , Canadian lawyer",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 7,
+            "page_title": "Killam",
+            "sentence_id": 6,
+            "text": "Izaak Walton Killam , Canadian financier",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 8,
+            "page_title": "Killam",
+            "sentence_id": 14,
+            "text": "Taran Killam , American comic actor",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 9,
+            "page_title": "Killam",
+            "sentence_id": 16,
+            "text": "Thomas Killam , Canadian ship builder",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 10,
+            "page_title": "List_of_people_from_Yarmouth_County,_Nova_Scotia",
+            "sentence_id": 69,
+            "text": "Thomas Killam , politician and shipbuilder",
+            "is_gold_evidence": false
+          }
+        ]
+      },
+      {
+        "claim_id": 5513,
+        "label": "SUPPORTS",
+        "claim": "Shadowhunters premiered in 2016.",
+        "category": "no_hit",
+        "query_strategy": "and_1_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Shadowhunters",
+              "sentence_id": 4
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Emeraude_Toubia",
+            "sentence_id": 1,
+            "text": "She portrays Isabelle Lightwood on the Freeform fantasy series Shadowhunters .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 2,
+            "page_title": "Melissa_Neeley",
+            "sentence_id": 13,
+            "text": "Neeley played the store clerk 's wife in Shadowhunters : Lost .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 3,
+            "page_title": "Stephanie_Bennett_-LRB-actress-RRB-",
+            "sentence_id": 1,
+            "text": "She is known for her roles in Leprechaun : Origins and Shadowhunters .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 4,
+            "page_title": "Michael_Reisz",
+            "sentence_id": 2,
+            "text": "He is currently one of the writers and executive producers for Shadowhunters .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 5,
+            "page_title": "Will_Tudor",
+            "sentence_id": 3,
+            "text": "He is set to play Sebastian Verlac on the Freeform series Shadowhunters .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 6,
+            "page_title": "List_of_people_from_Kansas_City,_Missouri",
+            "sentence_id": 231,
+            "text": "Katherine McNamara - actress on the TV Show , Shadowhunters on Freeform as Clary Fray",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 7,
+            "page_title": "Alan_van_Sprang",
+            "sentence_id": 1,
+            "text": "He also made an appearance portraying Valentine Morgenstern on Freeform 's hit show , `` Shadowhunters '' .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 8,
+            "page_title": "Isaiah_Mustafa",
+            "sentence_id": 2,
+            "text": "He is also known for portraying Luke Garroway on Freeform 's fantasy series Shadowhunters .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 9,
+            "page_title": "Dead_Man's_Party",
+            "sentence_id": 9,
+            "text": "`` Dead Man 's Party '' , third episode of the first season of Shadowhunters -LRB- 2016 -RRB-",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 10,
+            "page_title": "Shadowhunters",
+            "sentence_id": 0,
+            "text": "Shadowhunters -LRB- also known as Shadowhunters : The Mortal Instruments -RRB- is an American fantasy television series that is loosely based on The Mortal Instruments by Cassandra Clare , and developed for television by Ed Decter .",
+            "is_gold_evidence": false
+          }
+        ]
+      },
+      {
+        "claim_id": 71072,
+        "label": "SUPPORTS",
+        "claim": "Richard Kuklinski has a wife and child.",
+        "category": "no_hit",
+        "query_strategy": "and_2_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Richard_Kuklinski",
+              "sentence_id": 5
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Kuklinski",
+            "sentence_id": 8,
+            "text": "Joseph Kuklinski -LRB- 1944 -- 2003 -RRB- , murderer , younger brother of Richard Kuklinski",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 2,
+            "page_title": "The_Iceman_-LRB-nickname-RRB-",
+            "sentence_id": 47,
+            "text": "Richard Kuklinski -LRB- 1935 -- 2006 -RRB- , American contract killer",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 3,
+            "page_title": "Kuklinski",
+            "sentence_id": 4,
+            "text": "Richard Kuklinski -LRB- 1935 -- 2006 -RRB- , Polish-American contract killer nicknamed `` The Iceman ''",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 4,
+            "page_title": "The_Iceman_-LRB-film-RRB-",
+            "sentence_id": 0,
+            "text": "The Iceman is an American biography crime thriller film based on the true story of longtime notorious hitman Richard Kuklinski .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 5,
+            "page_title": "Philip_Carlo",
+            "sentence_id": 0,
+            "text": "Philip Carlo -LRB- April 18 , 1949 -- November 8 , 2010 -RRB- was a journalist and best selling biographer of Thomas Pitera , Richard Kuklinski , Anthony Casso , and Richard Ramirez .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 6,
+            "page_title": "Richard_Kuklinski",
+            "sentence_id": 0,
+            "text": "Richard Leonard Kuklinski -LRB- April 11 , 1935 -- March 5 , 2006 -RRB- was an American contract killer who was convicted for five murders .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 7,
+            "page_title": "Park_Dietz",
+            "sentence_id": 0,
+            "text": "Park Dietz -LRB- born 1948 -RRB- is a forensic psychiatrist who has consulted or testified in many of the highest profile US criminal cases including Joel Rifkin , Arthur Shawcross , Jeffrey Dahmer , The Unabomber , Richard Kuklinski , the Beltway sniper attacks , and Jared Lee Loughner .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 8,
+            "page_title": "James_Gannon",
+            "sentence_id": 5,
+            "text": "The book discusses key episodes of 20th-century espionage and cryptology involving the Zimmermann telegram ; Enigma decryption and `` Ultra '' ; the Battle of the Atlantic ; Erwin Rommel ; the Colossus computer ; Frank Rowlett and Japan 's Purple cipher ; Allied Operation Overlord deceptions ; World War II spies and spy organizations ; Rudolf Roessler and the Lucy Spy Ring ; Takeo Yoshikawa and Japan 's attack on Pearl Harbor ; Joseph J. Rochefort and the Battle of Midway ; Richard Sorge ; Donald Maclean ; Klaus Fuchs ; Venona ; Oleg Penkovsky ; and Ryszard Kukliński .",
+            "is_gold_evidence": false
+          }
+        ]
+      },
+      {
+        "claim_id": 118594,
+        "label": "REFUTES",
+        "claim": "Ed Decter is a Canadian.",
+        "category": "no_hit",
+        "query_strategy": "and_2_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Ed_Decter",
+              "sentence_id": 0
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Hirst_-LRB-surname-RRB-",
+            "sentence_id": 102,
+            "text": "Shari Decter Hirst , Canadian politician",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 2,
+            "page_title": "Shari_Decter_Hirst",
+            "sentence_id": 0,
+            "text": "Shari Decter Hirst is a Canadian politician , who was elected mayor of Brandon , Manitoba in the 2010 municipal election .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 3,
+            "page_title": "Barry_Fry_-LRB-curler-RRB-",
+            "sentence_id": 5,
+            "text": "Fry won his first national title in 1973 , when he won the Canadian Mixed Curling Championship for Manitoba with teammates Peggy Casselman , Stephen Decter and Susan Lynch .",
+            "is_gold_evidence": false
+          }
+        ]
+      },
+      {
+        "claim_id": 143205,
+        "label": "SUPPORTS",
+        "claim": "The American Civil War began in 1861.",
+        "category": "no_hit",
+        "query_strategy": "and_5_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "American_Civil_War",
+              "sentence_id": 0
+            }
+          ],
+          [
+            {
+              "page_title": "American_Civil_War",
+              "sentence_id": 1
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Early_life_and_career_of_Ulysses_S._Grant",
+            "sentence_id": 10,
+            "text": "He worked there until 1861 , when the American Civil War began .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 2,
+            "page_title": "Crittenden–Johnson_Resolution",
+            "sentence_id": 2,
+            "text": "after the start of the American Civil War , which began on April 12 , 1861 .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 3,
+            "page_title": "John_Hawxhurst",
+            "sentence_id": 1,
+            "text": "As Union men , they fled Virginia temporarily as the American Civil War began in April 1861 .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 4,
+            "page_title": "Names_of_the_American_Civil_War",
+            "sentence_id": 0,
+            "text": "The American Civil War has been known by a number of names since it began in 1861 .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 5,
+            "page_title": "Technology_during_World_War_I",
+            "sentence_id": 1,
+            "text": "This trend began at least fifty years prior to World War I during the American Civil War of 1861-1865 ,",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 6,
+            "page_title": "History_of_South_Carolina",
+            "sentence_id": 23,
+            "text": "In April 1861 , the American Civil War began when Confederate forces attacked the American fort at Fort Sumter in Charleston harbor .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 7,
+            "page_title": "Kendall_Manor",
+            "sentence_id": 3,
+            "text": "Construction began prior to the outset of the American Civil War of 1861-1865 , and it was completed in 1867 .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 8,
+            "page_title": "Seth_Padelford",
+            "sentence_id": 13,
+            "text": "After the American Civil War began in 1861 , Padelford won two consecutive elections for Lieutenant Governor , serving from 1863 to 1865 .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 9,
+            "page_title": "Antelope_Peak_Station",
+            "sentence_id": 18,
+            "text": "Antelope Peak Station was abandoned like other stations on its route by the Overland Mail Company just before the American Civil War began in March 1861 .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 10,
+            "page_title": "John_Tyler",
+            "sentence_id": 26,
+            "text": "When the American Civil War began in 1861 , Tyler sided with the Confederate government , and won election to the Confederate House of Representatives shortly before his death .",
+            "is_gold_evidence": false
+          }
+        ]
+      },
+      {
+        "claim_id": 75794,
+        "label": "REFUTES",
+        "claim": "The Saw franchise is a collection of TV shows.",
+        "category": "no_hit",
+        "query_strategy": "and_2_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Saw_-LRB-franchise-RRB-",
+              "sentence_id": 0
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "List_of_multimedia_franchises",
+            "sentence_id": 7,
+            "text": "A franchise may be included if it obtained multimedia franchise status prior to works within the collection entering the public domain .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 2,
+            "page_title": "Artlist_Collection-COLON-_The_Dog_and_Friends",
+            "sentence_id": 1,
+            "text": "Initially known as Artlist Collection : The Dog , the franchise began as collection of calendars and postcards of dogs photographed with a fisheye lens .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 3,
+            "page_title": "Steven_Raab",
+            "sentence_id": 1,
+            "text": "Prior to founding The Raab Collection , Steven practiced law in Philadelphia , and maintained a specialty practice focused on franchise law .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 4,
+            "page_title": "Windfall_tax_-LRB-Australia-RRB-",
+            "sentence_id": 4,
+            "text": "Franchise fees windfall tax , imposed under the Franchise Fees Windfall Tax -LRB- Collection -RRB- Act 1997 -LRB- 1997 No 132 -RRB- , Franchise Fees Windfall Tax -LRB- Imposition -RRB- Act 1997 -LRB- 1997 No 133 -RRB- , and Franchise Fees Windfall Tax -LRB- Consequential Amendments -RRB- Act 1997 -LRB- 1997 No 134 -RRB-",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 5,
+            "page_title": "Saturn_Award_for_Best_DVD_or_Blu-ray_Collection",
+            "sentence_id": 1,
+            "text": "The movie collection can be either a series of movies simply , even a franchise , or movies that have the same director .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 6,
+            "page_title": "Artlist_Collection-COLON-_The_Dog_and_Friends",
+            "sentence_id": 2,
+            "text": "Afterwards , the franchise became so popular that new animals such as cats , pigs , rabbits , ducks , and hamsters were added to the collection .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 7,
+            "page_title": "Rangers_Strike",
+            "sentence_id": 2,
+            "text": "The game was expanded with several expansion packs , such as collection in 2007 , featuring characters from the Kamen Rider Series television franchise , and the in 2008 featuring characters from the Metal Hero Series television franchise .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 8,
+            "page_title": "Franchise",
+            "sentence_id": 13,
+            "text": "Media franchise , term referring to a collection of related creative works , such as films , video games , books , etc. , particularly in North American usage",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 9,
+            "page_title": "Artlist_Collection-COLON-_The_Dog_and_Friends",
+            "sentence_id": 0,
+            "text": "Artlist Collection : The Dog and Friends -LRB- better known as The Dog and Friends -RRB- is a franchise created by Artlist in Japan in 2000 .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 10,
+            "page_title": "Scooby-Doo's_Snack_Tracks-COLON-_The_Ultimate_Collection",
+            "sentence_id": 0,
+            "text": "Scooby-Doo 's Snack Tracks : The Ultimate Collection is the first and only soundtrack to the popular Hanna-Barbera Saturday morning cartoon franchise , Scooby-Doo .",
+            "is_gold_evidence": false
+          }
+        ]
+      },
+      {
+        "claim_id": 45565,
+        "label": "SUPPORTS",
+        "claim": "Seohyun is a performer.",
+        "category": "no_hit",
+        "query_strategy": "and_1_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Seohyun",
+              "sentence_id": 0
+            }
+          ],
+          [
+            {
+              "page_title": "Seohyun",
+              "sentence_id": 2
+            }
+          ],
+          [
+            {
+              "page_title": "Seohyun",
+              "sentence_id": 3
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Mark_of_the_Unicorn",
+            "sentence_id": 6,
+            "text": "Digital Performer",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 2,
+            "page_title": "Open_Media_Framework_Interchange",
+            "sentence_id": 16,
+            "text": "Digital Performer",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 3,
+            "page_title": "Performer_Magazine",
+            "sentence_id": 7,
+            "text": "Up until 2009 , Performer circulated three regional editions of the magazine each month -LRB- Northeast Performer , Southeast Performer and West Coast Performer -RRB- .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 4,
+            "page_title": "Backstage_pass",
+            "sentence_id": 13,
+            "text": "performer 's agents .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 5,
+            "page_title": "Daredevil",
+            "sentence_id": 2,
+            "text": "A stunt performer",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 6,
+            "page_title": "List_of_Native_American_women_artists",
+            "sentence_id": 18,
+            "text": "Painter , muralist , performer .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 7,
+            "page_title": "List_of_accolades_received_by_An_Education",
+            "sentence_id": 252,
+            "text": "| Most Promising Performer",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 8,
+            "page_title": "Margaret_Nichols",
+            "sentence_id": 4,
+            "text": "Maggie Nicols , performer",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 9,
+            "page_title": "Stuckey_-LRB-surname-RRB-",
+            "sentence_id": 24,
+            "text": "Lyn Stuckey , performer",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 10,
+            "page_title": "The_Franz_Kafka_Big_Band",
+            "sentence_id": 17,
+            "text": "Craig Stobo - performer",
+            "is_gold_evidence": false
+          }
+        ]
+      },
+      {
+        "claim_id": 208157,
+        "label": "REFUTES",
+        "claim": "Easy A is written by a stork.",
+        "category": "no_hit",
+        "query_strategy": "and_2_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Bert_V._Royal",
+              "sentence_id": 0
+            },
+            {
+              "page_title": "Easy_A",
+              "sentence_id": 0
+            }
+          ],
+          [
+            {
+              "page_title": "Easy_A",
+              "sentence_id": 0
+            },
+            {
+              "page_title": "Will_Gluck",
+              "sentence_id": 0
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "The_Coming_of_Stork",
+            "sentence_id": 0,
+            "text": "The Coming of Stork was the first play written by David Williamson .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 2,
+            "page_title": "Waltz_of_the_Stork",
+            "sentence_id": 0,
+            "text": "Waltz of the Stork is a semi-autobiographical play written and originally performed by Melvin Van Peebles .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 3,
+            "page_title": "The_Black_Stork",
+            "sentence_id": 0,
+            "text": "The Black Stork is a 1917 motion picture written by and starring Harry J. Haiselden , the chief surgeon at the German-American Hospital in Chicago .",
+            "is_gold_evidence": false
+          }
+        ]
+      },
+      {
+        "claim_id": 181837,
+        "label": "SUPPORTS",
+        "claim": "Don Hall is an employee of Walt Disney Animation Studios.",
+        "category": "no_hit",
+        "query_strategy": "and_2_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Don_Hall_-LRB-filmmaker-RRB-",
+              "sentence_id": 0
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Masashi_Kudō",
+            "sentence_id": 0,
+            "text": "is an employee of the Japanese animation company Studio Pierrot .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 2,
+            "page_title": "Off_the_Air_-LRB-TV_series-RRB-",
+            "sentence_id": 4,
+            "text": "Hughes , a former employee of MTV Animation , first pitched it to Mike Lazzo at Adult Swim after producing a video mixtape for the network 's 2010 Carnival Tour event .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 3,
+            "page_title": "Kimio_Yabuki",
+            "sentence_id": 5,
+            "text": "Yabuki was an employee of Toei Animation until going freelance in 1973 , but did work on several Toei productions -LRB- including Dororon Enma-kun , Ikkyu-san , and The Kabocha Wine -RRB- afterward .",
+            "is_gold_evidence": false
+          }
+        ]
+      },
+      {
+        "claim_id": 181640,
+        "label": "REFUTES",
+        "claim": "Mogadishu is a book.",
+        "category": "no_hit",
+        "query_strategy": "and_2_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Mogadishu",
+              "sentence_id": 0
+            }
+          ],
+          [
+            {
+              "page_title": "Mogadishu",
+              "sentence_id": 1
+            }
+          ],
+          [
+            {
+              "page_title": "Mogadishu",
+              "sentence_id": 5
+            }
+          ],
+          [
+            {
+              "page_title": "Mogadishu",
+              "sentence_id": 7
+            }
+          ],
+          [
+            {
+              "page_title": "Mogadishu",
+              "sentence_id": 9
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "In_the_Company_of_Heroes",
+            "sentence_id": 0,
+            "text": "In the Company of Heroes is a book by Michael Durant and Steven Hartov about Durant 's experiences in the Battle of Mogadishu , Korea , the Persian Gulf , Thailand , Panama , and Iraq .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 2,
+            "page_title": "United_Nations_Operation_in_Somalia_II",
+            "sentence_id": 7,
+            "text": "The UNOSOM II intervention is well known for the Battle of Mogadishu and the resulting events portrayed in the book Black Hawk Down : A Story of Modern War , and its associated film Black Hawk Down .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 3,
+            "page_title": "Black_Hawk_Down_-LRB-film-RRB-",
+            "sentence_id": 1,
+            "text": "The screenplay by Ken Nolan is adapted from the non-fiction book of the same name by Mark Bowden , which in turn is based on the 29-part series of articles published in The Philadelphia Inquirer chronicling the events of a 1993 raid in Mogadishu by the U.S. military aimed at capturing faction leader Mohamed Farrah Aidid and the ensuing firefight , known as the Battle of Mogadishu .",
+            "is_gold_evidence": false
+          }
+        ]
+      },
+      {
+        "claim_id": 79800,
+        "label": "REFUTES",
+        "claim": "Firefox is a desktop-only browser.",
+        "category": "no_hit",
+        "query_strategy": "and_3_terms",
+        "gold_evidence_groups": [
+          [
+            {
+              "page_title": "Firefox",
+              "sentence_id": 1
+            }
+          ],
+          [
+            {
+              "page_title": "Firefox",
+              "sentence_id": 2
+            }
+          ]
+        ],
+        "retrieved_evidence": [
+          {
+            "rank": 1,
+            "page_title": "Firefox",
+            "sentence_id": 13,
+            "text": ", Firefox has between 9 % and 16 % of worldwide usage as a `` desktop '' browser , making it the second most popular web browser .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 2,
+            "page_title": "Firefox_for_iOS",
+            "sentence_id": 1,
+            "text": "It is the first Firefox branded browser not to use the Gecko layout engine as is used in Firefox for desktop and mobile .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 3,
+            "page_title": "Cliqz",
+            "sentence_id": 3,
+            "text": "Cliqz is available as a desktop and mobile web browser , as well as an extension for Firefox itself .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 4,
+            "page_title": "IAC_Applications",
+            "sentence_id": 4,
+            "text": "IAC Applications develops utilities across three primary platforms : browser -LRB- applications for Chrome , IE , Safari and Firefox -RRB- , mobile -LRB- apps for iOS and Android -RRB- and desktop -LRB- traditional desktop software for PC and Mac -RRB- .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 5,
+            "page_title": "Mozilla_Location_Service",
+            "sentence_id": 19,
+            "text": "Although the Mozilla Location Service is not used by default in Firefox , the service is used in the Vivaldi browser , and the KDE and GNOME desktop environments for Linux .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 6,
+            "page_title": "Firefox",
+            "sentence_id": 14,
+            "text": "Firefox is still the most popular desktop browser in Cuba -LRB- even most popular overall -RRB- , Eritrea , and Germany , with 85.93 % , 79.39 % , and 37.01 % of the market share , respectively .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 7,
+            "page_title": "Java_Desktop_Integration_Components",
+            "sentence_id": 1,
+            "text": "For example , a Java application running on one user 's desktop can open a web page using that user 's default web browser -LRB- e.g. Firefox -RRB- , but the same Java application running on a different user 's desktop would open the page in Opera -LRB- the second user 's default browser -RRB- .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 8,
+            "page_title": "Asa_Dotzler",
+            "sentence_id": 0,
+            "text": "Asa Dotzler -LRB- -LSB- ˈeɪsə_ˈdɒtslər -RSB- born June 5 , 1974 -RRB- is an American software developer best known for his work in development of the Firefox browser through its evolution from his volunteer work when Netscape released Mozilla as open source code and employment as community coordinator for several Mozilla projects to director of Mozilla 's Firefox desktop .",
+            "is_gold_evidence": false
+          },
+          {
+            "rank": 9,
+            "page_title": "Lightweight_Portable_Security",
+            "sentence_id": 8,
+            "text": "As of September 2011 -LRB- version 1.2.5 -RRB- , the LPS public distribution includes a smart card-enabled Firefox browser supporting DoD 's CAC and Personal Identity Verification -LRB- PIV -RRB- cards , a PDF and text viewer , Java , a file browser , remote desktop software -LRB- Citrix , Microsoft or VMware View -RRB- , an SSH client , the public edition of Encryption Wizard and the ability to use USB flash drives .",
+            "is_gold_evidence": false
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "evaluation": {
+    "dataset": "FEVER shared_task_dev.jsonl",
+    "method": "SQLite FTS5 BM25 ranking with iterative AND queries",
+    "query_policy": "Unique non-stopword tokens, minimum length 3; try 5, 4, 3, 2, then 1 longest tokens until results are found.",
+    "claims_evaluated": 19998,
+    "claims_with_gold_evidence": 13332,
+    "claims_without_gold_evidence": 6666,
+    "empty_queries": 0,
+    "claims_with_no_results": 29,
+    "retrieval_errors": 0,
+    "strategy_counts": {
+      "and_4_terms": 2296,
+      "and_2_terms": 7928,
+      "and_5_terms": 1694,
+      "and_3_terms": 5128,
+      "and_1_terms": 2923,
+      "no_results": 29
+    }
+  },
+  "metrics": {
+    "Recall@1": {
+      "hits": 2275,
+      "denominator": 13332,
+      "score": 0.17064206420642064
+    },
+    "CompleteEvidenceGroup@1": {
+      "complete_groups": 2132,
+      "denominator": 13332,
+      "score": 0.15991599159915992
+    },
+    "Recall@5": {
+      "hits": 3444,
+      "denominator": 13332,
+      "score": 0.2583258325832583
+    },
+    "CompleteEvidenceGroup@5": {
+      "complete_groups": 3214,
+      "denominator": 13332,
+      "score": 0.24107410741074106
+    },
+    "Recall@10": {
+      "hits": 3782,
+      "denominator": 13332,
+      "score": 0.2836783678367837
+    },
+    "CompleteEvidenceGroup@10": {
+      "complete_groups": 3513,
+      "denominator": 13332,
+      "score": 0.2635013501350135
+    }
+  },
+  "retrieval_error_samples": []
+}

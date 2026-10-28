@@ -1,0 +1,61 @@
+WIKIPEDIA CORPUS LINE-FORMAT DIAGNOSTIC
+=================================================================
+Corpus records scanned: 5,416,537
+Malformed JSON records: 0
+Malformed line entries: 507
+
+COUNTS BY CATEGORY
+non_integer_sentence_id: 507
+
+
+EXAMPLES: non_integer_sentence_id
+-----------------------------------------------------------------
+File: wiki-001.jsonl
+JSONL record line: 21176
+Page ID: '1971_Castrol_Trophy'
+Entry: sentence-line 3: 'Warwick Farm\tWarwick Farm Raceway\tNew South Wales\tNew South Wales\tAustralia\tAustralia'
+
+File: wiki-001.jsonl
+JSONL record line: 21527
+Page ID: '1965_Rose_Bowl'
+Entry: sentence-line 3: 'Michigan Wolverines\t1964 Michigan Wolverines football team\tOregon State Beavers\t1964 Oregon State Beavers football team'
+
+File: wiki-002.jsonl
+JSONL record line: 19105
+Page ID: '1936_Vanderbilt_Cup'
+Entry: sentence-line 4: 'Alfa Romeo 12C-36\tAlfa Romeo 12C'
+
+File: wiki-002.jsonl
+JSONL record line: 43845
+Page ID: '1828_in_birding_and_ornithology'
+Entry: sentence-line 4: "Paris museum\tMuséum national d'histoire naturelle"
+
+File: wiki-002.jsonl
+JSONL record line: 47405
+Page ID: '1971_Australian_Sports_Car_Championship'
+Entry: sentence-line 11: 'Wanneroo Park\tBarbagallo Raceway\tWestern Australia\tWestern Australia'
+
+File: wiki-003.jsonl
+JSONL record line: 36633
+Page ID: '2012–13_Miami_Heat_season'
+Entry: sentence-line 5: 'Eastern Conference Finals\t2013 NBA Playoffs\tChicago Bulls in 1998\t1997–98 Chicago Bulls season\tThree-peat\tThree-peat'
+
+File: wiki-003.jsonl
+JSONL record line: 42868
+Page ID: "2014_Big_Ten_Conference_Women's_Basketball_Tournament"
+Entry: sentence-line 5: "2014 NCAA Tournament\t2014 NCAA Women's Division I Basketball Tournament"
+
+File: wiki-003.jsonl
+JSONL record line: 44618
+Page ID: '2016–17_SD_Eibar_season'
+Entry: sentence-line 2: '14th place\t2015–16 La Liga#League table'
+
+File: wiki-004.jsonl
+JSONL record line: 29553
+Page ID: '27_Infantry_Battalion_-LRB-Ireland-RRB-'
+Entry: sentence-line 3: '2nd Brigade\t2nd Brigade (Ireland)'
+
+File: wiki-004.jsonl
+JSONL record line: 30616
+Page ID: "2011_Australian_Open_–_Boys'_Doubles"
+Entry: sentence-line 4: 'Andrew Whittington\tAndrew Whittington (tennis)\tAndrew Whittington\tAndrew Whittington (tennis)'

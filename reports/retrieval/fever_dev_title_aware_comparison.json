@@ -1,0 +1,122 @@
+{
+  "evaluation": {
+    "dataset": "FEVER shared_task_dev.jsonl",
+    "claims_evaluated": 19998,
+    "candidate_pool_size": 100,
+    "baseline": "Existing iterative AND-query BM25 ranking; top 10 from the same candidate pool.",
+    "experimental_method": "Rerank the top 100 BM25 candidates, moving candidates whose normalized Wikipedia page-title phrase occurs in the claim ahead of other candidates. Preserve BM25 order within each group. This is a heuristic, not NER.",
+    "query_policy": "Reuse the existing baseline tokenization and query policy.",
+    "retrieval_errors": 0,
+    "strategy_counts": {
+      "and_4_terms": 2296,
+      "and_2_terms": 7928,
+      "and_5_terms": 1694,
+      "and_3_terms": 5128,
+      "and_1_terms": 2923,
+      "no_results": 29
+    }
+  },
+  "baseline_metrics": {
+    "Recall@1": {
+      "hits": 2275,
+      "denominator": 13332,
+      "score": 0.17064206420642064
+    },
+    "CompleteEvidenceGroup@1": {
+      "complete_groups": 2132,
+      "denominator": 13332,
+      "score": 0.15991599159915992
+    },
+    "Recall@5": {
+      "hits": 3444,
+      "denominator": 13332,
+      "score": 0.2583258325832583
+    },
+    "CompleteEvidenceGroup@5": {
+      "complete_groups": 3214,
+      "denominator": 13332,
+      "score": 0.24107410741074106
+    },
+    "Recall@10": {
+      "hits": 3782,
+      "denominator": 13332,
+      "score": 0.2836783678367837
+    },
+    "CompleteEvidenceGroup@10": {
+      "complete_groups": 3513,
+      "denominator": 13332,
+      "score": 0.2635013501350135
+    }
+  },
+  "title_aware_metrics": {
+    "Recall@1": {
+      "hits": 3711,
+      "denominator": 13332,
+      "score": 0.27835283528352833
+    },
+    "CompleteEvidenceGroup@1": {
+      "complete_groups": 3506,
+      "denominator": 13332,
+      "score": 0.262976297629763
+    },
+    "Recall@5": {
+      "hits": 4269,
+      "denominator": 13332,
+      "score": 0.3202070207020702
+    },
+    "CompleteEvidenceGroup@5": {
+      "complete_groups": 4006,
+      "denominator": 13332,
+      "score": 0.3004800480048005
+    },
+    "Recall@10": {
+      "hits": 4385,
+      "denominator": 13332,
+      "score": 0.3289078907890789
+    },
+    "CompleteEvidenceGroup@10": {
+      "complete_groups": 4102,
+      "denominator": 13332,
+      "score": 0.30768076807680766
+    }
+  },
+  "comparison": {
+    "Recall@1": {
+      "baseline": 0.17064206420642064,
+      "title_aware": 0.27835283528352833,
+      "absolute_change": 0.10771077107710769
+    },
+    "CompleteEvidenceGroup@1": {
+      "baseline": 0.15991599159915992,
+      "title_aware": 0.262976297629763,
+      "absolute_change": 0.10306030603060307
+    },
+    "Recall@5": {
+      "baseline": 0.2583258325832583,
+      "title_aware": 0.3202070207020702,
+      "absolute_change": 0.06188118811881188
+    },
+    "CompleteEvidenceGroup@5": {
+      "baseline": 0.24107410741074106,
+      "title_aware": 0.3004800480048005,
+      "absolute_change": 0.05940594059405943
+    },
+    "Recall@10": {
+      "baseline": 0.2836783678367837,
+      "title_aware": 0.3289078907890789,
+      "absolute_change": 0.04522952295229521
+    },
+    "CompleteEvidenceGroup@10": {
+      "baseline": 0.2635013501350135,
+      "title_aware": 0.30768076807680766,
+      "absolute_change": 0.04417941794179414
+    }
+  },
+  "limitations": [
+    "Title matching only reranks BM25 candidates; it cannot recover a page absent from the candidate pool.",
+    "Title phrase matching is heuristic and does not perform named-entity recognition or entity linking.",
+    "A matching title does not establish that a sentence supports or refutes the claim.",
+    "Recall is claim-level: at least one gold sentence retrieved.",
+    "CompleteEvidenceGroup requires every pair in one gold alternative evidence group to be retrieved."
+  ]
+}
