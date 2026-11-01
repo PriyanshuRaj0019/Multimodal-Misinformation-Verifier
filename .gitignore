@@ -243,3 +243,10 @@ reports/eda/train_dev_claim_overlap.csv
 data/processed/wiki_sentence_index.sqlite3
 data/processed/wiki_sentence_index.sqlite3-shm
 data/processed/wiki_sentence_index.sqlite3-wal
+
+
+# Generated FEVER retrieval datasets
+data/processed/fever_train_retrieved_evidence*.jsonl
+
+# Generated Wikipedia indexes
+data/processed/wiki_title_index.sqlite3

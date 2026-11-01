@@ -1,0 +1,38 @@
+{
+  "dataset": "FEVER train",
+  "input_file": "data\\raw\\fever\\train.jsonl",
+  "index_file": "data\\processed\\wiki_sentence_index.sqlite3",
+  "output_file": "data\\processed\\fever_train_retrieved_evidence.jsonl",
+  "top_k": 5,
+  "processed_claims": 145449,
+  "claims_with_evidence": 145287,
+  "claims_without_evidence": 162,
+  "retrieval_errors": 0,
+  "label_distribution": {
+    "SUPPORTS": 80035,
+    "REFUTES": 29775,
+    "NOT ENOUGH INFO": 35639
+  },
+  "retrieval_strategy_distribution": {
+    "and_2_terms": 53361,
+    "and_5_terms": 14759,
+    "and_1_terms": 17424,
+    "and_4_terms": 19000,
+    "and_3_terms": 40743,
+    "no_results": 160,
+    "empty_query": 2
+  },
+  "gold_evidence_diagnostics": {
+    "claims_with_gold_evidence": 109810,
+    "claims_with_any_gold_hit": 27405,
+    "claims_with_complete_gold_group": 25069
+  },
+  "important_notes": [
+    "Only FEVER train.jsonl was used.",
+    "Gold evidence annotations were preserved separately.",
+    "Gold evidence was not injected into retrieved evidence.",
+    "Alternative gold evidence groups were preserved.",
+    "Retrieval diagnostics are not classifier performance metrics.",
+    "This dataset is not yet a trained evidence-aware model."
+  ]
+}

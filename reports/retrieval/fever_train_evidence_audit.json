@@ -1,0 +1,401 @@
+{
+  "dataset": "data\\processed\\fever_train_retrieved_evidence.jsonl",
+  "total_claims": 145449,
+  "overall": {
+    "claims_with_gold_evidence": 109810,
+    "claims_with_any_gold_hit": 27405,
+    "any_gold_hit_percent": 24.96,
+    "claims_with_complete_gold_group": 25069,
+    "complete_group_percent": 22.83,
+    "unique_gold_evidence_items": 204041,
+    "unique_matched_gold_evidence_items": 27757,
+    "gold_item_recall_percent": 13.6
+  },
+  "per_class": {
+    "NOT ENOUGH INFO": {
+      "claims": 35639,
+      "claims_with_retrieved_evidence": 35581,
+      "claims_without_retrieved_evidence": 58,
+      "claims_with_gold_evidence": 0,
+      "claims_with_any_gold_hit": 0,
+      "any_gold_hit_percent": 0.0,
+      "claims_with_complete_gold_group": 0,
+      "complete_group_percent": 0.0,
+      "unique_gold_evidence_items": 0,
+      "unique_matched_gold_evidence_items": 0,
+      "gold_item_recall_percent": 0.0
+    },
+    "REFUTES": {
+      "claims": 29775,
+      "claims_with_retrieved_evidence": 29731,
+      "claims_without_retrieved_evidence": 44,
+      "claims_with_gold_evidence": 29775,
+      "claims_with_any_gold_hit": 4761,
+      "any_gold_hit_percent": 15.99,
+      "claims_with_complete_gold_group": 4333,
+      "complete_group_percent": 14.55,
+      "unique_gold_evidence_items": 56930,
+      "unique_matched_gold_evidence_items": 4833,
+      "gold_item_recall_percent": 8.49
+    },
+    "SUPPORTS": {
+      "claims": 80035,
+      "claims_with_retrieved_evidence": 79975,
+      "claims_without_retrieved_evidence": 60,
+      "claims_with_gold_evidence": 80035,
+      "claims_with_any_gold_hit": 22644,
+      "any_gold_hit_percent": 28.29,
+      "claims_with_complete_gold_group": 20736,
+      "complete_group_percent": 25.91,
+      "unique_gold_evidence_items": 147111,
+      "unique_matched_gold_evidence_items": 22924,
+      "gold_item_recall_percent": 15.58
+    }
+  },
+  "retrieval_strategy_distribution": {
+    "and_2_terms": 53361,
+    "and_5_terms": 14759,
+    "and_1_terms": 17424,
+    "and_4_terms": 19000,
+    "and_3_terms": 40743,
+    "no_results": 160,
+    "empty_query": 2
+  },
+  "sample_gold_misses": [
+    {
+      "id": 75397,
+      "label": "SUPPORTS",
+      "claim": "Nikolaj Coster-Waldau worked with the Fox Broadcasting Company.",
+      "retrieval_strategy": "and_2_terms",
+      "gold_evidence_groups": [
+        [
+          {
+            "page_title": "Nikolaj_Coster-Waldau",
+            "sentence_id": 7
+          },
+          {
+            "page_title": "Fox_Broadcasting_Company",
+            "sentence_id": 0
+          }
+        ]
+      ],
+      "retrieved_evidence": [
+        {
+          "page_title": "İhlas_News_Agency_Co._-LRB-IHA-RRB-",
+          "sentence_id": 20,
+          "sentence_text": "American Broadcasting Company"
+        },
+        {
+          "page_title": "Nankai_-LRB-disambiguation-RRB-",
+          "sentence_id": 11,
+          "sentence_text": "Nankai Broadcasting , a broadcasting company in Japan"
+        },
+        {
+          "page_title": "Renda",
+          "sentence_id": 7,
+          "sentence_text": "Renda Broadcasting , Pittsburgh-based radio broadcasting company"
+        }
+      ]
+    },
+    {
+      "id": 150448,
+      "label": "SUPPORTS",
+      "claim": "Roman Atwood is a content creator.",
+      "retrieval_strategy": "and_2_terms",
+      "gold_evidence_groups": [
+        [
+          {
+            "page_title": "Roman_Atwood",
+            "sentence_id": 1
+          }
+        ],
+        [
+          {
+            "page_title": "Roman_Atwood",
+            "sentence_id": 3
+          }
+        ]
+      ],
+      "retrieved_evidence": [
+        {
+          "page_title": "Vincent_Hyland",
+          "sentence_id": 0,
+          "sentence_text": "Vincent Hyland is a digital Content -LRB- media -RRB- creator ."
+        },
+        {
+          "page_title": "Jasmine_Simpkins",
+          "sentence_id": 0,
+          "sentence_text": "Jasmine Simpkins is a television host , reporter , producer and content creator ."
+        },
+        {
+          "page_title": "Indie_RPG_Awards",
+          "sentence_id": 9,
+          "sentence_text": "A game where the creator has full control of content and publishing ."
+        }
+      ]
+    },
+    {
+      "id": 156709,
+      "label": "REFUTES",
+      "claim": "Adrienne Bailon is an accountant.",
+      "retrieval_strategy": "and_1_terms",
+      "gold_evidence_groups": [
+        [
+          {
+            "page_title": "Adrienne_Bailon",
+            "sentence_id": 0
+          }
+        ]
+      ],
+      "retrieved_evidence": [
+        {
+          "page_title": "Certified_Accountant",
+          "sentence_id": 4,
+          "sentence_text": "Chartered Certified Accountant or Certified Accountant , a British qualified accountant designation"
+        },
+        {
+          "page_title": "Seamus_McSporran",
+          "sentence_id": 13,
+          "sentence_text": "An accountant"
+        },
+        {
+          "page_title": "Terry_Rogers_-LRB-politician-RRB-",
+          "sentence_id": 14,
+          "sentence_text": "Chartered Accountant"
+        }
+      ]
+    },
+    {
+      "id": 226034,
+      "label": "SUPPORTS",
+      "claim": "Tetris has sold millions of physical copies.",
+      "retrieval_strategy": "and_2_terms",
+      "gold_evidence_groups": [
+        [
+          {
+            "page_title": "Tetris",
+            "sentence_id": 18
+          }
+        ]
+      ],
+      "retrieved_evidence": [
+        {
+          "page_title": "IBM_WebSphere_eXtreme_Scale",
+          "sentence_id": 12,
+          "sentence_text": "IBM testing has shown that can be scaled out to hundreds of physical servers processing millions of transactions per second ."
+        },
+        {
+          "page_title": "International_airport",
+          "sentence_id": 8,
+          "sentence_text": "The physical structures that serve millions of individual passengers and flights are among the most complex and interconnected in the world ."
+        },
+        {
+          "page_title": "Soy_allergy",
+          "sentence_id": 1,
+          "sentence_text": "It is a hypersensitivity to dietary substances from soy causing an overreaction of the immune system which may lead to severe physical symptoms for millions of people ."
+        }
+      ]
+    },
+    {
+      "id": 76253,
+      "label": "SUPPORTS",
+      "claim": "There is a movie called The Hunger Games.",
+      "retrieval_strategy": "and_4_terms",
+      "gold_evidence_groups": [
+        [
+          {
+            "page_title": "The_Hunger_Games_-LRB-film-RRB-",
+            "sentence_id": 0
+          }
+        ],
+        [
+          {
+            "page_title": "The_Hunger_Games_-LRB-film-RRB-",
+            "sentence_id": 1
+          }
+        ],
+        [
+          {
+            "page_title": "The_Hunger_Games_-LRB-film-RRB-",
+            "sentence_id": 2
+          }
+        ],
+        [
+          {
+            "page_title": "The_Hunger_Games_-LRB-film-RRB-",
+            "sentence_id": 16
+          }
+        ]
+      ],
+      "retrieved_evidence": [
+        {
+          "page_title": "Laurie_Spiegel",
+          "sentence_id": 13,
+          "sentence_text": "Her piece called `` Sediment '' was used in the cornucopia scene of the 2012 movie The Hunger Games ."
+        }
+      ]
+    },
+    {
+      "id": 188923,
+      "label": "SUPPORTS",
+      "claim": "Ryan Gosling has been to a country in Africa.",
+      "retrieval_strategy": "and_2_terms",
+      "gold_evidence_groups": [
+        [
+          {
+            "page_title": "Ryan_Gosling",
+            "sentence_id": 17
+          },
+          {
+            "page_title": "Chad",
+            "sentence_id": 0
+          }
+        ]
+      ],
+      "retrieved_evidence": [
+        {
+          "page_title": "Boom_Crash_Opera_-LRB-album-RRB-",
+          "sentence_id": 16,
+          "sentence_text": "The label then flew the band to London to record their debut album at RAK Studios with producer , Alex Sadkin -LRB- Simply Red , Grace Jones , Talking Heads -RRB- and engineer , Will Gosling -LRB- Big Country -RRB- ."
+        },
+        {
+          "page_title": "Homegrown_Cafe",
+          "sentence_id": 10,
+          "sentence_text": "Other Notable performers were Amanda Wilkinson -LRB- country Music Singer -RRB- , Leanne and Kelly Slade -LRB- Members of professional dance group The Canadian Steppers -RRB- Leah Gordon -LRB- professional opera singer -RRB- and Stephanie Cadman -LRB- Singer in Group Belle Star -RRB- and Ryan Gosling ."
+        }
+      ]
+    },
+    {
+      "id": 138503,
+      "label": "REFUTES",
+      "claim": "Stranger Things is set in Bloomington, Indiana.",
+      "retrieval_strategy": "and_1_terms",
+      "gold_evidence_groups": [
+        [
+          {
+            "page_title": "Stranger_Things",
+            "sentence_id": 5
+          }
+        ]
+      ],
+      "retrieved_evidence": [
+        {
+          "page_title": "List_of_hospitals_in_Indiana",
+          "sentence_id": 14,
+          "sentence_text": "Bloomington Hospital -- Bloomington"
+        },
+        {
+          "page_title": "Bloomington_High_School",
+          "sentence_id": 13,
+          "sentence_text": "Idt-Bloomington , Bloomington , Minnesota"
+        },
+        {
+          "page_title": "List_of_hospitals_in_Indiana",
+          "sentence_id": 18,
+          "sentence_text": "Bloomington Meadows Hospital -- Bloomington"
+        }
+      ]
+    },
+    {
+      "id": 129983,
+      "label": "SUPPORTS",
+      "claim": "Ryan Seacrest is a person.",
+      "retrieval_strategy": "and_1_terms",
+      "gold_evidence_groups": [
+        [
+          {
+            "page_title": "Ryan_Seacrest",
+            "sentence_id": 0
+          }
+        ],
+        [
+          {
+            "page_title": "Ryan_Seacrest",
+            "sentence_id": 1
+          }
+        ],
+        [
+          {
+            "page_title": "Ryan_Seacrest",
+            "sentence_id": 2
+          }
+        ],
+        [
+          {
+            "page_title": "Ryan_Seacrest",
+            "sentence_id": 5
+          }
+        ]
+      ],
+      "retrieved_evidence": [
+        {
+          "page_title": "Seacrest_Beach",
+          "sentence_id": 3,
+          "sentence_text": "Seacrest Beach , Florida"
+        },
+        {
+          "page_title": "Country_Day_School_movement",
+          "sentence_id": 141,
+          "sentence_text": "Seacrest Country Day School"
+        },
+        {
+          "page_title": "American_Idol_-LRB-season_12-RRB-",
+          "sentence_id": 1,
+          "sentence_text": "Ryan Seacrest returned to host ."
+        }
+      ]
+    },
+    {
+      "id": 73170,
+      "label": "REFUTES",
+      "claim": "Puerto Rico is not an unincorporated territory of the United States.",
+      "retrieval_strategy": "and_5_terms",
+      "gold_evidence_groups": [
+        [
+          {
+            "page_title": "Puerto_Rico",
+            "sentence_id": 0
+          }
+        ]
+      ],
+      "retrieved_evidence": [
+        {
+          "page_title": "Estado_Libre_Asociado_de_Puerto_Rico",
+          "sentence_id": 3,
+          "sentence_text": "Puerto Rico is an unincorporated territory of the United States ."
+        },
+        {
+          "page_title": "List_of_lakes_of_Puerto_Rico",
+          "sentence_id": 1,
+          "sentence_text": "Puerto Rico is an island and an unincorporated territory of the United States ."
+        },
+        {
+          "page_title": "Puerto_Rico_-LRB-disambiguation-RRB-",
+          "sentence_id": 0,
+          "sentence_text": "Puerto Rico is an unincorporated territory of the United States in the Caribbean Sea ."
+        }
+      ]
+    },
+    {
+      "id": 179616,
+      "label": "SUPPORTS",
+      "claim": "Michael Giacchino composed the score for Doctor Strange.",
+      "retrieval_strategy": "and_5_terms",
+      "gold_evidence_groups": [
+        [
+          {
+            "page_title": "Michael_Giacchino",
+            "sentence_id": 1
+          }
+        ]
+      ],
+      "retrieved_evidence": [
+        {
+          "page_title": "Doctor_Strange_-LRB-soundtrack-RRB-",
+          "sentence_id": 0,
+          "sentence_text": "Doctor Strange -LRB- Original Motion Picture Soundtrack -RRB- is the film score to the Marvel Studios film Doctor Strange composed by Michael Giacchino ."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1181 @@
+
+========================================================================================
+PROJECT PATH
+========================================================================================
+D:\COMEBACK\PROJECTS\Multimodal Misinformation Verifier
+
+========================================================================================
+GIT STATE
+========================================================================================
+
+--- Current branch ---
+Exit code: 0
+main
+
+--- Working tree status ---
+Exit code: 0
+## main...origin/main
+?? audit_multimodal_verifier.py
+
+--- Recent commits ---
+Exit code: 0
+7a0742d (HEAD -> main, origin/main, origin/HEAD) feat: add FEVER baseline verification models
+ee8640d feat: add FEVER evidence retrieval and evaluation
+8231748 docs: update project README and progress
+7ad39f8 feat: add FEVER dataset EDA and audit
+96b2377 docs: define MVP requirements and system architecture
+
+--- Unstaged diff summary ---
+Exit code: 0
+(no output)
+
+--- Staged diff summary ---
+Exit code: 0
+(no output)
+
+========================================================================================
+PYTHON AND DEPENDENCIES
+========================================================================================
+Project root: D:\COMEBACK\PROJECTS\Multimodal Misinformation Verifier
+Python executable: D:\COMEBACK\PROJECTS\Multimodal Misinformation Verifier\.venv\Scripts\python.exe
+Python version: 3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]
+Platform: Windows-11-10.0.26300-SP0
+sys.prefix: D:\COMEBACK\PROJECTS\Multimodal Misinformation Verifier\.venv
+sys.base_prefix: C:\Users\HP\AppData\Local\Programs\Python\Python312
+Virtual environment active: True
+
+Package availability:
+  numpy: AVAILABLE
+  pandas: AVAILABLE
+  scipy: AVAILABLE
+  scikit-learn: AVAILABLE
+  torch: NOT FOUND
+  torchvision: NOT FOUND
+  transformers: NOT FOUND
+  sentence-transformers: NOT FOUND
+  datasets: NOT FOUND
+  evaluate: NOT FOUND
+  rank-bm25: NOT FOUND
+  faiss: NOT FOUND
+  pytest: NOT FOUND
+  ruff: NOT FOUND
+  fastapi: NOT FOUND
+  pydantic: NOT FOUND
+  Pillow: AVAILABLE
+  pytesseract: NOT FOUND
+  opencv-python: NOT FOUND
+  faster-whisper: NOT FOUND
+  rapidfuzz: NOT FOUND
+  joblib: AVAILABLE
+
+--- pip version ---
+Exit code: 0
+pip 26.2.2 from D:\COMEBACK\PROJECTS\Multimodal Misinformation Verifier\.venv\Lib\site-packages\pip (python 3.12)
+
+========================================================================================
+GPU AND CUDA
+========================================================================================
+--- nvidia-smi ---
+Exit code: 0
+Thu Oct 29 09:23:30 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 617.42                 KMD Version: 617.42        CUDA UMD Version: 13.4     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                  Driver-Model | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 4060 ...  WDDM  |   00000000:01:00.0 Off |                  N/A |
+| N/A   51C    P0             10W /   97W |       0MiB /   8188MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+--- CUDA compiler ---
+Command not available: nvcc
+
+========================================================================================
+FILE INVENTORY
+========================================================================================
+Files found: 57
+Listing cap: 3000
+
+     5.30 KB  .gitignore
+      0.00 B  configs\.gitkeep
+     8.80 KB  docs\architecture.md
+      0.00 B  docs\data-card.md
+      0.00 B  docs\model-card.md
+     9.15 KB  docs\requirements-specification.md
+     6.26 KB  README.md
+    129.00 B  reports\eda\dataset_overview.csv
+    158.00 B  reports\eda\dev_claim_length_summary.csv
+    28.27 KB  reports\eda\dev_claim_lengths.png
+    16.86 KB  reports\eda\dev_conflicting_claims.csv
+    227.00 B  reports\eda\dev_evidence_by_label.csv
+    117.00 B  reports\eda\dev_evidence_structure_by_label.csv
+    113.00 B  reports\eda\dev_evidence_summary.csv
+     93.00 B  reports\eda\dev_label_distribution.csv
+    34.04 KB  reports\eda\dev_label_distribution.png
+    102.00 B  reports\eda\dev_missing_values.csv
+    131.00 B  reports\eda\dev_verifiable_by_label.csv
+    160.00 B  reports\eda\train_claim_length_summary.csv
+    32.09 KB  reports\eda\train_claim_lengths.png
+   389.17 KB  reports\eda\train_conflicting_claims.csv
+     1.95 KB  reports\eda\train_dev_claim_overlap.csv
+    232.00 B  reports\eda\train_evidence_by_label.csv
+    125.00 B  reports\eda\train_evidence_structure_by_label.csv
+    117.00 B  reports\eda\train_evidence_summary.csv
+     95.00 B  reports\eda\train_label_distribution.csv
+    37.21 KB  reports\eda\train_label_distribution.png
+    102.00 B  reports\eda\train_missing_values.csv
+    140.00 B  reports\eda\train_verifiable_by_label.csv
+     2.98 KB  reports\retrieval\baseline_verifier.md
+     4.97 KB  reports\retrieval\baseline_verifier_metrics.json
+     1.45 KB  reports\retrieval\fever_dev_retrieval_metrics.json
+     3.78 KB  reports\retrieval\fever_dev_title_aware_comparison.json
+     2.25 KB  reports\retrieval\malformed_corpus_lines.txt
+     5.04 KB  reports\retrieval\README.md
+    82.26 KB  reports\retrieval\retrieval_failure_analysis.json
+   403.08 KB  reports\retrieval\title_aware_failure_analysis.json
+      0.00 B  scripts\.gitkeep
+     5.38 KB  scripts\analyze_title_aware_failures.py
+     5.42 KB  scripts\audit_fever.py
+     6.31 KB  scripts\build_wiki_sentence_index.py
+     4.08 KB  scripts\diagnose_corpus_line_formats.py
+     5.57 KB  scripts\eda_fever.py
+    10.24 KB  scripts\evaluate_bm25_retrieval.py
+     9.87 KB  scripts\evaluate_title_aware_retrieval.py
+     2.50 KB  scripts\inspect_fever_cases.py
+    690.00 B  scripts\inspect_index_schema.py
+     3.65 KB  scripts\inspect_malformed_corpus_lines.py
+     5.89 KB  scripts\inspect_missing_evidence.py
+    12.31 KB  scripts\inspect_retrieval_failures.py
+     1.05 KB  scripts\inspect_wiki_corpus.py
+     1.91 KB  scripts\show_retrieval_failure_examples.py
+     5.79 KB  scripts\train_baseline_verifier.py
+     7.04 KB  scripts\validate_evidence_mapping.py
+    12.00 KB  scripts\validate_normalized_evidence_mapping.py
+      0.00 B  src\misinfo_verifier\__init__.py
+      0.00 B  tests\__init__.py
+
+========================================================================================
+DATA AND EXISTING REPORTS
+========================================================================================
+
+--- data\raw\fever ---
+     4.15 MB  shared_task_dev.jsonl
+    31.49 MB  train.jsonl
+       [DIR]  wiki-pages.zip/
+
+--- data\processed ---
+      0.00 B  .gitkeep
+     6.11 GB  wiki_sentence_index.sqlite3
+    32.00 KB  wiki_sentence_index.sqlite3-shm
+      0.00 B  wiki_sentence_index.sqlite3-wal
+
+--- reports\retrieval ---
+     2.98 KB  baseline_verifier.md
+     4.97 KB  baseline_verifier_metrics.json
+     1.45 KB  fever_dev_retrieval_metrics.json
+     3.78 KB  fever_dev_title_aware_comparison.json
+     2.25 KB  malformed_corpus_lines.txt
+     5.04 KB  README.md
+    82.26 KB  retrieval_failure_analysis.json
+   403.08 KB  title_aware_failure_analysis.json
+
+--- reports ---
+       [DIR]  audit/
+       [DIR]  eda/
+       [DIR]  retrieval/
+
+========================================================================================
+SQLITE EVIDENCE INDEX
+========================================================================================
+Index path: D:\COMEBACK\PROJECTS\Multimodal Misinformation Verifier\data\processed\wiki_sentence_index.sqlite3
+Index size: 6.11 GB
+Last modified: Wed Oct 28 20:44:35 2026
+
+SQLite schema objects:
+
+[table] sentences
+CREATE VIRTUAL TABLE sentences USING fts5(
+                sentence_text,
+                page_title UNINDEXED,
+                sentence_id UNINDEXED,
+                tokenize = 'unicode61'
+            )
+
+[table] sentences_config
+CREATE TABLE 'sentences_config'(k PRIMARY KEY, v) WITHOUT ROWID
+
+[table] sentences_content
+CREATE TABLE 'sentences_content'(id INTEGER PRIMARY KEY, c0, c1, c2)
+
+[table] sentences_data
+CREATE TABLE 'sentences_data'(id INTEGER PRIMARY KEY, block BLOB)
+
+[table] sentences_docsize
+CREATE TABLE 'sentences_docsize'(id INTEGER PRIMARY KEY, sz BLOB)
+
+[table] sentences_idx
+CREATE TABLE 'sentences_idx'(segid, term, pgno, PRIMARY KEY(segid, term)) WITHOUT ROWID
+
+Sentence row count: 42041086
+
+========================================================================================
+SOURCE OUTLINE AND CONFIGURATION
+========================================================================================
+
+--- scripts\analyze_title_aware_failures.py (5.38 KB) ---
+2: import json
+3: import random
+4: import sqlite3
+5: import time
+6: from pathlib import Path
+8: import evaluate_bm25_retrieval as baseline
+9: import evaluate_title_aware_retrieval as improved
+23: def serialize_pairs(pairs):
+30: def main():
+
+--- scripts\audit_fever.py (5.42 KB) ---
+2: from pathlib import Path
+4: import pandas as pd
+17: def evidence_info(value):
+47: def main():
+
+--- scripts\build_wiki_sentence_index.py (6.31 KB) ---
+1: import json
+2: import sqlite3
+3: import unicodedata
+4: from pathlib import Path
+18: def normalize_title(title: str) -> str:
+22: def main():
+
+--- scripts\diagnose_corpus_line_formats.py (4.08 KB) ---
+1: import json
+2: from collections import Counter, defaultdict
+3: from pathlib import Path
+11: def classify_entry(entry):
+28: def main():
+
+--- scripts\eda_fever.py (5.57 KB) ---
+2: from pathlib import Path
+3: import re
+5: import pandas as pd
+6: import matplotlib
+9: import matplotlib.pyplot as plt
+22: def inspect_evidence(value):
+60: def analyse_dataset(name, path):
+189: def main():
+
+--- scripts\evaluate_bm25_retrieval.py (10.24 KB) ---
+2: import json
+3: import re
+4: import sqlite3
+5: import time
+6: import unicodedata
+7: from pathlib import Path
+36: def normalize_title(title):
+40: def extract_gold_groups(row):
+73: def load_dev_rows():
+102: def claim_tokens(claim):
+115: def make_and_query(tokens):
+120: def retrieve_top_k(connection, claim):
+172: def main():
+
+--- scripts\evaluate_title_aware_retrieval.py (9.87 KB) ---
+2: import json
+3: import re
+4: import sqlite3
+5: import time
+6: import unicodedata
+7: from pathlib import Path
+9: import evaluate_bm25_retrieval as baseline
+22: def normalize_text(text):
+34: def title_aliases(title):
+47: def title_appears_in_claim(title, normalized_claim):
+57: def retrieve_candidates(connection, claim):
+111: def rerank_by_title(claim, candidates):
+132: def score_rankings(rows, rankings):
+181: def main():
+
+--- scripts\inspect_fever_cases.py (2.50 KB) ---
+2: from pathlib import Path
+3: import json
+4: from pprint import pprint
+6: import pandas as pd
+18: def main():
+
+--- scripts\inspect_index_schema.py (690.00 B) ---
+1: import sqlite3
+2: from pathlib import Path
+
+--- scripts\inspect_malformed_corpus_lines.py (3.65 KB) ---
+1: import json
+2: from pathlib import Path
+11: def inspect_lines(lines):
+46: def main():
+
+--- scripts\inspect_missing_evidence.py (5.89 KB) ---
+2: import json
+3: import unicodedata
+4: from pathlib import Path
+5: from collections import defaultdict
+17: def load_references():
+55: def normalized(value, form):
+59: def main():
+
+--- scripts\inspect_retrieval_failures.py (12.31 KB) ---
+2: from __future__ import annotations
+4: import json
+5: import random
+6: import re
+7: import sqlite3
+8: import time
+9: import unicodedata
+10: from pathlib import Path
+11: from urllib.parse import quote
+38: def find_dev_file() -> Path:
+57: def normalize_title(value: str) -> str:
+61: def extract_gold_groups(row: dict) -> list[set[tuple[str, int]]]:
+99: def tokenize_claim(claim: str) -> list[str]:
+112: def make_and_query(tokens: list[str]) -> str:
+118: def retrieve_top_k(
+165: def main() -> None:
+
+--- scripts\inspect_wiki_corpus.py (1.05 KB) ---
+2: import json
+3: from pathlib import Path
+
+--- scripts\show_retrieval_failure_examples.py (1.91 KB) ---
+2: import json
+3: from pathlib import Path
+9: def main():
+
+--- scripts\train_baseline_verifier.py (5.79 KB) ---
+2: import json
+3: import time
+4: from collections import Counter
+5: from pathlib import Path
+7: from sklearn.feature_extraction.text import TfidfVectorizer
+8: from sklearn.linear_model import LogisticRegression
+9: from sklearn.metrics import (
+15: from sklearn.pipeline import Pipeline
+26: def load_dataset(path):
+51: def build_model(class_weight=None):
+75: def evaluate(name, y_true, y_pred):
+101: def print_results(results):
+119: def main():
+
+--- scripts\validate_evidence_mapping.py (7.04 KB) ---
+2: import json
+3: from pathlib import Path
+15: def load_evidence_references():
+79: def validate_corpus(required_pages, required_pairs):
+165: def main():
+
+--- scripts\validate_normalized_evidence_mapping.py (12.00 KB) ---
+1: import json
+2: import unicodedata
+3: from collections import defaultdict
+4: from pathlib import Path
+18: def normalize_title(title: str) -> str:
+23: def load_required_evidence():
+101: def parse_corpus_lines(lines):
+134: def validate_mapping():
+
+--- src\misinfo_verifier\__init__.py (0.00 B) ---
+No import/class/function declarations found.
+
+--- tests\__init__.py (0.00 B) ---
+No import/class/function declarations found.
+
+========================================================================================
+PHASE 5/6/7 KEYWORD SCAN
+========================================================================================
+
+[train_test_split]
+No matches found.
+
+[GroupShuffleSplit]
+No matches found.
+
+[Stratified]
+No matches found.
+
+[LogisticRegression]
+scripts\train_baseline_verifier.py:8: from sklearn.linear_model import LogisticRegression
+scripts\train_baseline_verifier.py:65: LogisticRegression(
+
+[TfidfVectorizer]
+scripts\train_baseline_verifier.py:7: from sklearn.feature_extraction.text import TfidfVectorizer
+scripts\train_baseline_verifier.py:55: TfidfVectorizer(
+
+[BM25]
+reports\retrieval\fever_dev_retrieval_metrics.json:4: "method": "SQLite FTS5 BM25 ranking with iterative AND queries",
+reports\retrieval\fever_dev_title_aware_comparison.json:6: "baseline": "Existing iterative AND-query BM25 ranking; top 10 from the same candidate pool.",
+reports\retrieval\fever_dev_title_aware_comparison.json:7: "experimental_method": "Rerank the top 100 BM25 candidates, moving candidates whose normalized Wikipedia page-title phrase occurs in the claim ahead of other candidates. Preserve B
+reports\retrieval\fever_dev_title_aware_comparison.json:116: "Title matching only reranks BM25 candidates; it cannot recover a page absent from the candidate pool.",
+reports\retrieval\README.md:33: ### BM25 baseline
+reports\retrieval\README.md:35: - SQLite FTS5 BM25 ranking.
+reports\retrieval\README.md:42: - Retrieves up to 100 BM25 candidates.
+reports\retrieval\README.md:45: - Preserves BM25 order within the title-match and non-title-match groups.
+
+[Recall@]
+reports\retrieval\fever_dev_retrieval_metrics.json:22: "Recall@1": {
+reports\retrieval\fever_dev_retrieval_metrics.json:32: "Recall@5": {
+reports\retrieval\fever_dev_retrieval_metrics.json:42: "Recall@10": {
+reports\retrieval\fever_dev_title_aware_comparison.json:20: "Recall@1": {
+reports\retrieval\fever_dev_title_aware_comparison.json:30: "Recall@5": {
+reports\retrieval\fever_dev_title_aware_comparison.json:40: "Recall@10": {
+reports\retrieval\fever_dev_title_aware_comparison.json:52: "Recall@1": {
+reports\retrieval\fever_dev_title_aware_comparison.json:62: "Recall@5": {
+
+[recall_at]
+No matches found.
+
+[macro_f1]
+reports\retrieval\baseline_verifier_metrics.json:25: "macro_f1": 0.16666666666666666,
+reports\retrieval\baseline_verifier_metrics.json:81: "macro_f1": 0.5066227959047337,
+reports\retrieval\baseline_verifier_metrics.json:136: "macro_f1": 0.5544374033931692,
+scripts\train_baseline_verifier.py:79: "macro_f1": float(
+scripts\train_baseline_verifier.py:105: print(f"Macro-F1: {results['macro_f1']:.4f}")
+scripts\train_baseline_verifier.py:193: f"macro-F1={experiment['macro_f1']:.4f}"
+
+[classification_report]
+reports\retrieval\baseline_verifier_metrics.json:26: "classification_report": {
+reports\retrieval\baseline_verifier_metrics.json:82: "classification_report": {
+reports\retrieval\baseline_verifier_metrics.json:137: "classification_report": {
+scripts\train_baseline_verifier.py:11: classification_report,
+scripts\train_baseline_verifier.py:88: "classification_report": classification_report(
+scripts\train_baseline_verifier.py:107: report = results["classification_report"]
+
+[confusion_matrix]
+reports\retrieval\baseline_verifier_metrics.json:59: "confusion_matrix": [
+reports\retrieval\baseline_verifier_metrics.json:115: "confusion_matrix": [
+reports\retrieval\baseline_verifier_metrics.json:170: "confusion_matrix": [
+scripts\train_baseline_verifier.py:12: confusion_matrix,
+scripts\train_baseline_verifier.py:95: "confusion_matrix": confusion_matrix(
+
+[calibration]
+No matches found.
+
+[NOT ENOUGH INFO]
+reports\retrieval\baseline_verifier.md:10: - `NOT ENOUGH INFO`
+reports\retrieval\baseline_verifier.md:51: | NOT ENOUGH INFO |    0.5442 | 0.2736 | 0.3641 |
+reports\retrieval\baseline_verifier.md:64: | NOT ENOUGH INFO |    0.5001 | 0.4779 | 0.4888 |
+reports\retrieval\baseline_verifier.md:77: The class-balanced model is the current preferred claim-only baseline. It improves overall accuracy by 2.99 percentage points and macro-F1 by 4.78 percentage points over the unbala
+reports\retrieval\baseline_verifier_metrics.json:10: "NOT ENOUGH INFO"
+reports\retrieval\baseline_verifier_metrics.json:15: "NOT ENOUGH INFO": 35639
+reports\retrieval\baseline_verifier_metrics.json:18: "NOT ENOUGH INFO": 6666,
+reports\retrieval\baseline_verifier_metrics.json:39: "NOT ENOUGH INFO": {
+
+[evidence]
+reports\retrieval\baseline_verifier.md:12: These models provide a reference point for future evidence-grounded verification.
+reports\retrieval\baseline_verifier.md:82: - Neither model retrieves or reasons over evidence.
+reports\retrieval\baseline_verifier.md:99: Proceed to evidence-grounded claim verification, combining retrieved evidence with each claim. Evaluate retrieval and classification quality separately before measuring end-to-end 
+reports\retrieval\baseline_verifier_metrics.json:191: "Both classifiers use claim text only and do not retrieve evidence.",
+reports\retrieval\fever_dev_retrieval_metrics.json:7: "claims_with_gold_evidence": 13332,
+reports\retrieval\fever_dev_retrieval_metrics.json:8: "claims_without_gold_evidence": 6666,
+reports\retrieval\fever_dev_retrieval_metrics.json:27: "CompleteEvidenceGroup@1": {
+reports\retrieval\fever_dev_retrieval_metrics.json:37: "CompleteEvidenceGroup@5": {
+
+[page_title]
+reports\retrieval\retrieval_failure_analysis.json:43: "page_title": "South_Island",
+reports\retrieval\retrieval_failure_analysis.json:49: "page_title": "South_Island",
+reports\retrieval\retrieval_failure_analysis.json:55: "page_title": "South_Island",
+reports\retrieval\retrieval_failure_analysis.json:61: "page_title": "South_Island",
+reports\retrieval\retrieval_failure_analysis.json:69: "page_title": "South_Island",
+reports\retrieval\retrieval_failure_analysis.json:85: "page_title": "DJ_Quik",
+reports\retrieval\retrieval_failure_analysis.json:93: "page_title": "DJ_Quik",
+reports\retrieval\retrieval_failure_analysis.json:100: "page_title": "Rhythm-al-ism",
+
+[sentence_id]
+reports\retrieval\malformed_corpus_lines.txt:8: non_integer_sentence_id: 507
+reports\retrieval\malformed_corpus_lines.txt:11: EXAMPLES: non_integer_sentence_id
+reports\retrieval\retrieval_failure_analysis.json:44: "sentence_id": 5
+reports\retrieval\retrieval_failure_analysis.json:50: "sentence_id": 5
+reports\retrieval\retrieval_failure_analysis.json:56: "sentence_id": 5
+reports\retrieval\retrieval_failure_analysis.json:62: "sentence_id": 5
+reports\retrieval\retrieval_failure_analysis.json:70: "sentence_id": 5,
+reports\retrieval\retrieval_failure_analysis.json:86: "sentence_id": 0
+
+[pytest]
+No matches found.
+
+[TODO]
+No matches found.
+
+[FIXME]
+No matches found.
+
+========================================================================================
+KEY DOCUMENTS AND BASELINE METRICS
+========================================================================================
+
+--- README.md ---
+Size: 6.26 KB
+﻿# Multimodal Misinformation Verifier
+
+An evidence-grounded misinformation verification system designed to evaluate claims against supporting or refuting evidence, communicate uncertainty, and provide traceable explanations.
+
+**Project status:** Dataset exploration and audit completed. Evidence retrieval and model development are upcoming.
+
+## Overview
+
+Misinformation verification requires more than classifying a statement as true or false. A reliable system must retrieve relevant evidence, assess whether that evidence supports or refutes a claim, and recognize when the available information is insufficient.
+
+This project aims to develop a modular verification pipeline that prioritizes evidence traceability, measurable performance, uncertainty handling, and reproducibility.
+
+## Objectives
+
+- Retrieve relevant evidence for a given claim.
+- Classify claims into `SUPPORTS`, `REFUTES`, or `NOT ENOUGH INFO`.
+- Connect predictions to the evidence used to produce them.
+- Evaluate retrieval quality and classification performance separately.
+- Identify failure cases, uncertainty, and limitations.
+- Build toward a multimodal architecture that can incorporate text, images, audio, and video.
+
+These are project objectives, not claims that all features have already been implemented.
+
+## Dataset
+
+The initial dataset exploration uses the FEVER benchmark:
+
+| Split       | Records | Purpose                      |
+| ----------- | ------: | ---------------------------- |
+| Train       | 145,449 | Training-data exploration    |
+| Development |  19,998 | Development-data exploration |
+
+The development split contains 6,666 examples per label in the selected file.
+
+**Labels**
+
+- `SUPPORTS`
+- `REFUTES`
+- `NOT ENOUGH INFO`
+
+The dataset audit identified duplicate claim texts and some claims associated with conflicting labels. These cases require careful treatment rather than automatic deletion or relabeling.
+
+Raw datasets are kept locally and excluded from Git.
+
+## Current Progress
+
+### Completed
+
+- Initial repository structure and documentation scaffold
+- FEVER training and development dataset exploration
+- Label distribution and claim-length analysis
+- Evidence annotation structure inspection
+- Missing-value and duplicate-claim analysis
+- Conflicting-label and train/development overlap reports
+- Representative evidence cases inspected
+- EDA and audit scripts committed to the repository
+
+### Next
+
+1. Inspect and validate the Wikipedia evidence corpus.
+2. Map FEVER evidence annotations to source sentences.
+3. Implement a reproducible evidence-loading pipeline.
+4. Build a baseline retrieval system.
+5. Evaluate retrieval using metrics such as Recall@k.
+6. Develop and evaluate claim-verification models.
+
+## Planned Architecture
+
+The intended system is organized into modular stages:
+
+1. **Input processing** — accept and validate claims and supported media inputs.
+2. **Evidence retrieval** — retrieve relevant source passages or sentences.
+3. **Evidence analysis** — assess claim–evidence relationships.
+4. **Verification** — predict `SUPPORTS`, `REFUTES`, or `NOT ENOUGH INFO`.
+5. **Reliability layer** — report uncertainty and handle insufficient evidence.
+6. **Result presentation** — return predictions with traceable evidence and limitations.
+
+The architecture will evolve as individual components are implemented and evaluated.
+
+## Repository Structure
+
+```text
+Multimodal-Misinformation-Verifier/
+├── configs/
+├── data/
+│   ├── raw/
+│   ├── interim/
+│   └── processed/
+├── docs/
+│   ├── architecture.md
+│   ├── data-card.md
+│   ├── model-card.md
+│   └── requirements-specification.md
+├── notebooks/
+├── reports/
+│   └── eda/
+├── scripts/
+│   ├── audit_fever.py
+│   ├── eda_fever.py
+│   └── inspect_fever_cases.py
+├── src/
+│   └── misinfo_verifier/
+└── tests/
+```
+
+## Reproducibility
+
+Use Python 3.12 and a virtual environment.
+
+Create the environment:
+
+```powershell
+python -m venv .venv
+```
+
+Install the packages needed for the current EDA scripts:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install pandas matplotlib
+```
+
+Run the dataset exploration:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/eda_fever.py
+```
+
+Run the dataset audit:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/audit_fever.py
+```
+
+Inspect representative cases:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/inspect_fever_cases.py
+```
+
+These commands assume the FEVER JSONL files are available locally at the paths expected by the scripts. Later pipeline stages may require additional dependencies.
+
+## Evaluation Strategy
+
+The project will report relevant metrics at each stage:
+
+- **Retrieval:** Recall@k and evidence coverage
+- **Classification:** precision, recall, F1-score, macro-F1, and confusion matrix
+- **Reliability:** confidence calibration, abstention behavior, and error analysis
+- **Engineering:** reproducibility, latency, input validation, and test coverage
+
+Metrics will be reported only after the corresponding component has been implemented and evaluated.
+
+## Engineering Principles
+
+- Evidence-backed predictions instead of unsupported assertions
+- Explicit uncertainty when evidence is insufficient
+- Separation of retrieval quality from classification quality
+- Reproducible data processing and evaluation
+- No fabricated performance metrics
+- Clear documentation of dataset limitations and model failures
+- Modular design for future multimodal support
+
+## Limitations
+
+The current work covers dataset exploration and auditing. A functioning evidence retrieval engine, trained verification model, multimodal processing pipeline, and deployed API are not yet established by this milestone.
+
+FEVER is a benchmark dataset, not a complete representation of real-world misinformation. Benchmark performance alone will not establish factual correctness across arbitrary claims or domains.
+
+## License and Data
+
+Review the applicable FEVER dataset license and the licenses of any additional corpora or pretrained models before redistribution. Raw datasets are not included in this repository.
+
+## Author
+
+**Priyanshu Raj**
+
+GitHub: [PriyanshuRaj0019](https://github.com/PriyanshuRaj0019)
+
+Repository: [Multimodal Misinformation Verifier](https://github.com/PriyanshuRaj0019/Multimodal-Misinformation-Verifier)
+
+--- docs\architecture.md ---
+Size: 8.80 KB
+﻿# System Architecture
+
+## 1. Document Information
+
+- Project: Multimodal Misinformation Verifier
+- Version: 0.1.0
+- Status: Proposed architecture
+- Target: Text-only MVP
+
+This document describes the intended design. It does not assert that the components have been implemented.
+
+## 2. Architectural Principles
+
+- Evidence before verdict.
+- Retrieval relevance is not equivalent to truth.
+- Every evidence item must retain provenance.
+- Uncertainty and conflicting evidence must be explicit.
+- Components should be testable in isolation.
+- Dataset and model versions must be traceable.
+- The initial design should remain simple enough to evaluate and improve.
+
+## 3. High-Level Data Flow
+
+Claim input
+    |
+    v
+Input validation
+    |
+    v
+Text preprocessing
+    |
+    v
+Evidence retrieval <--- Versioned evidence corpus
+    |
+    v
+Candidate evidence filtering and ranking
+    |
+    v
+Claim-evidence assessment
+    |
+    v
+Verdict policy and uncertainty handling
+    |
+    v
+Result assembly
+    |
+    v
+Structured verification result
+
+The first implementation may use simple lexical retrieval. Semantic embeddings, reranking, and stronger inference models are optional later improvements, not prerequisites for the first baseline.
+
+## 4. Logical Components
+
+### 4.1 Input and validation
+
+Responsibilities:
+- Accept a textual claim.
+- Validate type, whitespace, and configured length limits.
+- Return clear validation errors.
+- Avoid interpreting arbitrary user input as executable instructions.
+
+### 4.2 Preprocessing
+
+Responsibilities:
+- Apply consistent text normalization.
+- Preserve the original claim for display and audit.
+- Normalize evidence text without destroying meaningful names, dates, quantities, or negation.
+- Record preprocessing configuration.
+
+Normalization must be tested because aggressive transformations can alter claim meaning.
+
+### 4.3 Evidence store
+
+The evidence store shall expose records with a stable schema.
+
+Proposed fields:
+- evidence_id: stable unique identifier
+- text: evidence passage
+- source_title: title when available
+- source_url: URL when available and verified
+- publisher: publisher name when available
+- published_at: publication timestamp when available
+- retrieved_at: acquisition timestamp when available
+- source_type: documented source category
+- dataset_version: version or snapshot identifier
+
+Unavailable metadata must remain missing rather than being invented.
+
+### 4.4 Retrieval
+
+Responsibilities:
+- Search the configured evidence corpus.
+- Return a bounded list of candidate passages.
+- Preserve evidence IDs and source metadata.
+- Record retrieval method and parameters.
+
+Initial baseline:
+- A simple lexical retrieval method such as TF-IDF or BM25, selected after reviewing the dataset and available dependencies.
+
+Potential future improvements:
+- Dense embedding retrieval.
+- Hybrid lexical and dense retrieval.
+- Cross-encoder reranking.
+- Query reformulation.
+
+Retrieval performance must be measured independently from final verdict accuracy.
+
+### 4.5 Claim-evidence assessment
+
+Responsibilities:
+- Compare a claim with each candidate evidence passage.
+- Determine whether the passage supports, contradicts, or does not resolve the claim.
+- Preserve the link between assessment and evidence ID.
+- Handle irrelevant and ambiguous passages.
+
+A retrieval score alone shall not determine support or refutation. The first assessment baseline may use documented rules or a selected model, but its limitations must be evaluated.
+
+### 4.6 Verdict policy
+
+The verdict policy combines evidence assessments and applies explicit decision rules.
+
+Possible outputs:
+- Supported
+- Refuted
+- Insufficient evidence
+- Review required
+
+The policy must account for:
+- Evidence quality and relevance.
+- Agreement or disagreement among evidence items.
+- Missing or incomplete evidence.
+- Contradictory sources.
+- Configured decision thresholds, if applicable.
+
+Thresholds must be selected using validation data, not chosen to make reported results look better. The policy should prefer unresolved outcomes when the evidence does not justify a conclusion.
+
+### 4.7 Result assembly
+
+Proposed response fields:
+- claim
+- verdict
+- rationale
+- evidence: list of evidence references and assessment details
+- warnings
+- unresolved_questions
+- pipeline_version
+- dataset_version
+
+Optional scores may be included only when their meaning is documented. They must not be described as calibrated confidence without appropriate validation.
+
+### 4.8 Evaluation
+
+Responsibilities:
+- Evaluate retrieval separately from verification.
+- Compute documented metrics on fixed data splits.
+- Record experiment configuration and versions.
+- Produce error analyses and reproducible outputs.
+- Test abstention behavior and evidence provenance.
+
+### 4.9 API boundary — future milestone
+
+A REST API may later expose the pipeline through a framework such as FastAPI.
+
+Expected concerns:
+- Request and response schemas.
+- Input validation.
+- Controlled error responses.
+- Request size limits and timeouts.
+- Logging that avoids unnecessary sensitive input retention.
+- Health checks and API tests.
+
+The API is not considered implemented until its code and tests exist.
+
+## 5. Suggested Package Boundaries
+
+Proposed source layout:
+
+src/misinfo_verifier/
+    __init__.py
+    schemas.py
+... preview truncated
+
+--- docs\data-card.md ---
+Size: 0.00 B
+(Empty file)
+
+--- docs\model-card.md ---
+Size: 0.00 B
+(Empty file)
+
+--- reports\retrieval\baseline_verifier.md ---
+Size: 2.98 KB
+
+# FEVER Baseline Verification Experiments
+
+## Objective
+
+Establish reproducible claim-only classification baselines for the three FEVER labels:
+
+- `SUPPORTS`
+- `REFUTES`
+- `NOT ENOUGH INFO`
+
+These models provide a reference point for future evidence-grounded verification.
+
+## Dataset
+
+| Split | Examples |
+| ----- | -------: |
+| Train |  145,449 |
+| Dev   |   19,998 |
+
+The dev set contains 6,666 examples per class.
+
+## Models
+
+### 1. Majority-class baseline
+
+Predicts the most frequent training label for every dev claim.
+
+- Accuracy: 33.33%
+- Macro-F1: 16.67%
+
+### 2. TF-IDF + Logistic Regression
+
+Configuration:
+
+- Lowercase text
+- Unigrams and bigrams
+- Minimum document frequency: 2
+- Maximum features: 200,000
+- Sublinear term frequency
+- Logistic Regression with `lbfgs`
+- Maximum iterations: 300
+- Random state: 42
+
+Results:
+
+| Label           | Precision | Recall |     F1 |
+| --------------- | --------: | -----: | -----: |
+| SUPPORTS        |    0.4407 | 0.8306 | 0.5758 |
+| REFUTES         |    0.7635 | 0.4674 | 0.5799 |
+| NOT ENOUGH INFO |    0.5442 | 0.2736 | 0.3641 |
+
+- Accuracy: 52.39%
+- Macro-F1: 50.66%
+
+### 3. Class-balanced TF-IDF + Logistic Regression
+
+Uses the same text features and classifier settings, with `class_weight="balanced"`.
+
+| Label           | Precision | Recall |     F1 |
+| --------------- | --------: | -----: | -----: |
+| SUPPORTS        |    0.5156 | 0.5794 | 0.5456 |
+| REFUTES         |    0.6560 | 0.6040 | 0.6289 |
+| NOT ENOUGH INFO |    0.5001 | 0.4779 | 0.4888 |
+
+- Accuracy: 55.38%
+- Macro-F1: 55.44%
+
+## Comparison
+
+| Model                                       | Accuracy | Macro-F1 |
+| ------------------------------------------- | -------: | -------: |
+| Majority baseline                           |   33.33% |   16.67% |
+| TF-IDF + Logistic Regression                |   52.39% |   50.66% |
+| Class-balanced TF-IDF + Logistic Regression |   55.38% |   55.44% |
+
+The class-balanced model is the current preferred claim-only baseline. It improves overall accuracy by 2.99 percentage points and macro-F1 by 4.78 percentage points over the unbalanced model. Its `NOT ENOUGH INFO` F1 improves from 0.3641 to 0.4888.
+
+## Limitations
+
+- Both trained classifiers use claim text only.
+- Neither model retrieves or reasons over evidence.
+- A predicted label does not establish factual truth.
+- Results are measured on the FEVER dev split and are not final test-set results.
+- The 90–95% accuracy target is aspirational and has not been achieved or validated.
+
+## Reproducibility
+
+From the repository root, run:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\train_baseline_verifier.py
+```
+
+Machine-readable metrics are saved to `reports/retrieval/baseline_verifier_metrics.json`.
+
+## Next step
+
+Proceed to evidence-grounded claim verification, combining retrieved evidence with each claim. Evaluate retrieval and classification quality separately before measuring end-to-end verification performance.
+
+--- reports\retrieval\baseline_verifier_metrics.json ---
+Size: 4.97 KB
+{
+  "task": "Three-class FEVER claim-only verification baseline",
+  "training_data": "data\\raw\\fever\\train.jsonl",
+  "evaluation_data": "data\\raw\\fever\\shared_task_dev.jsonl",
+  "training_rows": 145449,
+  "dev_rows": 19998,
+  "label_order": [
+    "SUPPORTS",
+    "REFUTES",
+    "NOT ENOUGH INFO"
+  ],
+  "train_label_distribution": {
+    "SUPPORTS": 80035,
+    "REFUTES": 29775,
+    "NOT ENOUGH INFO": 35639
+  },
+  "dev_label_distribution": {
+    "NOT ENOUGH INFO": 6666,
+    "SUPPORTS": 6666,
+    "REFUTES": 6666
+  },
+  "majority_baseline": {
+    "name": "majority_baseline",
+    "accuracy": 0.3333333333333333,
+    "macro_f1": 0.16666666666666666,
+    "classification_report": {
+      "SUPPORTS": {
+        "precision": 0.3333333333333333,
+        "recall": 1.0,
+        "f1-score": 0.5,
+        "support": 6666.0
+      },
+      "REFUTES": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 6666.0
+      },
+      "NOT ENOUGH INFO": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 6666.0
+      },
+      "accuracy": 0.3333333333333333,
+      "macro avg": {
+        "precision": 0.1111111111111111,
+        "recall": 0.3333333333333333,
+        "f1-score": 0.16666666666666666,
+        "support": 19998.0
+      },
+      "weighted avg": {
+        "precision": 0.1111111111111111,
+        "recall": 0.3333333333333333,
+        "f1-score": 0.16666666666666666,
+        "support": 19998.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        6666,
+        0,
+        0
+      ],
+      [
+        6666,
+        0,
+        0
+      ],
+      [
+        6666,
+        0,
+        0
+      ]
+    ]
+  },
+  "experiments": {
+    "tfidf_logistic_regression": {
+      "name": "tfidf_logistic_regression",
+      "accuracy": 0.5239023902390239,
+      "macro_f1": 0.5066227959047337,
+      "classification_report": {
+        "SUPPORTS": {
+          "precision": 0.4406685236768802,
+          "recall": 0.8306330633063307,
+          "f1-score": 0.5758410899069211,
+          "support": 6666.0
+        },
+        "REFUTES": {
+          "precision": 0.7635383484440088,
+          "recall": 0.46744674467446745,
+          "f1-score": 0.5798827579789709,
+          "support": 6666.0
+        },
+        "NOT ENOUGH INFO": {
+          "precision": 0.5441527446300716,
+          "recall": 0.27362736273627364,
+          "f1-score": 0.364144539828309,
+          "support": 6666.0
+        },
+        "accuracy": 0.5239023902390239,
+        "macro avg": {
+          "precision": 0.5827865389169868,
+          "recall": 0.523902390239024,
+          "f1-score": 0.5066227959047337,
+          "support": 19998.0
+        },
+        "weighted avg": {
+          "precision": 0.5827865389169868,
+          "recall": 0.5239023902390239,
+          "f1-score": 0.5066227959047337,
+          "support": 19998.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          5537,
+          369,
+          760
+        ],
+        [
+          2782,
+          3116,
+          768
+        ],
+        [
+          4246,
+          596,
+          1824
+        ]
+      ]
+    },
+    "tfidf_logistic_regression_balanced": {
+      "name": "tfidf_logistic_regression_balanced",
+      "accuracy": 0.5537553755375537,
+      "macro_f1": 0.5544374033931692,
+      "classification_report": {
+        "SUPPORTS": {
+          "precision": 0.5156208277703604,
+          "recall": 0.5793579357935793,
+          "f1-score": 0.5456343599886974,
+          "support": 6666.0
+        },
+        "REFUTES": {
+          "precision": 0.6560208570963011,
+          "recall": 0.6039603960396039,
+          "f1-score": 0.6289150980239007,
+          "support": 6666.0
+        },
+        "NOT ENOUGH INFO": {
+          "precision": 0.500078480615288,
+          "recall": 0.47794779477947796,
+          "f1-score": 0.48876275216690956,
+          "support": 6666.0
+        },
+        "accuracy": 0.5537553755375537,
+        "macro avg": {
+          "precision": 0.5572400551606499,
+          "recall": 0.5537553755375537,
+          "f1-score": 0.5544374033931692,
+          "support": 19998.0
+        },
+        "weighted avg": {
+          "precision": 0.5572400551606499,
+          "recall": 0.5537553755375537,
+          "f1-score": 0.5544374033931692,
+          "support": 19998.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          3862,
+          967,
+          1837
+        ],
+        [
+          1292,
+          4026,
+          1348
+        ],
+... preview truncated

@@ -1,0 +1,74 @@
+{
+  "dataset": "FEVER",
+  "input": "D:\\COMEBACK\\PROJECTS\\Multimodal Misinformation Verifier\\data\\raw\\fever\\train.jsonl",
+  "bm25_database": "D:\\COMEBACK\\PROJECTS\\Multimodal Misinformation Verifier\\data\\processed\\wiki_sentence_index.sqlite3",
+  "title_database": "D:\\COMEBACK\\PROJECTS\\Multimodal Misinformation Verifier\\data\\processed\\wiki_title_index.sqlite3",
+  "records_processed": 5,
+  "errors": 0,
+  "retrieval_configuration": {
+    "bm25_candidate_limit": 100,
+    "final_evidence_limit": 10,
+    "max_title_ngram_words": 8,
+    "max_title_matches": 30,
+    "max_pages_per_title": 10,
+    "max_sentences_per_title_page": 500,
+    "max_title_candidates": 5000,
+    "fusion": "reciprocal_rank_fusion",
+    "rrf_k": 60
+  },
+  "retrieval_source_counts": {
+    "BM25": 21,
+    "TITLE": 19,
+    "BM25+TITLE": 1
+  },
+  "metrics": {
+    "BM25": {
+      "channel": "BM25",
+      "records_evaluated": 5,
+      "records_with_gold_evidence": 4,
+      "recall_at_k": {
+        "1": 0.25,
+        "5": 0.25,
+        "10": 0.25
+      },
+      "complete_group_recall_at_k": {
+        "1": 0.25,
+        "5": 0.25,
+        "10": 0.25
+      },
+      "gold_item_recall": 0.16666666666666666
+    },
+    "TITLE": {
+      "channel": "TITLE",
+      "records_evaluated": 5,
+      "records_with_gold_evidence": 4,
+      "recall_at_k": {
+        "1": 0.25,
+        "5": 0.25,
+        "10": 0.5
+      },
+      "complete_group_recall_at_k": {
+        "1": 0.25,
+        "5": 0.25,
+        "10": 0.25
+      },
+      "gold_item_recall": 0.3333333333333333
+    },
+    "FUSED": {
+      "channel": "FUSED",
+      "records_evaluated": 5,
+      "records_with_gold_evidence": 4,
+      "recall_at_k": {
+        "1": 0.25,
+        "5": 0.5,
+        "10": 0.5
+      },
+      "complete_group_recall_at_k": {
+        "1": 0.25,
+        "5": 0.5,
+        "10": 0.5
+      },
+      "gold_item_recall": 0.3333333333333333
+    }
+  }
+}
