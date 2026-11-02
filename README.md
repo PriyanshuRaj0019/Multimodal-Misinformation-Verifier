@@ -2,7 +2,7 @@
 
 An evidence-grounded misinformation verification system designed to evaluate claims using supporting and contradicting evidence, with a long-term goal of extending verification across text, images, audio, and video.
 
-**Project status:** Active development — FEVER dataset analysis, evidence-reference validation, Wikipedia indexing, evidence retrieval experiments, and claim-only baseline classification have been completed.
+**Project status:** Active development — FEVER dataset analysis, evidence-reference validation, Wikipedia indexing, evidence retrieval experiments, claim-only baseline classification, and initial automated testing infrastructure have been completed.
 
 ## Project Overview
 
@@ -14,21 +14,24 @@ The current implementation focuses on dataset analysis, Wikipedia evidence index
 
 ## Current Capabilities
 
-| Component                               | Implementation status            |
-| --------------------------------------- | -------------------------------- |
-| FEVER dataset exploration and audit     | Complete                         |
-| Wikipedia corpus inspection             | Complete                         |
-| SQLite sentence index                   | Built                            |
-| SQLite title index                      | Built                            |
-| Evidence-reference validation           | Complete                         |
-| BM25 evidence retrieval                 | Implemented and evaluated        |
-| Title-aware retrieval reranking         | Implemented and evaluated        |
-| Reciprocal Rank Fusion experiment       | Evaluated on FEVER training data |
-| TF-IDF + Logistic Regression baseline   | Trained and evaluated            |
-| Evidence-conditioned verification model | Planned                          |
-| Transformer-based verification          | Planned                          |
-| Image, audio, and video verification    | Planned                          |
-| API and production deployment           | Planned                          |
+| Component                               | Implementation status                 |
+| --------------------------------------- | ------------------------------------- |
+| FEVER dataset exploration and audit     | Complete                              |
+| Wikipedia corpus inspection             | Complete                              |
+| SQLite sentence index                   | Built                                 |
+| SQLite title index                      | Built                                 |
+| Evidence-reference validation           | Complete                              |
+| BM25 evidence retrieval                 | Implemented and evaluated             |
+| Title-aware retrieval reranking         | Implemented and evaluated             |
+| Reciprocal Rank Fusion experiment       | Evaluated on FEVER training data      |
+| TF-IDF + Logistic Regression baseline   | Trained and evaluated                 |
+| Automated retrieval tests               | Implemented; 65 tests passing locally |
+| Ruff linting and formatting             | Configured and passing locally        |
+| GitHub Actions CI                       | Configured; remote execution pending  |
+| Evidence-conditioned verification model | Planned                               |
+| Transformer-based verification          | Planned                               |
+| Image, audio, and video verification    | Planned                               |
+| API and production deployment           | Planned                               |
 
 ## System Direction
 
@@ -182,6 +185,10 @@ Detailed results: [`reports/retrieval/baseline_verifier.md`](reports/retrieval/b
 ```text
 Multimodal-Misinformation-Verifier/
 │
+├── .github/
+│   └── workflows/
+│       └── tests.yml
+│
 ├── configs/
 │
 ├── data/
@@ -216,7 +223,11 @@ Multimodal-Misinformation-Verifier/
 │   └── misinfo_verifier/
 │
 ├── tests/
+│
 ├── .gitignore
+├── pyproject.toml
+├── requirements.txt
+├── requirements-dev.txt
 └── README.md
 ```
 
@@ -226,12 +237,11 @@ Large raw datasets, generated indexes, and other local artifacts are not include
 
 ### Requirements
 
-- Python 3.12 or a compatible Python version.
-- pandas
-- matplotlib
-- scikit-learn
+- Python 3.12
+- pip
+- Git
 
-The current scripts also use Python standard-library modules, including SQLite.
+Runtime dependencies are pinned in `requirements.txt`. Development dependencies, including pytest, pytest-cov, and Ruff, are defined in `requirements-dev.txt`.
 
 ### Environment setup
 
@@ -242,55 +252,85 @@ python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
-Install the dependencies needed for the currently implemented workflows:
+Install runtime dependencies:
 
 ```powershell
-python -m pip install pandas matplotlib scikit-learn
+python -m pip install -r requirements.txt
 ```
 
-**Note:** A complete dependency lockfile or pinned project dependency manifest has not yet been established. The commands above cover the external libraries identified in the current script imports; they are not a complete installation procedure for every future project component.
+For development, testing, and code-quality checks, install:
+
+```powershell
+python -m pip install -r requirements-dev.txt
+```
 
 ### Running existing experiments
 
 Run the following commands from the repository root.
 
-FEVER exploratory data analysis:
+**FEVER exploratory data analysis:**
 
 ```powershell
 python scripts/eda_fever.py
 ```
 
-Dataset audit:
+**Dataset audit:**
 
 ```powershell
 python scripts/audit_fever.py
 ```
 
-Evidence-aware dataset audit:
+**Evidence-aware dataset audit:**
 
 ```powershell
 python scripts/audit_evidence_dataset.py
 ```
 
-BM25 retrieval evaluation:
+**BM25 retrieval evaluation:**
 
 ```powershell
 python scripts/evaluate_bm25_retrieval.py
 ```
 
-Title-aware retrieval evaluation:
+**Title-aware retrieval evaluation:**
 
 ```powershell
 python scripts/evaluate_title_aware_retrieval.py
 ```
 
-Claim-only baseline verification:
+**Claim-only baseline verification:**
 
 ```powershell
 python scripts/train_baseline_verifier.py
 ```
 
 **Data prerequisites:** These workflows depend on the FEVER dataset and, for retrieval experiments, the locally prepared Wikipedia corpus and SQLite indexes. The large source datasets and indexes are not distributed through this repository. Consult the project documentation and retrieval report for the required data preparation and execution details.
+
+### Running tests and quality checks
+
+Run the automated test suite:
+
+```powershell
+python -m pytest -v
+```
+
+Run Ruff lint checks:
+
+```powershell
+python -m ruff check scripts tests
+```
+
+Verify code formatting:
+
+```powershell
+python -m ruff format --check scripts tests
+```
+
+The repository includes GitHub Actions CI configured to run linting, formatting, and automated tests on pushes and pull requests targeting `main`.
+
+The current local test suite contains 65 passing tests. Coverage is 94% across the two core retrieval modules.
+
+Remote GitHub Actions execution has not yet been verified.
 
 ## Documentation and Experiment Reports
 
@@ -311,7 +351,8 @@ python scripts/train_baseline_verifier.py
 - The current experiments do not establish end-to-end evidence-grounded verification performance.
 - Training-set retrieval results are exploratory and require separate held-out evaluation.
 - Multimodal evidence processing, uncertainty calibration, and production deployment are not yet implemented.
-- Reproducibility still needs a pinned dependency manifest, automated tests, and continuous integration.
+- Reproducibility across different environments and datasets still requires further validation.
+- GitHub Actions CI is configured, but successful remote workflow execution has not yet been verified.
 
 ## Next Development Milestones
 
@@ -320,7 +361,7 @@ python scripts/train_baseline_verifier.py
 3. Establish robust evaluation protocols and error analysis.
 4. Explore transformer-based verification architectures.
 5. Extend the system to image, audio, and video evidence.
-6. Develop an API, testing infrastructure, and production deployment workflow.
+6. Develop an API, production deployment workflow, and operational monitoring.
 
 ## Author
 
@@ -329,6 +370,14 @@ python scripts/train_baseline_verifier.py
 AI/ML Engineering | Machine Learning | Evidence-Grounded AI Systems
 
 - GitHub: [@PriyanshuRaj0019](https://github.com/PriyanshuRaj0019)
+
+## License
+
+This project is licensed under the Apache License 2.0.
+See the [LICENSE](LICENSE) file for details.
+
+Third-party datasets, pretrained models, and external resources
+remain subject to their respective licenses and terms of use.
 
 ---
 
