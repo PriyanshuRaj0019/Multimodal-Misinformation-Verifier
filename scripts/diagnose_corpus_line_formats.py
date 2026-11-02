@@ -61,9 +61,7 @@ def main():
                     reason = "lines_not_string"
                     counts[reason] += 1
                     if len(samples[reason]) < 10:
-                        samples[reason].append(
-                            (path.name, record_line, page_id, repr(lines))
-                        )
+                        samples[reason].append((path.name, record_line, page_id, repr(lines)))
                     continue
 
                 for position, entry in enumerate(lines.splitlines(), 1):

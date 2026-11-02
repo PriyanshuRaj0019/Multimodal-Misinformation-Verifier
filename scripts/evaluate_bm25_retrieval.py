@@ -1,4 +1,3 @@
-
 import json
 import re
 import sqlite3
@@ -17,19 +16,105 @@ TOP_K = (1, 5, 10)
 PROGRESS_EVERY = 25
 
 STOPWORDS = {
-    "the", "and", "for", "are", "was", "were", "with", "that",
-    "this", "from", "have", "has", "had", "not", "but", "its",
-    "his", "her", "their", "they", "them", "who", "what", "when",
-    "where", "which", "while", "into", "than", "then", "there",
-    "been", "being", "also", "more", "most", "some", "such",
-    "only", "other", "over", "under", "after", "before", "between",
-    "during", "about", "against", "because", "through", "each",
-    "both", "all", "any", "can", "could", "would", "should",
-    "will", "may", "might", "did", "does", "doing", "out", "off",
-    "from", "how", "why", "whose", "whom", "is", "am", "be",
-    "to", "of", "in", "on", "at", "by", "as", "an", "a", "or",
-    "if", "it", "he", "she", "we", "you", "i", "me", "my",
-    "our", "us", "up", "no", "so", "do",
+    "the",
+    "and",
+    "for",
+    "are",
+    "was",
+    "were",
+    "with",
+    "that",
+    "this",
+    "from",
+    "have",
+    "has",
+    "had",
+    "not",
+    "but",
+    "its",
+    "his",
+    "her",
+    "their",
+    "they",
+    "them",
+    "who",
+    "what",
+    "when",
+    "where",
+    "which",
+    "while",
+    "into",
+    "than",
+    "then",
+    "there",
+    "been",
+    "being",
+    "also",
+    "more",
+    "most",
+    "some",
+    "such",
+    "only",
+    "other",
+    "over",
+    "under",
+    "after",
+    "before",
+    "between",
+    "during",
+    "about",
+    "against",
+    "because",
+    "through",
+    "each",
+    "both",
+    "all",
+    "any",
+    "can",
+    "could",
+    "would",
+    "should",
+    "will",
+    "may",
+    "might",
+    "did",
+    "does",
+    "doing",
+    "out",
+    "off",
+    "from",
+    "how",
+    "why",
+    "whose",
+    "whom",
+    "is",
+    "am",
+    "be",
+    "to",
+    "of",
+    "in",
+    "on",
+    "at",
+    "by",
+    "as",
+    "an",
+    "a",
+    "or",
+    "if",
+    "it",
+    "he",
+    "she",
+    "we",
+    "you",
+    "i",
+    "me",
+    "my",
+    "our",
+    "us",
+    "up",
+    "no",
+    "so",
+    "do",
 }
 
 
@@ -81,20 +166,20 @@ def load_dev_rows():
             try:
                 row = json.loads(line)
             except json.JSONDecodeError as exc:
-                raise ValueError(
-                    f"Invalid JSON at dev line {line_number}"
-                ) from exc
+                raise ValueError(f"Invalid JSON at dev line {line_number}") from exc
 
             claim = row.get("claim")
             if not isinstance(claim, str) or not claim.strip():
                 continue
 
-            rows.append({
-                "id": row.get("id"),
-                "claim": claim,
-                "label": row.get("label"),
-                "gold_groups": extract_gold_groups(row),
-            })
+            rows.append(
+                {
+                    "id": row.get("id"),
+                    "claim": claim,
+                    "label": row.get("label"),
+                    "gold_groups": extract_gold_groups(row),
+                }
+            )
 
     return rows
 
@@ -103,10 +188,7 @@ def claim_tokens(claim):
     tokens = re.findall(r"[^\W_]+", claim.lower(), flags=re.UNICODE)
 
     # Remove duplicate and low-information terms.
-    tokens = {
-        token for token in tokens
-        if len(token) >= 3 and token not in STOPWORDS
-    }
+    tokens = {token for token in tokens if len(token) >= 3 and token not in STOPWORDS}
 
     # Long terms are a simple heuristic for more selective query terms.
     return sorted(tokens, key=lambda token: (-len(token), token))
@@ -188,10 +270,7 @@ def main():
     )
     connection.execute("PRAGMA query_only = ON")
 
-    counts = {
-        k: {"hit": 0, "complete_group": 0, "denominator": 0}
-        for k in TOP_K
-    }
+    counts = {k: {"hit": 0, "complete_group": 0, "denominator": 0} for k in TOP_K}
 
     claims_with_evidence = 0
     claims_without_evidence = 0
@@ -213,13 +292,9 @@ def main():
             else:
                 claims_without_evidence += 1
 
-            retrieved, strategy = retrieve_top_k(
-                connection, row["claim"]
-            )
+            retrieved, strategy = retrieve_top_k(connection, row["claim"])
 
-            strategy_counts[strategy] = (
-                strategy_counts.get(strategy, 0) + 1
-            )
+            strategy_counts[strategy] = strategy_counts.get(strategy, 0) + 1
 
             if strategy == "empty_query":
                 empty_queries += 1
@@ -228,11 +303,13 @@ def main():
             elif strategy.startswith("error:"):
                 retrieval_errors += 1
                 if len(error_samples) < 10:
-                    error_samples.append({
-                        "claim_id": row["id"],
-                        "claim": row["claim"],
-                        "error": strategy,
-                    })
+                    error_samples.append(
+                        {
+                            "claim_id": row["id"],
+                            "claim": row["claim"],
+                            "error": strategy,
+                        }
+                    )
 
             if gold_pairs:
                 for k in TOP_K:
@@ -291,10 +368,7 @@ def main():
         results["metrics"][f"CompleteEvidenceGroup@{k}"] = {
             "complete_groups": values["complete_group"],
             "denominator": denominator,
-            "score": (
-                values["complete_group"] / denominator
-                if denominator else None
-            ),
+            "score": (values["complete_group"] / denominator if denominator else None),
         }
 
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
@@ -316,9 +390,7 @@ def main():
         complete = results["metrics"][f"CompleteEvidenceGroup@{k}"]["score"]
 
         recall_text = f"{recall:.4f}" if recall is not None else "N/A"
-        complete_text = (
-            f"{complete:.4f}" if complete is not None else "N/A"
-        )
+        complete_text = f"{complete:.4f}" if complete is not None else "N/A"
 
         print(f"Recall@{k}: {recall_text}")
         print(f"CompleteEvidenceGroup@{k}: {complete_text}")

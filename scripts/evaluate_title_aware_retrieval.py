@@ -1,4 +1,3 @@
-
 import json
 import re
 import sqlite3
@@ -7,7 +6,6 @@ import unicodedata
 from pathlib import Path
 
 import evaluate_bm25_retrieval as baseline
-
 
 ROOT = Path(__file__).resolve().parent.parent
 INDEX_PATH = ROOT / "data" / "processed" / "wiki_sentence_index.sqlite3"
@@ -130,10 +128,7 @@ def rerank_by_title(claim, candidates):
 
 
 def score_rankings(rows, rankings):
-    counts = {
-        k: {"hit": 0, "complete_group": 0, "denominator": 0}
-        for k in TOP_K
-    }
+    counts = {k: {"hit": 0, "complete_group": 0, "denominator": 0} for k in TOP_K}
 
     for row, retrieved in zip(rows, rankings):
         groups = row["gold_groups"]
@@ -161,18 +156,13 @@ def score_rankings(rows, rankings):
         metrics[f"Recall@{k}"] = {
             "hits": values["hit"],
             "denominator": denominator,
-            "score": (
-                values["hit"] / denominator if denominator else None
-            ),
+            "score": (values["hit"] / denominator if denominator else None),
         }
 
         metrics[f"CompleteEvidenceGroup@{k}"] = {
             "complete_groups": values["complete_group"],
             "denominator": denominator,
-            "score": (
-                values["complete_group"] / denominator
-                if denominator else None
-            ),
+            "score": (values["complete_group"] / denominator if denominator else None),
         }
 
     return metrics
@@ -201,13 +191,9 @@ def main():
 
     try:
         for index, row in enumerate(rows, 1):
-            candidates, strategy = retrieve_candidates(
-                connection, row["claim"]
-            )
+            candidates, strategy = retrieve_candidates(connection, row["claim"])
 
-            strategy_counts[strategy] = (
-                strategy_counts.get(strategy, 0) + 1
-            )
+            strategy_counts[strategy] = strategy_counts.get(strategy, 0) + 1
 
             if strategy.startswith("error:"):
                 errors += 1
@@ -223,8 +209,7 @@ def main():
                 elapsed = time.perf_counter() - start
                 rate = index / elapsed if elapsed else 0
                 print(
-                    f"Progress: {index:,}/{len(rows):,} | "
-                    f"{elapsed:.1f}s | {rate:.2f} claims/s",
+                    f"Progress: {index:,}/{len(rows):,} | {elapsed:.1f}s | {rate:.2f} claims/s",
                     flush=True,
                 )
     finally:
@@ -242,9 +227,7 @@ def main():
             "baseline": old_score,
             "title_aware": new_value,
             "absolute_change": (
-                new_value - old_score
-                if new_value is not None and old_score is not None
-                else None
+                new_value - old_score if new_value is not None and old_score is not None else None
             ),
         }
 
@@ -254,8 +237,7 @@ def main():
             "claims_evaluated": len(rows),
             "candidate_pool_size": CANDIDATE_POOL_SIZE,
             "baseline": (
-                "Existing iterative AND-query BM25 ranking; "
-                "top 10 from the same candidate pool."
+                "Existing iterative AND-query BM25 ranking; top 10 from the same candidate pool."
             ),
             "experimental_method": (
                 "Rerank the top 100 BM25 candidates, moving candidates "
@@ -263,9 +245,7 @@ def main():
                 "in the claim ahead of other candidates. Preserve BM25 "
                 "order within each group. This is a heuristic, not NER."
             ),
-            "query_policy": (
-                "Reuse the existing baseline tokenization and query policy."
-            ),
+            "query_policy": ("Reuse the existing baseline tokenization and query policy."),
             "retrieval_errors": errors,
             "strategy_counts": strategy_counts,
         },
@@ -277,8 +257,7 @@ def main():
             "recover a page absent from the candidate pool.",
             "Title phrase matching is heuristic and does not perform "
             "named-entity recognition or entity linking.",
-            "A matching title does not establish that a sentence "
-            "supports or refutes the claim.",
+            "A matching title does not establish that a sentence supports or refutes the claim.",
             "Recall is claim-level: at least one gold sentence retrieved.",
             "CompleteEvidenceGroup requires every pair in one gold "
             "alternative evidence group to be retrieved.",
@@ -303,10 +282,7 @@ def main():
         if old is None or new is None:
             print(f"{name}: baseline={old}, title-aware={new}")
         else:
-            print(
-                f"{name}: baseline={old:.4f}, "
-                f"title-aware={new:.4f}, change={delta:+.4f}"
-            )
+            print(f"{name}: baseline={old:.4f}, title-aware={new:.4f}, change={delta:+.4f}")
 
     print(f"\nReport: {REPORT_PATH}")
 

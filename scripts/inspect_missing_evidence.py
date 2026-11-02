@@ -1,8 +1,7 @@
-
 import json
 import unicodedata
-from pathlib import Path
 from collections import defaultdict
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 FEVER_DIR = ROOT / "data" / "raw" / "fever"
@@ -74,14 +73,8 @@ def main():
     nfd_pages = set()
     sentence_ids_by_page = {}
 
-    required_nfc = {
-        normalized(page, "NFC"): page
-        for page in required_pages
-    }
-    required_nfd = {
-        normalized(page, "NFD"): page
-        for page in required_pages
-    }
+    required_nfc = {normalized(page, "NFC"): page for page in required_pages}
+    required_nfd = {normalized(page, "NFD"): page for page in required_pages}
 
     for file_index, path in enumerate(corpus_files, start=1):
         with path.open("r", encoding="utf-8") as file:
@@ -119,9 +112,7 @@ def main():
 
                 if isinstance(lines, str):
                     for sentence_line in lines.splitlines():
-                        sentence_id_text, separator, _ = (
-                            sentence_line.partition("\t")
-                        )
+                        sentence_id_text, separator, _ = sentence_line.partition("\t")
 
                         if not separator:
                             continue

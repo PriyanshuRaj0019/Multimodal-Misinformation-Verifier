@@ -3,12 +3,9 @@ import sqlite3
 import unicodedata
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parent.parent
 
-CORPUS_DIR = (
-    ROOT / "data" / "raw" / "fever" / "wiki-pages.zip" / "wiki-pages"
-)
+CORPUS_DIR = ROOT / "data" / "raw" / "fever" / "wiki-pages.zip" / "wiki-pages"
 INDEX_DIR = ROOT / "data" / "processed"
 INDEX_PATH = INDEX_DIR / "wiki_sentence_index.sqlite3"
 
@@ -71,10 +68,7 @@ def main():
         """
 
         for file_index, corpus_file in enumerate(corpus_files, start=1):
-            print(
-                f"[{file_index}/{len(corpus_files)}] "
-                f"Indexing {corpus_file.name}"
-            )
+            print(f"[{file_index}/{len(corpus_files)}] Indexing {corpus_file.name}")
 
             with corpus_file.open("r", encoding="utf-8") as handle:
                 for record_line, raw_line in enumerate(handle, start=1):
@@ -140,8 +134,7 @@ def main():
             pending_rows = 0
 
             print(
-                f"  Records scanned: {records_scanned:,} | "
-                f"Sentence rows indexed: {sentence_rows:,}"
+                f"  Records scanned: {records_scanned:,} | Sentence rows indexed: {sentence_rows:,}"
             )
 
         connection.commit()

@@ -1,4 +1,3 @@
-
 import json
 from pathlib import Path
 
@@ -21,9 +20,7 @@ def load_evidence_references():
 
     for dataset_path in DATASET_FILES:
         if not dataset_path.is_file():
-            raise FileNotFoundError(
-                f"Dataset file not found: {dataset_path}"
-            )
+            raise FileNotFoundError(f"Dataset file not found: {dataset_path}")
 
         with dataset_path.open("r", encoding="utf-8") as file:
             for line_number, line in enumerate(file, start=1):
@@ -34,8 +31,7 @@ def load_evidence_references():
                     row = json.loads(line)
                 except json.JSONDecodeError as error:
                     raise ValueError(
-                        f"Invalid JSON in {dataset_path.name}, "
-                        f"line {line_number}: {error}"
+                        f"Invalid JSON in {dataset_path.name}, line {line_number}: {error}"
                     ) from error
 
                 dataset_rows += 1
@@ -79,16 +75,12 @@ def load_evidence_references():
 def validate_corpus(required_pages, required_pairs):
     """Scan corpus files and match annotated evidence references."""
     if not WIKI_DIR.is_dir():
-        raise FileNotFoundError(
-            f"Wikipedia corpus directory not found: {WIKI_DIR}"
-        )
+        raise FileNotFoundError(f"Wikipedia corpus directory not found: {WIKI_DIR}")
 
     wiki_files = sorted(WIKI_DIR.glob("wiki-*.jsonl"))
 
     if not wiki_files:
-        raise FileNotFoundError(
-            f"No wiki-*.jsonl files found in {WIKI_DIR}"
-        )
+        raise FileNotFoundError(f"No wiki-*.jsonl files found in {WIKI_DIR}")
 
     found_pages = set()
     found_pairs = set()
@@ -129,9 +121,7 @@ def validate_corpus(required_pages, required_pairs):
                     continue
 
                 for sentence_line in lines.splitlines():
-                    sentence_id_text, separator, _ = (
-                        sentence_line.partition("\t")
-                    )
+                    sentence_id_text, separator, _ = sentence_line.partition("\t")
 
                     if not separator:
                         continue
@@ -188,10 +178,7 @@ def main():
     print(f"Corpus records read: {result['total_records']:,}")
     print(f"Records with empty page IDs: {result['empty_id_records']:,}")
     print(f"Malformed JSON records: {result['malformed_json']:,}")
-    print(
-        f"Evidence pages found: {len(result['found_pages']):,} / "
-        f"{len(required_pages):,}"
-    )
+    print(f"Evidence pages found: {len(result['found_pages']):,} / {len(required_pages):,}")
     print(
         f"Evidence sentence references found: "
         f"{len(result['found_pairs']):,} / {len(required_pairs):,}"
@@ -210,10 +197,7 @@ def main():
             print(f" - {page} | sentence {sentence_id}")
 
     if result["malformed_json"] or missing_pairs:
-        print(
-            "\nSTATUS: Investigation required. "
-            "Do not assume all evidence references are usable."
-        )
+        print("\nSTATUS: Investigation required. Do not assume all evidence references are usable.")
     else:
         print(
             "\nSTATUS: All referenced sentence IDs were found. "

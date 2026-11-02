@@ -3,7 +3,6 @@ import unicodedata
 from collections import defaultdict
 from pathlib import Path
 
-
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 DATA_DIR = PROJECT_ROOT / "data" / "raw" / "fever"
@@ -36,9 +35,7 @@ def load_required_evidence():
 
     for dataset_file in dataset_files:
         if not dataset_file.is_file():
-            raise FileNotFoundError(
-                f"Dataset file not found: {dataset_file}"
-            )
+            raise FileNotFoundError(f"Dataset file not found: {dataset_file}")
 
         with dataset_file.open("r", encoding="utf-8") as file:
             for line_number, line in enumerate(file, start=1):
@@ -49,8 +46,7 @@ def load_required_evidence():
                     row = json.loads(line)
                 except json.JSONDecodeError as exc:
                     raise ValueError(
-                        f"Invalid JSON in {dataset_file.name}, "
-                        f"line {line_number}: {exc}"
+                        f"Invalid JSON in {dataset_file.name}, line {line_number}: {exc}"
                     ) from exc
 
                 rows_read += 1
@@ -154,8 +150,7 @@ def validate_mapping():
     required_normalized_pages = set(normalized_to_original)
 
     required_normalized_pairs = {
-        (normalize_title(page_title), sentence_id)
-        for page_title, sentence_id in required_pairs
+        (normalize_title(page_title), sentence_id) for page_title, sentence_id in required_pairs
     }
 
     normalization_collisions = {
@@ -166,26 +161,15 @@ def validate_mapping():
 
     print(f"Dataset rows read: {rows_read:,}")
     print(f"Unique original FEVER page titles: {len(required_pages):,}")
-    print(
-        "Unique normalized FEVER page titles: "
-        f"{len(required_normalized_pages):,}"
-    )
+    print(f"Unique normalized FEVER page titles: {len(required_normalized_pages):,}")
     print(f"Unique original page/sentence pairs: {len(required_pairs):,}")
-    print(
-        "Unique normalized page/sentence pairs: "
-        f"{len(required_normalized_pairs):,}"
-    )
+    print(f"Unique normalized page/sentence pairs: {len(required_normalized_pairs):,}")
     print(f"Malformed evidence items skipped: {malformed_evidence_items:,}")
-    print(
-        "Normalized-title collisions in FEVER annotations: "
-        f"{len(normalization_collisions):,}"
-    )
+    print(f"Normalized-title collisions in FEVER annotations: {len(normalization_collisions):,}")
 
     if normalization_collisions:
         print("\nWARNING: Multiple original FEVER titles normalize to the same title.")
-        for normalized_title, originals in list(
-            normalization_collisions.items()
-        )[:SAMPLE_LIMIT]:
+        for normalized_title, originals in list(normalization_collisions.items())[:SAMPLE_LIMIT]:
             print(f"  NFC: {normalized_title!r}")
             for original in sorted(originals):
                 print(f"    Original: {original!r}")
@@ -193,16 +177,12 @@ def validate_mapping():
     print("\n[2/3] Scanning Wikipedia corpus...")
 
     if not CORPUS_DIR.is_dir():
-        raise FileNotFoundError(
-            f"Wikipedia corpus directory not found: {CORPUS_DIR}"
-        )
+        raise FileNotFoundError(f"Wikipedia corpus directory not found: {CORPUS_DIR}")
 
     corpus_files = sorted(CORPUS_DIR.glob("wiki-*.jsonl"))
 
     if not corpus_files:
-        raise FileNotFoundError(
-            f"No wiki-*.jsonl files found in: {CORPUS_DIR}"
-        )
+        raise FileNotFoundError(f"No wiki-*.jsonl files found in: {CORPUS_DIR}")
 
     found_normalized_pages = set()
     found_exact_pages = set()
@@ -216,10 +196,7 @@ def validate_mapping():
     # Only keep sentence IDs for pages required by FEVER.
     # The entire 7 GB corpus is never loaded into memory.
     for file_index, corpus_file in enumerate(corpus_files, start=1):
-        print(
-            f"Scanning file {file_index}/{len(corpus_files)}: "
-            f"{corpus_file.name}"
-        )
+        print(f"Scanning file {file_index}/{len(corpus_files)}: {corpus_file.name}")
 
         with corpus_file.open("r", encoding="utf-8") as file:
             for line_number, line in enumerate(file, start=1):
@@ -250,9 +227,7 @@ def validate_mapping():
                 if raw_page_id in required_pages:
                     found_exact_pages.add(raw_page_id)
 
-                sentence_ids, malformed_entries = parse_corpus_lines(
-                    record.get("lines", "")
-                )
+                sentence_ids, malformed_entries = parse_corpus_lines(record.get("lines", ""))
                 malformed_corpus_line_entries += malformed_entries
 
                 for sentence_id in sentence_ids:
@@ -263,24 +238,18 @@ def validate_mapping():
 
     print("\n[3/3] Calculating validation results...")
 
-    missing_normalized_pages = (
-        required_normalized_pages - found_normalized_pages
-    )
-    missing_normalized_pairs = (
-        required_normalized_pairs - found_normalized_pairs
-    )
+    missing_normalized_pages = required_normalized_pages - found_normalized_pages
+    missing_normalized_pairs = required_normalized_pairs - found_normalized_pairs
 
-    normalized_only_pages = (
-        found_normalized_pages
-        - {normalize_title(title) for title in found_exact_pages}
-    )
+    normalized_only_pages = found_normalized_pages - {
+        normalize_title(title) for title in found_exact_pages
+    }
 
     exact_pair_matches = sum(
         1
         for page_title, sentence_id in required_pairs
         if page_title in found_exact_pages
-        and (normalize_title(page_title), sentence_id)
-        in found_normalized_pairs
+        and (normalize_title(page_title), sentence_id) in found_normalized_pairs
     )
 
     print("\n" + "=" * 72)
@@ -291,20 +260,13 @@ def validate_mapping():
     print(f"Corpus records scanned: {corpus_records:,}")
     print(f"Malformed JSON records: {malformed_json_records:,}")
     print(f"Records with empty/invalid page IDs: {empty_page_ids:,}")
-    print(
-        "Malformed corpus line entries: "
-        f"{malformed_corpus_line_entries:,}"
-    )
+    print(f"Malformed corpus line entries: {malformed_corpus_line_entries:,}")
 
     print("\nPAGE MATCHING")
     print(
-        f"Exact original-title page matches: "
-        f"{len(found_exact_pages):,} / {len(required_pages):,}"
+        f"Exact original-title page matches: {len(found_exact_pages):,} / {len(required_pages):,}"
     )
-    print(
-        f"Additional normalized-only page matches: "
-        f"{len(normalized_only_pages):,}"
-    )
+    print(f"Additional normalized-only page matches: {len(normalized_only_pages):,}")
     print(
         f"Total normalized pages found: "
         f"{len(found_normalized_pages):,} / "
@@ -313,37 +275,21 @@ def validate_mapping():
     print(f"Missing normalized pages: {len(missing_normalized_pages):,}")
 
     print("\nSENTENCE REFERENCE VALIDATION")
-    print(
-        f"Original unique page/sentence pairs: {len(required_pairs):,}"
-    )
+    print(f"Original unique page/sentence pairs: {len(required_pairs):,}")
     print(
         f"Unique normalized page/sentence pairs found: "
         f"{len(found_normalized_pairs):,} / "
         f"{len(required_normalized_pairs):,}"
     )
-    print(
-        f"Missing normalized sentence references: "
-        f"{len(missing_normalized_pairs):,}"
-    )
-    print(
-        f"Exact-title pair matches (diagnostic only): "
-        f"{exact_pair_matches:,}"
-    )
+    print(f"Missing normalized sentence references: {len(missing_normalized_pairs):,}")
+    print(f"Exact-title pair matches (diagnostic only): {exact_pair_matches:,}")
 
     if required_normalized_pairs:
-        pair_coverage = (
-            len(found_normalized_pairs)
-            / len(required_normalized_pairs)
-            * 100
-        )
+        pair_coverage = len(found_normalized_pairs) / len(required_normalized_pairs) * 100
         print(f"Normalized sentence-reference coverage: {pair_coverage:.4f}%")
 
     if required_normalized_pages:
-        page_coverage = (
-            len(found_normalized_pages)
-            / len(required_normalized_pages)
-            * 100
-        )
+        page_coverage = len(found_normalized_pages) / len(required_normalized_pages) * 100
         print(f"Normalized page coverage: {page_coverage:.4f}%")
 
     if missing_normalized_pages:
@@ -354,9 +300,7 @@ def validate_mapping():
 
     if missing_normalized_pairs:
         print("\nSample missing page/sentence references:")
-        for normalized_title, sentence_id in sorted(
-            missing_normalized_pairs
-        )[:SAMPLE_LIMIT]:
+        for normalized_title, sentence_id in sorted(missing_normalized_pairs)[:SAMPLE_LIMIT]:
             originals = normalized_to_original[normalized_title]
             original_title = sorted(originals)[0]
             print(f"  ({original_title!r}, {sentence_id})")
@@ -371,8 +315,7 @@ def validate_mapping():
 
     if normalization_collisions:
         print(
-            "NOTE: Review normalized-title collisions before treating the "
-            "mapping as unambiguous."
+            "NOTE: Review normalized-title collisions before treating the mapping as unambiguous."
         )
 
     print("=" * 72)

@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 import json
@@ -22,16 +21,82 @@ RANDOM_SEED = 42
 PROGRESS_EVERY = 25
 
 STOPWORDS = {
-    "a", "an", "and", "are", "as", "at", "be", "been", "being",
-    "but", "by", "can", "could", "did", "do", "does", "for",
-    "from", "had", "has", "have", "he", "her", "hers", "him",
-    "his", "how", "i", "if", "in", "into", "is", "it", "its",
-    "may", "might", "more", "most", "not", "of", "on", "or",
-    "our", "she", "should", "so", "some", "such", "than", "that",
-    "the", "their", "them", "then", "there", "these", "they",
-    "this", "those", "to", "too", "under", "up", "was", "we",
-    "were", "what", "when", "where", "which", "who", "will",
-    "with", "would", "you", "your",
+    "a",
+    "an",
+    "and",
+    "are",
+    "as",
+    "at",
+    "be",
+    "been",
+    "being",
+    "but",
+    "by",
+    "can",
+    "could",
+    "did",
+    "do",
+    "does",
+    "for",
+    "from",
+    "had",
+    "has",
+    "have",
+    "he",
+    "her",
+    "hers",
+    "him",
+    "his",
+    "how",
+    "i",
+    "if",
+    "in",
+    "into",
+    "is",
+    "it",
+    "its",
+    "may",
+    "might",
+    "more",
+    "most",
+    "not",
+    "of",
+    "on",
+    "or",
+    "our",
+    "she",
+    "should",
+    "so",
+    "some",
+    "such",
+    "than",
+    "that",
+    "the",
+    "their",
+    "them",
+    "then",
+    "there",
+    "these",
+    "they",
+    "this",
+    "those",
+    "to",
+    "too",
+    "under",
+    "up",
+    "was",
+    "we",
+    "were",
+    "what",
+    "when",
+    "where",
+    "which",
+    "who",
+    "will",
+    "with",
+    "would",
+    "you",
+    "your",
 }
 
 
@@ -99,11 +164,7 @@ def extract_gold_groups(row: dict) -> list[set[tuple[str, int]]]:
 def tokenize_claim(claim: str) -> list[str]:
     tokens = re.findall(r"[^\W_]+", claim.lower(), flags=re.UNICODE)
 
-    tokens = {
-        token
-        for token in tokens
-        if len(token) >= 3 and token not in STOPWORDS
-    }
+    tokens = {token for token in tokens if len(token) >= 3 and token not in STOPWORDS}
 
     # Same heuristic as the initial evaluator: longer terms first.
     return sorted(tokens, key=lambda token: (-len(token), token))
@@ -182,9 +243,7 @@ def main() -> None:
             try:
                 row = json.loads(line)
             except json.JSONDecodeError as exc:
-                raise ValueError(
-                    f"Invalid JSON at line {line_number}: {exc}"
-                ) from exc
+                raise ValueError(f"Invalid JSON at line {line_number}: {exc}") from exc
 
             groups = extract_gold_groups(row)
 
@@ -200,8 +259,7 @@ def main() -> None:
 
     if not evidence_claims:
         raise ValueError(
-            "No claims with gold evidence were found. "
-            "Check the FEVER dataset schema and path."
+            "No claims with gold evidence were found. Check the FEVER dataset schema and path."
         )
 
     rng = random.Random(RANDOM_SEED)
@@ -220,10 +278,7 @@ def main() -> None:
     connection.execute("PRAGMA query_only = ON")
 
     # Check expected columns before processing the sample.
-    columns = {
-        row[1]
-        for row in connection.execute("PRAGMA table_info(sentences)")
-    }
+    columns = {row[1] for row in connection.execute("PRAGMA table_info(sentences)")}
     required = {"page_title", "sentence_id", "sentence_text"}
 
     if not required.issubset(columns):
@@ -252,9 +307,7 @@ def main() -> None:
 
     try:
         for index, item in enumerate(sample, start=1):
-            retrieved, strategy, error = retrieve_top_k(
-                connection, item["claim"]
-            )
+            retrieved, strategy, error = retrieve_top_k(connection, item["claim"])
 
             strategy_counts[strategy] = strategy_counts.get(strategy, 0) + 1
 
@@ -268,20 +321,13 @@ def main() -> None:
                 counts["no_results"] += 1
 
             retrieved_pairs = {
-                (result["page_title"], result["sentence_id"])
-                for result in retrieved
+                (result["page_title"], result["sentence_id"]) for result in retrieved
             }
 
             # Complete if at least one alternative gold group is present.
-            complete = any(
-                group.issubset(retrieved_pairs)
-                for group in item["gold_groups"]
-            )
+            complete = any(group.issubset(retrieved_pairs) for group in item["gold_groups"])
 
-            any_gold_sentence = any(
-                bool(group & retrieved_pairs)
-                for group in item["gold_groups"]
-            )
+            any_gold_sentence = any(bool(group & retrieved_pairs) for group in item["gold_groups"])
 
             if complete:
                 category = "complete_hit"
@@ -317,7 +363,8 @@ def main() -> None:
                                 "is_gold_evidence": (
                                     result["page_title"],
                                     result["sentence_id"],
-                                ) in set().union(*item["gold_groups"]),
+                                )
+                                in set().union(*item["gold_groups"]),
                             }
                             for rank, result in enumerate(retrieved, start=1)
                         ],
@@ -336,9 +383,7 @@ def main() -> None:
     finally:
         connection.close()
 
-    evaluated = sum(counts[key] for key in (
-        "complete_hit", "partial_hit", "no_hit"
-    ))
+    evaluated = sum(counts[key] for key in ("complete_hit", "partial_hit", "no_hit"))
 
     report = {
         "evaluation": {
@@ -355,16 +400,11 @@ def main() -> None:
             "elapsed_seconds": round(time.time() - start_time, 2),
         },
         "sample_metrics": {
-            "complete_hit_rate": (
-                counts["complete_hit"] / evaluated if evaluated else 0
-            ),
+            "complete_hit_rate": (counts["complete_hit"] / evaluated if evaluated else 0),
             "any_gold_evidence_hit_rate": (
-                (counts["complete_hit"] + counts["partial_hit"]) / evaluated
-                if evaluated else 0
+                (counts["complete_hit"] + counts["partial_hit"]) / evaluated if evaluated else 0
             ),
-            "no_hit_rate": (
-                counts["no_hit"] / evaluated if evaluated else 0
-            ),
+            "no_hit_rate": (counts["no_hit"] / evaluated if evaluated else 0),
         },
         "examples": examples,
     }

@@ -1,7 +1,6 @@
 import json
 from pathlib import Path
 
-
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 CORPUS_DIR = PROJECT_ROOT / "data" / "raw" / "fever" / "wiki-pages.zip" / "wiki-pages"
 
@@ -22,23 +21,17 @@ def inspect_lines(lines):
         parts = entry.split("\t", maxsplit=1)
 
         if len(parts) != 2:
-            malformed.append(
-                (line_number, repr(entry), "missing tab separator")
-            )
+            malformed.append((line_number, repr(entry), "missing tab separator"))
             continue
 
         try:
             sentence_id = int(parts[0])
         except ValueError:
-            malformed.append(
-                (line_number, repr(entry), "sentence ID is not an integer")
-            )
+            malformed.append((line_number, repr(entry), "sentence ID is not an integer"))
             continue
 
         if sentence_id < 0:
-            malformed.append(
-                (line_number, repr(entry), "negative sentence ID")
-            )
+            malformed.append((line_number, repr(entry), "negative sentence ID"))
 
     return malformed
 

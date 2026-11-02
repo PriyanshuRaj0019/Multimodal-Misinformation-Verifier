@@ -1,29 +1,15 @@
-
 import sqlite3
 import time
 import unicodedata
 from pathlib import Path
 
-
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-SOURCE_DB = (
-    PROJECT_ROOT
-    / "data"
-    / "processed"
-    / "wiki_sentence_index.sqlite3"
-)
+SOURCE_DB = PROJECT_ROOT / "data" / "processed" / "wiki_sentence_index.sqlite3"
 
-OUTPUT_DB = (
-    PROJECT_ROOT
-    / "data"
-    / "processed"
-    / "wiki_title_index.sqlite3"
-)
+OUTPUT_DB = PROJECT_ROOT / "data" / "processed" / "wiki_title_index.sqlite3"
 
-BUILD_DB = OUTPUT_DB.with_name(
-    OUTPUT_DB.name + ".building"
-)
+BUILD_DB = OUTPUT_DB.with_name(OUTPUT_DB.name + ".building")
 
 BATCH_SIZE = 100_000
 
@@ -120,9 +106,7 @@ def build_pages(connection: sqlite3.Connection) -> int:
             """
         )
 
-    count = connection.execute(
-        "SELECT COUNT(*) FROM build.pages"
-    ).fetchone()[0]
+    count = connection.execute("SELECT COUNT(*) FROM build.pages").fetchone()[0]
 
     print(f"Unique pages: {count:,}")
 
@@ -139,9 +123,7 @@ def build_sentence_mappings(
     """
     print("\n[2/4] Building sentence mappings...")
 
-    total_rows = connection.execute(
-        "SELECT COUNT(*) FROM main.sentences"
-    ).fetchone()[0]
+    total_rows = connection.execute("SELECT COUNT(*) FROM main.sentences").fetchone()[0]
 
     print(f"Source sentence rows: {total_rows:,}")
 
@@ -169,9 +151,7 @@ def build_sentence_mappings(
             """
         )
 
-    mapping_count = connection.execute(
-        "SELECT COUNT(*) FROM build.page_sentences"
-    ).fetchone()[0]
+    mapping_count = connection.execute("SELECT COUNT(*) FROM build.page_sentences").fetchone()[0]
 
     elapsed = time.perf_counter() - start_time
 
@@ -215,13 +195,9 @@ def validate_index(
     """
     print("\n[4/4] Validating database...")
 
-    page_count = connection.execute(
-        "SELECT COUNT(*) FROM build.pages"
-    ).fetchone()[0]
+    page_count = connection.execute("SELECT COUNT(*) FROM build.pages").fetchone()[0]
 
-    mapping_count = connection.execute(
-        "SELECT COUNT(*) FROM build.page_sentences"
-    ).fetchone()[0]
+    mapping_count = connection.execute("SELECT COUNT(*) FROM build.page_sentences").fetchone()[0]
 
     missing_pages = connection.execute(
         """
@@ -269,9 +245,7 @@ def validate_index(
             "invalid_rowids",
         )
     ):
-        raise RuntimeError(
-            f"Validation failed: {result}"
-        )
+        raise RuntimeError(f"Validation failed: {result}")
 
     duplicate_test = connection.execute(
         """
@@ -287,8 +261,7 @@ def validate_index(
 
     if duplicate_test != 1:
         raise RuntimeError(
-            "Expected exactly one mapping for the known "
-            f"duplicate pair; received {duplicate_test}"
+            f"Expected exactly one mapping for the known duplicate pair; received {duplicate_test}"
         )
 
     # Verify that the selected rowid resolves to the expected text.
@@ -307,9 +280,7 @@ def validate_index(
     ).fetchone()
 
     if sentence is None or sentence[0] != "1927 in sports":
-        raise RuntimeError(
-            "Representative rowid validation failed."
-        )
+        raise RuntimeError("Representative rowid validation failed.")
 
     print("All consistency checks passed.")
 
@@ -318,19 +289,14 @@ def validate_index(
 
 def build_index() -> None:
     if not SOURCE_DB.exists():
-        raise FileNotFoundError(
-            f"Source database not found: {SOURCE_DB}"
-        )
+        raise FileNotFoundError(f"Source database not found: {SOURCE_DB}")
 
     if OUTPUT_DB.exists():
-        raise FileExistsError(
-            f"Output already exists: {OUTPUT_DB}"
-        )
+        raise FileExistsError(f"Output already exists: {OUTPUT_DB}")
 
     if BUILD_DB.exists():
         raise FileExistsError(
-            f"Previous build file exists: {BUILD_DB}. "
-            "Inspect it before proceeding."
+            f"Previous build file exists: {BUILD_DB}. Inspect it before proceeding."
         )
 
     print("=" * 60)
@@ -352,9 +318,7 @@ def build_index() -> None:
 
         page_count = build_pages(connection)
 
-        mapping_count = build_sentence_mappings(
-            connection
-        )
+        mapping_count = build_sentence_mappings(connection)
 
         create_lookup_indexes(connection)
 
@@ -371,7 +335,7 @@ def build_index() -> None:
 
         elapsed = time.perf_counter() - start_time
 
-        size_gb = OUTPUT_DB.stat().st_size / (1024 ** 3)
+        size_gb = OUTPUT_DB.stat().st_size / (1024**3)
 
         print("\n" + "=" * 60)
         print("TITLE INDEX BUILD COMPLETED")

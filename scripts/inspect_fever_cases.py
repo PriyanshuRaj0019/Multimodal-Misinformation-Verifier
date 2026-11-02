@@ -1,10 +1,6 @@
-
-from pathlib import Path
 import json
+from pathlib import Path
 from pprint import pprint
-
-import pandas as pd
-
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data" / "raw" / "fever"
@@ -48,9 +44,7 @@ def main():
 
         # Show a few claims that have different labels in the same split.
         conflicts = {
-            claim: labels
-            for claim, labels in conflicting_claims.items()
-            if len(labels) > 1
+            claim: labels for claim, labels in conflicting_claims.items() if len(labels) > 1
         }
 
         print(f"\n--- CONFLICTING LABEL EXAMPLES: {name.upper()} ---")

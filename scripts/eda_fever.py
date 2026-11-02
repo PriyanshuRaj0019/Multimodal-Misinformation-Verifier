@@ -1,13 +1,11 @@
-﻿
-from pathlib import Path
 import re
+from pathlib import Path
 
-import pandas as pd
 import matplotlib
+import pandas as pd
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data" / "raw" / "fever"
@@ -38,11 +36,7 @@ def inspect_evidence(value):
 
             # FEVER item:
             # [annotation_id, evidence_page_id, page_title, sentence_id]
-            if (
-                item[1] is not None
-                and item[2] is not None
-                and item[3] is not None
-            ):
+            if item[1] is not None and item[2] is not None and item[3] is not None:
                 valid_items.append(item)
 
         if valid_items:
@@ -73,10 +67,12 @@ def analyse_dataset(name, path):
     print(f"Columns: {list(df.columns)}")
 
     # Missing values
-    missing = pd.DataFrame({
-        "missing_count": df.isna().sum(),
-        "missing_percent": (df.isna().mean() * 100).round(2),
-    })
+    missing = pd.DataFrame(
+        {
+            "missing_count": df.isna().sum(),
+            "missing_percent": (df.isna().mean() * 100).round(2),
+        }
+    )
     missing.to_csv(OUTPUT_DIR / f"{name}_missing_values.csv")
 
     # Label distribution
@@ -84,9 +80,7 @@ def analyse_dataset(name, path):
     counts = labels.value_counts()
 
     label_table = counts.rename_axis("label").reset_index(name="count")
-    label_table["percentage"] = (
-        label_table["count"] / len(df) * 100
-    ).round(2)
+    label_table["percentage"] = (label_table["count"] / len(df) * 100).round(2)
 
     label_table.to_csv(
         OUTPUT_DIR / f"{name}_label_distribution.csv",
@@ -98,49 +92,51 @@ def analyse_dataset(name, path):
 
     # Claim lengths
     claims = df["claim"].fillna("").astype(str)
-    word_lengths = claims.map(
-        lambda claim: len(re.findall(r"\b\w+\b", claim))
+    word_lengths = claims.map(lambda claim: len(re.findall(r"\b\w+\b", claim)))
+
+    length_summary = (
+        pd.DataFrame(
+            {
+                "word_count": word_lengths,
+                "character_count": claims.str.len(),
+            }
+        )
+        .describe()
+        .round(2)
     )
 
-    length_summary = pd.DataFrame({
-        "word_count": word_lengths,
-        "character_count": claims.str.len(),
-    }).describe().round(2)
-
-    length_summary.to_csv(
-        OUTPUT_DIR / f"{name}_claim_length_summary.csv"
-    )
+    length_summary.to_csv(OUTPUT_DIR / f"{name}_claim_length_summary.csv")
 
     # Correct evidence interpretation
     evidence_info = df["evidence"].map(inspect_evidence)
 
-    evidence_table = pd.DataFrame({
-        "label": labels,
-        "annotation_group_count": evidence_info.map(
-            lambda x: x["annotation_group_count"]
-        ),
-        "actual_evidence_group_count": evidence_info.map(
-            lambda x: x["actual_evidence_group_count"]
-        ),
-        "actual_evidence_item_count": evidence_info.map(
-            lambda x: x["actual_evidence_item_count"]
-        ),
-        "has_actual_evidence": evidence_info.map(
-            lambda x: x["has_actual_evidence"]
-        ),
-    })
-
-    evidence_summary = evidence_table.groupby("label").agg(
-        rows=("label", "size"),
-        rows_with_actual_evidence=("has_actual_evidence", "sum"),
-        mean_annotation_groups=("annotation_group_count", "mean"),
-        mean_actual_evidence_groups=("actual_evidence_group_count", "mean"),
-        mean_actual_evidence_items=("actual_evidence_item_count", "mean"),
-    ).round(3)
-
-    evidence_summary.to_csv(
-        OUTPUT_DIR / f"{name}_evidence_by_label.csv"
+    evidence_table = pd.DataFrame(
+        {
+            "label": labels,
+            "annotation_group_count": evidence_info.map(lambda x: x["annotation_group_count"]),
+            "actual_evidence_group_count": evidence_info.map(
+                lambda x: x["actual_evidence_group_count"]
+            ),
+            "actual_evidence_item_count": evidence_info.map(
+                lambda x: x["actual_evidence_item_count"]
+            ),
+            "has_actual_evidence": evidence_info.map(lambda x: x["has_actual_evidence"]),
+        }
     )
+
+    evidence_summary = (
+        evidence_table.groupby("label")
+        .agg(
+            rows=("label", "size"),
+            rows_with_actual_evidence=("has_actual_evidence", "sum"),
+            mean_annotation_groups=("annotation_group_count", "mean"),
+            mean_actual_evidence_groups=("actual_evidence_group_count", "mean"),
+            mean_actual_evidence_items=("actual_evidence_item_count", "mean"),
+        )
+        .round(3)
+    )
+
+    evidence_summary.to_csv(OUTPUT_DIR / f"{name}_evidence_by_label.csv")
 
     print("\nCorrected evidence statistics by label:")
     print(evidence_summary.to_string())
@@ -149,10 +145,7 @@ def analyse_dataset(name, path):
     overview = {
         "dataset": name,
         "rows": len(df),
-        "duplicate_ids": (
-            int(df["id"].duplicated().sum())
-            if "id" in df.columns else None
-        ),
+        "duplicate_ids": (int(df["id"].duplicated().sum()) if "id" in df.columns else None),
         "duplicate_claims": int(df["claim"].duplicated().sum()),
         "duplicate_rows": int(df.astype("string").duplicated().sum()),
         "unique_claims": int(df["claim"].nunique(dropna=True)),
@@ -189,17 +182,14 @@ def analyse_dataset(name, path):
 def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    results = [
-        analyse_dataset(name, path)
-        for name, path in DATASETS.items()
-    ]
+    results = [analyse_dataset(name, path) for name, path in DATASETS.items()]
 
     pd.DataFrame(results).to_csv(
         OUTPUT_DIR / "dataset_overview.csv",
         index=False,
     )
 
-    print(f"\nEDA UPDATED SUCCESSFULLY")
+    print("\nEDA UPDATED SUCCESSFULLY")
     print(f"Reports: {OUTPUT_DIR}")
     print("Check train_evidence_by_label.csv and dev_evidence_by_label.csv.")
 

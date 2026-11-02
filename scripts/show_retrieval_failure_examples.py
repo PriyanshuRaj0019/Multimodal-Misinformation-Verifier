@@ -1,4 +1,3 @@
-
 import json
 from pathlib import Path
 
@@ -27,23 +26,14 @@ def main():
             print(f"Query strategy: {item.get('query_strategy')}")
 
             print("\nGold evidence:")
-            for group_no, group in enumerate(
-                item.get("gold_evidence_groups", []), start=1
-            ):
+            for group_no, group in enumerate(item.get("gold_evidence_groups", []), start=1):
                 print(f"  Alternative group {group_no}:")
                 for evidence in group:
-                    print(
-                        f"    {evidence['page_title']} "
-                        f"(sentence {evidence['sentence_id']})"
-                    )
+                    print(f"    {evidence['page_title']} (sentence {evidence['sentence_id']})")
 
             print("\nRetrieved top results:")
             for result in item.get("retrieved_evidence", []):
-                marker = (
-                    "GOLD MATCH"
-                    if result.get("is_gold_evidence")
-                    else ""
-                )
+                marker = "GOLD MATCH" if result.get("is_gold_evidence") else ""
                 print(
                     f"  Rank {result['rank']}: "
                     f"{result['page_title']} "

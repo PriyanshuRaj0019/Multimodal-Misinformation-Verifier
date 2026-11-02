@@ -1,10 +1,7 @@
-
 import json
 from pathlib import Path
 
-corpus_file = Path(
-    "data/raw/fever/wiki-pages.zip/wiki-pages/wiki-001.jsonl"
-)
+corpus_file = Path("data/raw/fever/wiki-pages.zip/wiki-pages/wiki-001.jsonl")
 
 if not corpus_file.is_file():
     raise FileNotFoundError(f"Corpus file not found: {corpus_file}")

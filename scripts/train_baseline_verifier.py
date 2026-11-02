@@ -1,4 +1,3 @@
-
 import json
 import time
 from collections import Counter
@@ -13,7 +12,6 @@ from sklearn.metrics import (
     f1_score,
 )
 from sklearn.pipeline import Pipeline
-
 
 ROOT = Path(__file__).resolve().parent.parent
 TRAIN_PATH = ROOT / "data" / "raw" / "fever" / "train.jsonl"
@@ -36,9 +34,7 @@ def load_dataset(path):
             label = row.get("label")
 
             if not isinstance(claim, str) or label not in LABELS:
-                raise ValueError(
-                    f"Invalid claim or label at {path}:{line_number}"
-                )
+                raise ValueError(f"Invalid claim or label at {path}:{line_number}")
 
             rows.append({"claim": claim, "label": label})
 
@@ -49,27 +45,29 @@ def load_dataset(path):
 
 
 def build_model(class_weight=None):
-    return Pipeline([
-        (
-            "tfidf",
-            TfidfVectorizer(
-                lowercase=True,
-                ngram_range=(1, 2),
-                min_df=2,
-                max_features=200_000,
-                sublinear_tf=True,
+    return Pipeline(
+        [
+            (
+                "tfidf",
+                TfidfVectorizer(
+                    lowercase=True,
+                    ngram_range=(1, 2),
+                    min_df=2,
+                    max_features=200_000,
+                    sublinear_tf=True,
+                ),
             ),
-        ),
-        (
-            "classifier",
-            LogisticRegression(
-                solver="lbfgs",
-                max_iter=300,
-                random_state=42,
-                class_weight=class_weight,
+            (
+                "classifier",
+                LogisticRegression(
+                    solver="lbfgs",
+                    max_iter=300,
+                    random_state=42,
+                    class_weight=class_weight,
+                ),
             ),
-        ),
-    ])
+        ]
+    )
 
 
 def evaluate(name, y_true, y_pred):
@@ -92,9 +90,7 @@ def evaluate(name, y_true, y_pred):
             output_dict=True,
             zero_division=0,
         ),
-        "confusion_matrix": confusion_matrix(
-            y_true, y_pred, labels=LABELS
-        ).tolist(),
+        "confusion_matrix": confusion_matrix(y_true, y_pred, labels=LABELS).tolist(),
     }
 
 
@@ -120,9 +116,7 @@ def main():
     start = time.perf_counter()
 
     if not TRAIN_PATH.exists() or not DEV_PATH.exists():
-        raise FileNotFoundError(
-            f"Expected dataset files:\n{TRAIN_PATH}\n{DEV_PATH}"
-        )
+        raise FileNotFoundError(f"Expected dataset files:\n{TRAIN_PATH}\n{DEV_PATH}")
 
     train_rows = load_dataset(TRAIN_PATH)
     dev_rows = load_dataset(DEV_PATH)
@@ -189,8 +183,7 @@ def main():
     print("\nEXPERIMENT SUMMARY")
     for name, experiment in experiments.items():
         print(
-            f"{name}: accuracy={experiment['accuracy']:.4f}, "
-            f"macro-F1={experiment['macro_f1']:.4f}"
+            f"{name}: accuracy={experiment['accuracy']:.4f}, macro-F1={experiment['macro_f1']:.4f}"
         )
 
     print(f"\nReport saved: {REPORT_PATH}")

@@ -1,18 +1,12 @@
-
 import json
 from collections import Counter, defaultdict
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parent.parent
 
-DATASET_PATH = (
-    ROOT / "data" / "processed" / "fever_train_retrieved_evidence.jsonl"
-)
+DATASET_PATH = ROOT / "data" / "processed" / "fever_train_retrieved_evidence.jsonl"
 
-REPORT_PATH = (
-    ROOT / "reports" / "retrieval" / "fever_train_evidence_audit.json"
-)
+REPORT_PATH = ROOT / "reports" / "retrieval" / "fever_train_evidence_audit.json"
 
 MAX_FAILURE_EXAMPLES = 10
 
@@ -36,11 +30,7 @@ def audit_record(record, class_stats, global_stats, failures):
 
     retrieved = evidence_pairs(evidence)
 
-    non_empty_groups = [
-        evidence_pairs(group)
-        for group in gold_groups
-        if group
-    ]
+    non_empty_groups = [evidence_pairs(group) for group in gold_groups if group]
 
     all_gold_pairs = set().union(*non_empty_groups) if non_empty_groups else set()
 
@@ -49,10 +39,7 @@ def audit_record(record, class_stats, global_stats, failures):
     has_gold = bool(non_empty_groups)
     any_hit = bool(matched_pairs)
 
-    complete_group = any(
-        group.issubset(retrieved)
-        for group in non_empty_groups
-    )
+    complete_group = any(group.issubset(retrieved) for group in non_empty_groups)
 
     stats["claims"] += 1
     global_stats["claims"] += 1
@@ -76,23 +63,23 @@ def audit_record(record, class_stats, global_stats, failures):
         global_stats["unique_matched_gold_evidence_items"] += len(matched_pairs)
 
         if not any_hit and len(failures) < MAX_FAILURE_EXAMPLES:
-            failures.append({
-                "id": record.get("id"),
-                "label": label,
-                "claim": record.get("claim"),
-                "retrieval_strategy": record.get("retrieval", {}).get(
-                    "strategy"
-                ),
-                "gold_evidence_groups": gold_groups,
-                "retrieved_evidence": [
-                    {
-                        "page_title": item.get("page_title"),
-                        "sentence_id": item.get("sentence_id"),
-                        "sentence_text": item.get("sentence_text"),
-                    }
-                    for item in evidence[:3]
-                ],
-            })
+            failures.append(
+                {
+                    "id": record.get("id"),
+                    "label": label,
+                    "claim": record.get("claim"),
+                    "retrieval_strategy": record.get("retrieval", {}).get("strategy"),
+                    "gold_evidence_groups": gold_groups,
+                    "retrieved_evidence": [
+                        {
+                            "page_title": item.get("page_title"),
+                            "sentence_id": item.get("sentence_id"),
+                            "sentence_text": item.get("sentence_text"),
+                        }
+                        for item in evidence[:3]
+                    ],
+                }
+            )
 
 
 def percentage(numerator, denominator):
@@ -118,9 +105,7 @@ def main():
             try:
                 record = json.loads(line)
             except json.JSONDecodeError as exc:
-                raise ValueError(
-                    f"Invalid JSON at line {line_number}: {exc}"
-                ) from exc
+                raise ValueError(f"Invalid JSON at line {line_number}: {exc}") from exc
 
             audit_record(
                 record,
@@ -129,9 +114,7 @@ def main():
                 failures,
             )
 
-            strategy_counts[
-                record.get("retrieval", {}).get("strategy", "unknown")
-            ] += 1
+            strategy_counts[record.get("retrieval", {}).get("strategy", "unknown")] += 1
 
     per_class = {}
 
@@ -140,33 +123,21 @@ def main():
 
         per_class[label] = {
             "claims": stats["claims"],
-            "claims_with_retrieved_evidence": (
-                stats["claims_with_retrieved_evidence"]
-            ),
-            "claims_without_retrieved_evidence": (
-                stats["claims_without_retrieved_evidence"]
-            ),
+            "claims_with_retrieved_evidence": (stats["claims_with_retrieved_evidence"]),
+            "claims_without_retrieved_evidence": (stats["claims_without_retrieved_evidence"]),
             "claims_with_gold_evidence": gold_claims,
-            "claims_with_any_gold_hit": (
-                stats["claims_with_any_gold_hit"]
-            ),
+            "claims_with_any_gold_hit": (stats["claims_with_any_gold_hit"]),
             "any_gold_hit_percent": percentage(
                 stats["claims_with_any_gold_hit"],
                 gold_claims,
             ),
-            "claims_with_complete_gold_group": (
-                stats["claims_with_complete_gold_group"]
-            ),
+            "claims_with_complete_gold_group": (stats["claims_with_complete_gold_group"]),
             "complete_group_percent": percentage(
                 stats["claims_with_complete_gold_group"],
                 gold_claims,
             ),
-            "unique_gold_evidence_items": (
-                stats["unique_gold_evidence_items"]
-            ),
-            "unique_matched_gold_evidence_items": (
-                stats["unique_matched_gold_evidence_items"]
-            ),
+            "unique_gold_evidence_items": (stats["unique_gold_evidence_items"]),
+            "unique_matched_gold_evidence_items": (stats["unique_matched_gold_evidence_items"]),
             "gold_item_recall_percent": percentage(
                 stats["unique_matched_gold_evidence_items"],
                 stats["unique_gold_evidence_items"],
@@ -180,23 +151,17 @@ def main():
         "total_claims": global_stats["claims"],
         "overall": {
             "claims_with_gold_evidence": total_gold_claims,
-            "claims_with_any_gold_hit": (
-                global_stats["claims_with_any_gold_hit"]
-            ),
+            "claims_with_any_gold_hit": (global_stats["claims_with_any_gold_hit"]),
             "any_gold_hit_percent": percentage(
                 global_stats["claims_with_any_gold_hit"],
                 total_gold_claims,
             ),
-            "claims_with_complete_gold_group": (
-                global_stats["claims_with_complete_gold_group"]
-            ),
+            "claims_with_complete_gold_group": (global_stats["claims_with_complete_gold_group"]),
             "complete_group_percent": percentage(
                 global_stats["claims_with_complete_gold_group"],
                 total_gold_claims,
             ),
-            "unique_gold_evidence_items": (
-                global_stats["unique_gold_evidence_items"]
-            ),
+            "unique_gold_evidence_items": (global_stats["unique_gold_evidence_items"]),
             "unique_matched_gold_evidence_items": (
                 global_stats["unique_matched_gold_evidence_items"]
             ),
@@ -232,9 +197,7 @@ def main():
             f"{stats['claims_with_complete_gold_group']:,} "
             f"({stats['complete_group_percent']}%)"
         )
-        print(
-            f"  Gold item recall: {stats['gold_item_recall_percent']}%"
-        )
+        print(f"  Gold item recall: {stats['gold_item_recall_percent']}%")
 
     print(f"\nReport: {REPORT_PATH}")
 

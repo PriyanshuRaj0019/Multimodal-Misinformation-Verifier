@@ -1,4 +1,3 @@
-
 import argparse
 import json
 import sqlite3
@@ -7,19 +6,14 @@ import unicodedata
 from collections import Counter
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parent.parent
 SCRIPTS_DIR = ROOT / "scripts"
 
 TRAIN_PATH = ROOT / "data" / "raw" / "fever" / "train.jsonl"
 INDEX_PATH = ROOT / "data" / "processed" / "wiki_sentence_index.sqlite3"
 
-OUTPUT_PATH = (
-    ROOT / "data" / "processed" / "fever_train_retrieved_evidence.jsonl"
-)
-REPORT_PATH = (
-    ROOT / "reports" / "retrieval" / "fever_train_evidence_dataset_report.json"
-)
+OUTPUT_PATH = ROOT / "data" / "processed" / "fever_train_retrieved_evidence.jsonl"
+REPORT_PATH = ROOT / "reports" / "retrieval" / "fever_train_evidence_dataset_report.json"
 
 VALID_LABELS = {
     "SUPPORTS",
@@ -110,10 +104,12 @@ def extract_gold_groups(row):
             pair = (normalize_title(title), sentence_id)
 
             if pair not in seen:
-                group.append({
-                    "page_title": pair[0],
-                    "sentence_id": pair[1],
-                })
+                group.append(
+                    {
+                        "page_title": pair[0],
+                        "sentence_id": pair[1],
+                    }
+                )
                 seen.add(pair)
 
         if group:
@@ -177,12 +173,14 @@ def retrieve_evidence(connection, claim, baseline, top_k):
 
                 seen.add(key)
 
-                results.append({
-                    "rank": len(results) + 1,
-                    "sentence_text": sentence_text,
-                    "page_title": page_title,
-                    "sentence_id": sentence_id,
-                })
+                results.append(
+                    {
+                        "rank": len(results) + 1,
+                        "sentence_text": sentence_text,
+                        "page_title": page_title,
+                        "sentence_id": sentence_id,
+                    }
+                )
 
             if results:
                 return results, f"and_{size}_terms", None
@@ -194,10 +192,7 @@ def retrieve_evidence(connection, claim, baseline, top_k):
 
 
 def calculate_gold_matches(gold_groups, retrieved_evidence):
-    retrieved_pairs = {
-        (item["page_title"], item["sentence_id"])
-        for item in retrieved_evidence
-    }
+    retrieved_pairs = {(item["page_title"], item["sentence_id"]) for item in retrieved_evidence}
 
     matched_gold_items = 0
     total_gold_items = 0
@@ -210,15 +205,10 @@ def calculate_gold_matches(gold_groups, retrieved_evidence):
             if pair in retrieved_pairs:
                 matched_gold_items += 1
 
-    non_empty_groups = [
-        group for group in gold_groups if group
-    ]
+    non_empty_groups = [group for group in gold_groups if group]
 
     complete_group_retrieved = any(
-        all(
-            (item["page_title"], item["sentence_id"]) in retrieved_pairs
-            for item in group
-        )
+        all((item["page_title"], item["sentence_id"]) in retrieved_pairs for item in group)
         for group in non_empty_groups
     )
 
@@ -246,10 +236,7 @@ def main():
         raise FileNotFoundError(f"SQLite index not found: {INDEX_PATH}")
 
     if not args.overwrite:
-        existing = [
-            path for path in (OUTPUT_PATH, REPORT_PATH)
-            if path.exists()
-        ]
+        existing = [path for path in (OUTPUT_PATH, REPORT_PATH) if path.exists()]
 
         if existing:
             paths = "\n".join(str(path) for path in existing)
@@ -262,12 +249,8 @@ def main():
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
 
-    temporary_output = OUTPUT_PATH.with_suffix(
-        OUTPUT_PATH.suffix + ".tmp"
-    )
-    temporary_report = REPORT_PATH.with_suffix(
-        REPORT_PATH.suffix + ".tmp"
-    )
+    temporary_output = OUTPUT_PATH.with_suffix(OUTPUT_PATH.suffix + ".tmp")
+    temporary_report = REPORT_PATH.with_suffix(REPORT_PATH.suffix + ".tmp")
 
     baseline = load_retrieval_helpers()
 
@@ -284,11 +267,10 @@ def main():
         connection.execute("PRAGMA query_only = ON")
 
         try:
-            with TRAIN_PATH.open("r", encoding="utf-8") as source, \
-                    temporary_output.open(
-                        "w", encoding="utf-8"
-                    ) as destination:
-
+            with (
+                TRAIN_PATH.open("r", encoding="utf-8") as source,
+                temporary_output.open("w", encoding="utf-8") as destination,
+            ):
                 for line_number, line in enumerate(source, start=1):
                     if not line.strip():
                         continue
@@ -296,28 +278,19 @@ def main():
                     try:
                         row = json.loads(line)
                     except json.JSONDecodeError as exc:
-                        raise ValueError(
-                            f"Invalid JSON at line {line_number}: {exc}"
-                        ) from exc
+                        raise ValueError(f"Invalid JSON at line {line_number}: {exc}") from exc
 
                     if not isinstance(row, dict):
-                        raise ValueError(
-                            f"Expected a JSON object at line {line_number}."
-                        )
+                        raise ValueError(f"Expected a JSON object at line {line_number}.")
 
                     claim = row.get("claim")
                     label = row.get("label")
 
                     if not isinstance(claim, str) or not claim.strip():
-                        raise ValueError(
-                            f"Missing or invalid claim at line {line_number}."
-                        )
+                        raise ValueError(f"Missing or invalid claim at line {line_number}.")
 
                     if label not in VALID_LABELS:
-                        raise ValueError(
-                            f"Invalid FEVER label at line {line_number}: "
-                            f"{label!r}"
-                        )
+                        raise ValueError(f"Invalid FEVER label at line {line_number}: {label!r}")
 
                     gold_groups = extract_gold_groups(row)
 
@@ -348,16 +321,12 @@ def main():
                         "retrieval_gold_match": gold_matches,
                     }
 
-                    destination.write(
-                        json.dumps(record, ensure_ascii=False) + "\n"
-                    )
+                    destination.write(json.dumps(record, ensure_ascii=False) + "\n")
 
                     counters["processed_claims"] += 1
                     counters["claims_with_evidence"] += bool(evidence)
                     counters["claims_without_evidence"] += not bool(evidence)
-                    counters["retrieval_errors"] += (
-                        strategy == "sqlite_error"
-                    )
+                    counters["retrieval_errors"] += strategy == "sqlite_error"
 
                     label_counts[label] += 1
                     strategy_counts[strategy] += 1
@@ -369,9 +338,7 @@ def main():
                         gold_matches["any_gold_evidence_retrieved"]
                     )
                     counters["claims_with_complete_gold_group"] += bool(
-                        gold_matches[
-                            "complete_gold_evidence_group_retrieved"
-                        ]
+                        gold_matches["complete_gold_evidence_group_retrieved"]
                     )
 
                     if counters["processed_claims"] % args.progress_every == 0:
@@ -399,15 +366,9 @@ def main():
             "label_distribution": dict(label_counts),
             "retrieval_strategy_distribution": dict(strategy_counts),
             "gold_evidence_diagnostics": {
-                "claims_with_gold_evidence": (
-                    counters["claims_with_gold_evidence"]
-                ),
-                "claims_with_any_gold_hit": (
-                    counters["claims_with_any_gold_hit"]
-                ),
-                "claims_with_complete_gold_group": (
-                    counters["claims_with_complete_gold_group"]
-                ),
+                "claims_with_gold_evidence": (counters["claims_with_gold_evidence"]),
+                "claims_with_any_gold_hit": (counters["claims_with_any_gold_hit"]),
+                "claims_with_complete_gold_group": (counters["claims_with_complete_gold_group"]),
             },
             "important_notes": [
                 "Only FEVER train.jsonl was used.",

@@ -1,4 +1,3 @@
-
 import sqlite3
 from pathlib import Path
 
@@ -19,6 +18,7 @@ TOP_K = 5
 def retrieve_evidence(connection, claim):
     # Reuse the existing retrieval tokenization and query policy.
     import sys
+
     sys.path.insert(0, str(Path(__file__).resolve().parent))
 
     import evaluate_bm25_retrieval as baseline
@@ -68,11 +68,13 @@ def retrieve_evidence(connection, claim):
                     continue
 
                 seen.add(key)
-                results.append({
-                    "sentence_text": sentence_text,
-                    "page_title": page_title,
-                    "sentence_id": sentence_id,
-                })
+                results.append(
+                    {
+                        "sentence_text": sentence_text,
+                        "page_title": page_title,
+                        "sentence_id": sentence_id,
+                    }
+                )
 
             if results:
                 return results, f"and_{size}_terms"
