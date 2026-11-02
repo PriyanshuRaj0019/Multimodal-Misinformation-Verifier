@@ -1,179 +1,335 @@
 ﻿# Multimodal Misinformation Verifier
 
-An evidence-grounded misinformation verification system designed to evaluate claims against supporting or refuting evidence, communicate uncertainty, and provide traceable explanations.
+An evidence-grounded misinformation verification system designed to evaluate claims using supporting and contradicting evidence, with a long-term goal of extending verification across text, images, audio, and video.
 
-**Project status:** Dataset exploration and audit completed. Evidence retrieval and model development are upcoming.
+**Project status:** Active development — FEVER dataset analysis, evidence-reference validation, Wikipedia indexing, evidence retrieval experiments, and claim-only baseline classification have been completed.
 
-## Overview
+## Project Overview
 
-Misinformation verification requires more than classifying a statement as true or false. A reliable system must retrieve relevant evidence, assess whether that evidence supports or refutes a claim, and recognize when the available information is insufficient.
+Misinformation verification requires more than classifying a statement as true or false. A reliable system must retrieve relevant evidence, assess whether that evidence supports or contradicts a claim, and communicate uncertainty when the available information is insufficient.
 
-This project aims to develop a modular verification pipeline that prioritizes evidence traceability, measurable performance, uncertainty handling, and reproducibility.
+This project explores an evidence-grounded verification pipeline using the [FEVER dataset](https://fever.ai/).
 
-## Objectives
+The current implementation focuses on dataset analysis, Wikipedia evidence indexing, retrieval evaluation, and baseline claim classification. Evidence-conditioned verification and multimodal extensions remain under development.
 
-- Retrieve relevant evidence for a given claim.
-- Classify claims into `SUPPORTS`, `REFUTES`, or `NOT ENOUGH INFO`.
-- Connect predictions to the evidence used to produce them.
-- Evaluate retrieval quality and classification performance separately.
-- Identify failure cases, uncertainty, and limitations.
-- Build toward a multimodal architecture that can incorporate text, images, audio, and video.
+## Current Capabilities
 
-These are project objectives, not claims that all features have already been implemented.
+| Component                               | Implementation status            |
+| --------------------------------------- | -------------------------------- |
+| FEVER dataset exploration and audit     | Complete                         |
+| Wikipedia corpus inspection             | Complete                         |
+| SQLite sentence index                   | Built                            |
+| SQLite title index                      | Built                            |
+| Evidence-reference validation           | Complete                         |
+| BM25 evidence retrieval                 | Implemented and evaluated        |
+| Title-aware retrieval reranking         | Implemented and evaluated        |
+| Reciprocal Rank Fusion experiment       | Evaluated on FEVER training data |
+| TF-IDF + Logistic Regression baseline   | Trained and evaluated            |
+| Evidence-conditioned verification model | Planned                          |
+| Transformer-based verification          | Planned                          |
+| Image, audio, and video verification    | Planned                          |
+| API and production deployment           | Planned                          |
+
+## System Direction
+
+The intended verification workflow is:
+
+1. **Claim input:** Receive a textual claim or supported multimodal input.
+2. **Evidence retrieval:** Retrieve potentially relevant evidence from an indexed knowledge source.
+3. **Evidence assessment:** Evaluate whether retrieved evidence supports, refutes, or provides insufficient information about the claim.
+4. **Verification output:** Produce a prediction with supporting evidence, contradictions, and uncertainty.
+5. **Multimodal extension:** Extend the pipeline to process image, audio, and video evidence.
+
+The currently implemented pipeline covers important dataset, indexing, retrieval, and baseline-classification stages. It does not yet implement the complete workflow above.
 
 ## Dataset
 
-The initial dataset exploration uses the FEVER benchmark:
+### FEVER
 
-| Split       | Records | Purpose                      |
-| ----------- | ------: | ---------------------------- |
-| Train       | 145,449 | Training-data exploration    |
-| Development |  19,998 | Development-data exploration |
-
-The development split contains 6,666 examples per label in the selected file.
-
-**Labels**
+The project uses the [FEVER dataset](https://fever.ai/), which contains claims annotated with evidence and one of three labels:
 
 - `SUPPORTS`
 - `REFUTES`
-- `NOT ENOUGH INFO`
+- `NOT ENOUGH INFO` (NEI)
 
-The dataset audit identified duplicate claim texts and some claims associated with conflicting labels. These cases require careful treatment rather than automatic deletion or relabeling.
+| Split       | Records |
+| ----------- | ------: |
+| Train       | 145,449 |
+| Development |  19,998 |
 
-Raw datasets are kept locally and excluded from Git.
+The development set contains 6,666 examples per class.
 
-## Current Progress
+### Wikipedia Evidence Corpus
 
-### Completed
+The Wikipedia corpus was inspected and indexed to support evidence retrieval.
 
-- Initial repository structure and documentation scaffold
-- FEVER training and development dataset exploration
-- Label distribution and claim-length analysis
-- Evidence annotation structure inspection
-- Missing-value and duplicate-claim analysis
-- Conflicting-label and train/development overlap reports
-- Representative evidence cases inspected
-- EDA and audit scripts committed to the repository
+| Measurement                  |                 Result |
+| ---------------------------- | ---------------------: |
+| Corpus files scanned         |                    109 |
+| Records scanned              |              5,416,537 |
+| Sentence rows indexed        |             42,041,086 |
+| Annotation-like rows skipped |                    507 |
+| Malformed JSON records       |                      0 |
+| SQLite sentence index size   | Approximately 6.11 GiB |
 
-### Next
+The sentence index uses SQLite FTS5 with Unicode tokenization.
 
-1. Inspect and validate the Wikipedia evidence corpus.
-2. Map FEVER evidence annotations to source sentences.
-3. Implement a reproducible evidence-loading pipeline.
-4. Build a baseline retrieval system.
-5. Evaluate retrieval using metrics such as Recall@k.
-6. Develop and evaluate claim-verification models.
+### Evidence Reference Validation
 
-## Planned Architecture
+The evidence-mapping validation process achieved:
 
-The intended system is organized into modular stages:
+- 14,533 of 14,533 gold evidence pages matched.
+- 40,930 of 40,930 unique page/sentence references matched.
+- 100% reference-mapping coverage after Unicode normalization.
 
-1. **Input processing** — accept and validate claims and supported media inputs.
-2. **Evidence retrieval** — retrieve relevant source passages or sentences.
-3. **Evidence analysis** — assess claim–evidence relationships.
-4. **Verification** — predict `SUPPORTS`, `REFUTES`, or `NOT ENOUGH INFO`.
-5. **Reliability layer** — report uncertainty and handle insufficient evidence.
-6. **Result presentation** — return predictions with traceable evidence and limitations.
+This validates the mapping between FEVER annotations and the indexed corpus. It does not imply that the retrieval system successfully retrieves every gold evidence sentence.
 
-The architecture will evolve as individual components are implemented and evaluated.
+## Evidence Retrieval Experiments
+
+### Retrieval methods
+
+**BM25 retrieval**
+
+- Uses SQLite FTS5 BM25 ranking.
+- Filters short and common claim tokens.
+- Uses iterative AND queries with progressively relaxed token sets when a query returns no results.
+
+**Title-aware reranking**
+
+- Starts with BM25 candidate retrieval.
+- Normalizes Unicode, punctuation, underscores, and Wikipedia parenthetical title markup.
+- Promotes candidates whose normalized page-title phrase appears in the claim.
+- Preserves BM25 ordering within candidate groups.
+
+This is a deterministic title-matching heuristic, not a full entity-linking system. It cannot recover relevant pages that are absent from the BM25 candidate pool.
+
+**Reciprocal Rank Fusion (RRF)**
+
+An experimental fusion approach combines BM25 and title-based candidate rankings. The current reported full-training-set experiment uses an RRF constant of 60.
+
+### FEVER development-set results
+
+The following results are from the full development set of 19,998 claims.
+
+| Metric    |   BM25 | Title-aware |
+| --------- | -----: | ----------: |
+| Recall@1  | 17.06% |      27.84% |
+| Recall@5  | 25.83% |      32.02% |
+| Recall@10 | 28.37% |      32.89% |
+
+Complete evidence-group retrieval:
+
+| Metric                   |   BM25 | Title-aware |
+| ------------------------ | -----: | ----------: |
+| CompleteEvidenceGroup@1  | 15.99% |      26.30% |
+| CompleteEvidenceGroup@5  | 24.11% |      30.05% |
+| CompleteEvidenceGroup@10 | 26.35% |      30.77% |
+
+Title-aware reranking improves retrieval recall across the reported cutoffs. However, retrieval performance remains limited, particularly for claims requiring multiple evidence sentences.
+
+### FEVER training-set fusion experiment
+
+The following results are from a separate experiment on the full training set of 145,449 claims.
+
+| Metric    |   BM25 | Title-based | Fused RRF |
+| --------- | -----: | ----------: | --------: |
+| Recall@1  | 16.25% |      30.56% |    23.51% |
+| Recall@5  | 24.67% |      42.87% |    52.43% |
+| Recall@10 | 27.17% |      45.12% |    58.07% |
+
+Complete evidence-group retrieval:
+
+| Metric                   |   BM25 | Title-based | Fused RRF |
+| ------------------------ | -----: | ----------: | --------: |
+| CompleteEvidenceGroup@1  | 13.52% |      20.58% |    18.17% |
+| CompleteEvidenceGroup@5  | 19.66% |      31.96% |    39.17% |
+| CompleteEvidenceGroup@10 | 21.26% |      35.17% |    45.12% |
+
+These are training-set experiment results, not held-out evaluation results. They should not be compared directly with the development-set benchmark as if they were measured under identical conditions.
+
+Detailed methodology and results: [`reports/retrieval/README.md`](reports/retrieval/README.md).
+
+## Claim Classification Baseline
+
+A claim-only text classification baseline was trained using TF-IDF features and Logistic Regression.
+
+The model does not retrieve or reason over evidence. It serves as a reference point for subsequent evidence-conditioned models.
+
+### Development-set results
+
+| Model                                       |         Accuracy |         Macro-F1 |
+| ------------------------------------------- | ---------------: | ---------------: |
+| Majority-class baseline                     |           33.33% |           16.67% |
+| TF-IDF + Logistic Regression                |           52.39% |           50.66% |
+| Class-balanced TF-IDF + Logistic Regression | **55.38%** | **55.44%** |
+
+The class-balanced model is the current preferred claim-only baseline.
+
+Its per-class F1 scores are:
+
+| Label    | Precision | Recall |     F1 |
+| -------- | --------: | -----: | -----: |
+| SUPPORTS |    51.56% | 57.94% | 54.56% |
+| REFUTES  |    65.60% | 60.40% | 62.89% |
+| NEI      |    50.01% | 47.79% | 48.88% |
+
+Evaluation uses the FEVER development split. These results do not represent evidence-grounded verification performance or final test-set performance.
+
+Detailed results: [`reports/retrieval/baseline_verifier.md`](reports/retrieval/baseline_verifier.md).
 
 ## Repository Structure
 
 ```text
 Multimodal-Misinformation-Verifier/
+│
 ├── configs/
+│
 ├── data/
 │   ├── raw/
 │   ├── interim/
 │   └── processed/
+│
 ├── docs/
 │   ├── architecture.md
 │   ├── data-card.md
 │   ├── model-card.md
 │   └── requirements-specification.md
+│
 ├── notebooks/
+│
 ├── reports/
-│   └── eda/
+│   ├── audit/
+│   ├── eda/
+│   └── retrieval/
+│
 ├── scripts/
-│   ├── audit_fever.py
 │   ├── eda_fever.py
-│   └── inspect_fever_cases.py
+│   ├── audit_fever.py
+│   ├── build_wiki_sentence_index.py
+│   ├── build_wiki_title_index.py
+│   ├── evaluate_bm25_retrieval.py
+│   ├── evaluate_title_aware_retrieval.py
+│   ├── train_baseline_verifier.py
+│   └── ...
+│
 ├── src/
 │   └── misinfo_verifier/
-└── tests/
+│
+├── tests/
+├── .gitignore
+└── README.md
 ```
 
-## Reproducibility
+Large raw datasets, generated indexes, and other local artifacts are not included in the repository.
 
-Use Python 3.12 and a virtual environment.
+## Getting Started
 
-Create the environment:
+### Requirements
+
+- Python 3.12 or a compatible Python version.
+- pandas
+- matplotlib
+- scikit-learn
+
+The current scripts also use Python standard-library modules, including SQLite.
+
+### Environment setup
+
+Create and activate a virtual environment:
 
 ```powershell
 python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 ```
 
-Install the packages needed for the current EDA scripts:
+Install the dependencies needed for the currently implemented workflows:
 
 ```powershell
-.\.venv\Scripts\python.exe -m pip install pandas matplotlib
+python -m pip install pandas matplotlib scikit-learn
 ```
 
-Run the dataset exploration:
+**Note:** A complete dependency lockfile or pinned project dependency manifest has not yet been established. The commands above cover the external libraries identified in the current script imports; they are not a complete installation procedure for every future project component.
+
+### Running existing experiments
+
+Run the following commands from the repository root.
+
+FEVER exploratory data analysis:
 
 ```powershell
-.\.venv\Scripts\python.exe scripts/eda_fever.py
+python scripts/eda_fever.py
 ```
 
-Run the dataset audit:
+Dataset audit:
 
 ```powershell
-.\.venv\Scripts\python.exe scripts/audit_fever.py
+python scripts/audit_fever.py
 ```
 
-Inspect representative cases:
+Evidence-aware dataset audit:
 
 ```powershell
-.\.venv\Scripts\python.exe scripts/inspect_fever_cases.py
+python scripts/audit_evidence_dataset.py
 ```
 
-These commands assume the FEVER JSONL files are available locally at the paths expected by the scripts. Later pipeline stages may require additional dependencies.
+BM25 retrieval evaluation:
 
-## Evaluation Strategy
+```powershell
+python scripts/evaluate_bm25_retrieval.py
+```
 
-The project will report relevant metrics at each stage:
+Title-aware retrieval evaluation:
 
-- **Retrieval:** Recall@k and evidence coverage
-- **Classification:** precision, recall, F1-score, macro-F1, and confusion matrix
-- **Reliability:** confidence calibration, abstention behavior, and error analysis
-- **Engineering:** reproducibility, latency, input validation, and test coverage
+```powershell
+python scripts/evaluate_title_aware_retrieval.py
+```
 
-Metrics will be reported only after the corresponding component has been implemented and evaluated.
+Claim-only baseline verification:
 
-## Engineering Principles
+```powershell
+python scripts/train_baseline_verifier.py
+```
 
-- Evidence-backed predictions instead of unsupported assertions
-- Explicit uncertainty when evidence is insufficient
-- Separation of retrieval quality from classification quality
-- Reproducible data processing and evaluation
-- No fabricated performance metrics
-- Clear documentation of dataset limitations and model failures
-- Modular design for future multimodal support
+**Data prerequisites:** These workflows depend on the FEVER dataset and, for retrieval experiments, the locally prepared Wikipedia corpus and SQLite indexes. The large source datasets and indexes are not distributed through this repository. Consult the project documentation and retrieval report for the required data preparation and execution details.
 
-## Limitations
+## Documentation and Experiment Reports
 
-The current work covers dataset exploration and auditing. A functioning evidence retrieval engine, trained verification model, multimodal processing pipeline, and deployed API are not yet established by this milestone.
+| Document                                                                            | Description                           |
+| ----------------------------------------------------------------------------------- | ------------------------------------- |
+| [`docs/architecture.md`](docs/architecture.md)                                     | System architecture                   |
+| [`docs/requirements-specification.md`](docs/requirements-specification.md)         | Functional and technical requirements |
+| [`docs/data-card.md`](docs/data-card.md)                                           | Dataset documentation                 |
+| [`docs/model-card.md`](docs/model-card.md)                                         | Model documentation                   |
+| [`reports/retrieval/README.md`](reports/retrieval/README.md)                       | Retrieval methodology and evaluation  |
+| [`reports/retrieval/baseline_verifier.md`](reports/retrieval/baseline_verifier.md) | Baseline classification results       |
 
-FEVER is a benchmark dataset, not a complete representation of real-world misinformation. Benchmark performance alone will not establish factual correctness across arbitrary claims or domains.
+## Current Limitations
 
-## License and Data
+- BM25 and title-aware retrieval do not consistently retrieve complete gold evidence groups.
+- Title-aware matching relies on deterministic phrase matching rather than full entity resolution.
+- The current classification baseline uses claim text alone.
+- The current experiments do not establish end-to-end evidence-grounded verification performance.
+- Training-set retrieval results are exploratory and require separate held-out evaluation.
+- Multimodal evidence processing, uncertainty calibration, and production deployment are not yet implemented.
+- Reproducibility still needs a pinned dependency manifest, automated tests, and continuous integration.
 
-Review the applicable FEVER dataset license and the licenses of any additional corpora or pretrained models before redistribution. Raw datasets are not included in this repository.
+## Next Development Milestones
+
+1. Improve evidence retrieval and evaluate retrieval strategies on held-out data.
+2. Build and evaluate evidence-conditioned verification models.
+3. Establish robust evaluation protocols and error analysis.
+4. Explore transformer-based verification architectures.
+5. Extend the system to image, audio, and video evidence.
+6. Develop an API, testing infrastructure, and production deployment workflow.
 
 ## Author
 
 **Priyanshu Raj**
 
-GitHub: [PriyanshuRaj0019](https://github.com/PriyanshuRaj0019)
+AI/ML Engineering | Machine Learning | Evidence-Grounded AI Systems
 
-Repository: [Multimodal Misinformation Verifier](https://github.com/PriyanshuRaj0019/Multimodal-Misinformation-Verifier)
+- GitHub: [@PriyanshuRaj0019](https://github.com/PriyanshuRaj0019)
+
+---
+
+This project is under active development. Reported metrics describe specific experiments and should not be interpreted as claims of production-ready misinformation detection.
