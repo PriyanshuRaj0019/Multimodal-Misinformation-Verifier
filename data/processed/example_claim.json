@@ -1,0 +1,105 @@
+{
+  "claim": "Nikolaj Coster-Waldau worked with the Fox Broadcasting Company.",
+  "retrieved_evidence": [
+    {
+      "sentence_text": "American Broadcasting Company",
+      "page_title": "İhlas_News_Agency_Co._-LRB-IHA-RRB-",
+      "sentence_id": 20,
+      "bm25_rank": 1,
+      "title_rank": null,
+      "rrf_score": 0.01639344262295082,
+      "retrieval_source": "BM25",
+      "final_rank": 1
+    },
+    {
+      "sentence_text": "The Fox Broadcasting Company -LRB- often shortened to Fox and stylized as FOX -RRB- is an American English language commercial broadcast television network that is owned by the Fox Entertainment Group subsidiary of 21st Century Fox .",
+      "page_title": "Fox_Broadcasting_Company",
+      "sentence_id": 0,
+      "bm25_rank": null,
+      "title_rank": 1,
+      "rrf_score": 0.01639344262295082,
+      "retrieval_source": "TITLE",
+      "final_rank": 2
+    },
+    {
+      "sentence_text": "Nankai Broadcasting , a broadcasting company in Japan",
+      "page_title": "Nankai_-LRB-disambiguation-RRB-",
+      "sentence_id": 11,
+      "bm25_rank": 2,
+      "title_rank": null,
+      "rrf_score": 0.016129032258064516,
+      "retrieval_source": "BM25",
+      "final_rank": 3
+    },
+    {
+      "sentence_text": "Nikolaj Coster-Waldau -LRB- -LSB- neɡ̊olaɪ̯ kʰʌsd̥ɐ ˈʋald̥ɑʊ̯ -RSB- ; born 27 July 1970 -RRB- is a Danish actor , producer and screenwriter .",
+      "page_title": "Nikolaj_Coster-Waldau",
+      "sentence_id": 0,
+      "bm25_rank": null,
+      "title_rank": 2,
+      "rrf_score": 0.016129032258064516,
+      "retrieval_source": "TITLE",
+      "final_rank": 4
+    },
+    {
+      "sentence_text": "Renda Broadcasting , Pittsburgh-based radio broadcasting company",
+      "page_title": "Renda",
+      "sentence_id": 7,
+      "bm25_rank": 3,
+      "title_rank": null,
+      "rrf_score": 0.015873015873015872,
+      "retrieval_source": "BM25",
+      "final_rank": 5
+    },
+    {
+      "sentence_text": "The network is headquartered at the 20th Century Fox studio lot on Pico Boulevard in the Century City section of Los Angeles , with additional major offices and production facilities at the Fox Television Center in nearby West Los Angeles and the Fox Broadcasting Center in the Yorkville neighborhood of Manhattan , New York City .",
+      "page_title": "Fox_Broadcasting_Company",
+      "sentence_id": 1,
+      "bm25_rank": null,
+      "title_rank": 3,
+      "rrf_score": 0.015873015873015872,
+      "retrieval_source": "TITLE",
+      "final_rank": 6
+    },
+    {
+      "sentence_text": "The Bermuda Broadcasting Company is the largest broadcasting company in Bermuda .",
+      "page_title": "Bermuda_Broadcasting",
+      "sentence_id": 0,
+      "bm25_rank": 4,
+      "title_rank": null,
+      "rrf_score": 0.015625,
+      "retrieval_source": "BM25",
+      "final_rank": 7
+    },
+    {
+      "sentence_text": "The network is named after sister company 20th Century Fox , and indirectly for producer William Fox , who founded one of the movie studio 's predecessors , Fox Film .",
+      "page_title": "Fox_Broadcasting_Company",
+      "sentence_id": 13,
+      "bm25_rank": null,
+      "title_rank": 4,
+      "rrf_score": 0.015625,
+      "retrieval_source": "TITLE",
+      "final_rank": 8
+    },
+    {
+      "sentence_text": "American Broadcasting Company logos",
+      "page_title": "ABC_logos",
+      "sentence_id": 3,
+      "bm25_rank": 5,
+      "title_rank": null,
+      "rrf_score": 0.015384615384615385,
+      "retrieval_source": "BM25",
+      "final_rank": 9
+    },
+    {
+      "sentence_text": "Coster-Waldau 's breakthrough performance in Denmark was his role in the film Nightwatch -LRB- 1994 -RRB- .",
+      "page_title": "Nikolaj_Coster-Waldau",
+      "sentence_id": 2,
+      "bm25_rank": null,
+      "title_rank": 5,
+      "rrf_score": 0.015384615384615385,
+      "retrieval_source": "TITLE",
+      "final_rank": 10
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "error_records": 3220,
+  "unique_error_ids": 3220,
+  "matched_source_records": 3220,
+  "missing_source_records": 0,
+  "duplicate_source_ids": 0,
+  "top_k_used_by_model": 5,
+  "alignment_category_counts": {
+    "NEI_WITH_NO_GOLD_EVIDENCE": 1636,
+    "NO_GOLD_EVIDENCE_RETRIEVED": 1584
+  },
+  "classification_transition_counts": {
+    "NOT ENOUGH INFO -> SUPPORTS": 1154,
+    "SUPPORTS -> NOT ENOUGH INFO": 501,
+    "NOT ENOUGH INFO -> REFUTES": 482,
+    "REFUTES -> NOT ENOUGH INFO": 380,
+    "SUPPORTS -> REFUTES": 263,
+    "REFUTES -> SUPPORTS": 440
+  },
+  "methodology_notes": [
+    "Gold evidence is parsed as a flat list of dictionaries.",
+    "Evidence matching uses page_title and sentence_id.",
+    "Prediction-error evidence is preferred as the model input.",
+    "The fallback reconstructs the top five retrieved sentences.",
+    "Flat-list completeness does not establish alternative-group completeness.",
+    "Evidence identity matching does not establish semantic entailment.",
+    "NEI examples normally have no annotated gold evidence."
+  ]
+}

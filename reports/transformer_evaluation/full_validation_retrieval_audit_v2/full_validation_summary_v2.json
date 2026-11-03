@@ -1,0 +1,169 @@
+{
+  "validation_examples_audited": 14540,
+  "source_records_matched": 14540,
+  "missing_source_records": 0,
+  "duplicate_source_ids": 0,
+  "top_k": 5,
+  "accuracy": 0.7784731774415405,
+  "actual_class_alignment": {
+    "SUPPORTS": {
+      "examples": 8027,
+      "examples_with_gold_evidence": 8027,
+      "examples_without_gold_evidence": 0,
+      "examples_with_any_gold_match": 4415,
+      "examples_with_complete_gold_coverage": 3316,
+      "mean_gold_evidence_recall": 0.4688127371371838,
+      "gold_evidence_recall_at_5": 0.33975887201144334,
+      "any_gold_evidence_hit_rate": 0.5500186869316058,
+      "complete_coverage_rate": 0.413105768032889,
+      "mean_matching_page_title_count": 0.6384701631992027
+    },
+    "REFUTES": {
+      "examples": 2976,
+      "examples_with_gold_evidence": 2976,
+      "examples_without_gold_evidence": 0,
+      "examples_with_any_gold_match": 1344,
+      "examples_with_complete_gold_coverage": 1007,
+      "mean_gold_evidence_recall": 0.38137476589510794,
+      "gold_evidence_recall_at_5": 0.271953166577967,
+      "any_gold_evidence_hit_rate": 0.45161290322580644,
+      "complete_coverage_rate": 0.3383736559139785,
+      "mean_matching_page_title_count": 0.5362903225806451
+    },
+    "NOT ENOUGH INFO": {
+      "examples": 3537,
+      "examples_with_gold_evidence": 0,
+      "examples_without_gold_evidence": 3537,
+      "examples_with_any_gold_match": 0,
+      "examples_with_complete_gold_coverage": 0,
+      "mean_gold_evidence_recall": null,
+      "gold_evidence_recall_at_5": null,
+      "any_gold_evidence_hit_rate": null,
+      "complete_coverage_rate": null,
+      "mean_matching_page_title_count": null
+    }
+  },
+  "correct_vs_incorrect_alignment": {
+    "CORRECT": {
+      "examples": 11319,
+      "examples_with_gold_evidence": 9418,
+      "examples_without_gold_evidence": 1901,
+      "examples_with_any_gold_match": 5286,
+      "examples_with_complete_gold_coverage": 3972,
+      "mean_gold_evidence_recall": 0.4770135787589694,
+      "gold_evidence_recall_at_5": 0.3347792236681126,
+      "any_gold_evidence_hit_rate": 0.5612656614992567,
+      "complete_coverage_rate": 0.42174559354427693,
+      "mean_matching_page_title_count": 0.6383520917392228
+    },
+    "INCORRECT": {
+      "examples": 3221,
+      "examples_with_gold_evidence": 1585,
+      "examples_without_gold_evidence": 1636,
+      "examples_with_any_gold_match": 473,
+      "examples_with_complete_gold_coverage": 351,
+      "mean_gold_evidence_recall": 0.2559099429350424,
+      "gold_evidence_recall_at_5": 0.2144691780821918,
+      "any_gold_evidence_hit_rate": 0.29842271293375394,
+      "complete_coverage_rate": 0.22145110410094637,
+      "mean_matching_page_title_count": 0.4473186119873817
+    }
+  },
+  "prediction_groups": {
+    "NOT ENOUGH INFO_CORRECT": {
+      "examples": 1901,
+      "examples_with_gold_evidence": 0,
+      "examples_without_gold_evidence": 1901,
+      "examples_with_any_gold_match": 0,
+      "examples_with_complete_gold_coverage": 0,
+      "mean_gold_evidence_recall": null,
+      "gold_evidence_recall_at_5": null,
+      "any_gold_evidence_hit_rate": null,
+      "complete_coverage_rate": null,
+      "mean_matching_page_title_count": null
+    },
+    "SUPPORTS_CORRECT": {
+      "examples": 7262,
+      "examples_with_gold_evidence": 7262,
+      "examples_without_gold_evidence": 0,
+      "examples_with_any_gold_match": 4238,
+      "examples_with_complete_gold_coverage": 3196,
+      "mean_gold_evidence_recall": 0.4980322006334583,
+      "gold_evidence_recall_at_5": 0.3529454972822095,
+      "any_gold_evidence_hit_rate": 0.5835857890388323,
+      "complete_coverage_rate": 0.44009914624070506,
+      "mean_matching_page_title_count": 0.6593225006885156
+    },
+    "NOT ENOUGH INFO_INCORRECT": {
+      "examples": 1636,
+      "examples_with_gold_evidence": 0,
+      "examples_without_gold_evidence": 1636,
+      "examples_with_any_gold_match": 0,
+      "examples_with_complete_gold_coverage": 0,
+      "mean_gold_evidence_recall": null,
+      "gold_evidence_recall_at_5": null,
+      "any_gold_evidence_hit_rate": null,
+      "complete_coverage_rate": null,
+      "mean_matching_page_title_count": null
+    },
+    "SUPPORTS_INCORRECT": {
+      "examples": 765,
+      "examples_with_gold_evidence": 765,
+      "examples_without_gold_evidence": 0,
+      "examples_with_any_gold_match": 177,
+      "examples_with_complete_gold_coverage": 120,
+      "mean_gold_evidence_recall": 0.191437908496732,
+      "gold_evidence_recall_at_5": 0.17150890346766634,
+      "any_gold_evidence_hit_rate": 0.23137254901960785,
+      "complete_coverage_rate": 0.1568627450980392,
+      "mean_matching_page_title_count": 0.44052287581699345
+    },
+    "REFUTES_CORRECT": {
+      "examples": 2156,
+      "examples_with_gold_evidence": 2156,
+      "examples_without_gold_evidence": 0,
+      "examples_with_any_gold_match": 1048,
+      "examples_with_complete_gold_coverage": 776,
+      "mean_gold_evidence_recall": 0.40621708893868236,
+      "gold_evidence_recall_at_5": 0.27815934065934067,
+      "any_gold_evidence_hit_rate": 0.48608534322820035,
+      "complete_coverage_rate": 0.35992578849721707,
+      "mean_matching_page_title_count": 0.5677179962894249
+    },
+    "REFUTES_INCORRECT": {
+      "examples": 820,
+      "examples_with_gold_evidence": 820,
+      "examples_without_gold_evidence": 0,
+      "examples_with_any_gold_match": 296,
+      "examples_with_complete_gold_coverage": 231,
+      "mean_gold_evidence_recall": 0.3160576336000514,
+      "gold_evidence_recall_at_5": 0.25059101654846333,
+      "any_gold_evidence_hit_rate": 0.36097560975609755,
+      "complete_coverage_rate": 0.2817073170731707,
+      "mean_matching_page_title_count": 0.45365853658536587
+    }
+  },
+  "classification_transitions": {
+    "NOT ENOUGH INFO -> NOT ENOUGH INFO": 1901,
+    "SUPPORTS -> SUPPORTS": 7262,
+    "NOT ENOUGH INFO -> SUPPORTS": 1153,
+    "SUPPORTS -> NOT ENOUGH INFO": 502,
+    "REFUTES -> REFUTES": 2156,
+    "NOT ENOUGH INFO -> REFUTES": 483,
+    "REFUTES -> NOT ENOUGH INFO": 380,
+    "SUPPORTS -> REFUTES": 263,
+    "REFUTES -> SUPPORTS": 440
+  },
+  "methodology_notes": [
+    "Predictions are reused from the previously completed validation evaluation.",
+    "Gold evidence is read from the original V2 source dataset.",
+    "Retrieved evidence identities are read from the original V2 retrieved_evidence field.",
+    "The first top-k retrieved passages are selected by final_rank.",
+    "Exact evidence identity is (page_title, sentence_id).",
+    "Page-title overlap is reported separately and is not counted as an exact evidence match.",
+    "Gold evidence is represented as a flat list in the V2 source.",
+    "NEI examples without gold evidence are excluded from evidence recall calculations.",
+    "Exact identity matching does not establish semantic entailment.",
+    "No model training or retrieval index rebuilding is performed."
+  ]
+}

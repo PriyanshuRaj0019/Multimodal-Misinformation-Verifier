@@ -1,0 +1,178 @@
+{
+  "sample_count": 14540,
+  "accuracy": 0.7785419532324622,
+  "macro_precision": 0.7488475698718343,
+  "macro_recall": 0.7222482397310289,
+  "macro_f1": 0.7319087686610911,
+  "weighted_f1": 0.7714997048748974,
+  "validation_loss": 0.5544206503824813,
+  "per_class": {
+    "SUPPORTS": {
+      "precision": 0.8200293553121825,
+      "recall": 0.9048212283543042,
+      "f1": 0.8603411513859275,
+      "support": 8027
+    },
+    "REFUTES": {
+      "precision": 0.7431920027576697,
+      "recall": 0.7244623655913979,
+      "f1": 0.7337076739833248,
+      "support": 2976
+    },
+    "NOT ENOUGH INFO": {
+      "precision": 0.6833213515456507,
+      "recall": 0.5374611252473848,
+      "f1": 0.6016774806140212,
+      "support": 3537
+    }
+  },
+  "classification_report": {
+    "SUPPORTS": {
+      "precision": 0.8200293553121825,
+      "recall": 0.9048212283543042,
+      "f1-score": 0.8603411513859275,
+      "support": 8027.0
+    },
+    "REFUTES": {
+      "precision": 0.7431920027576697,
+      "recall": 0.7244623655913979,
+      "f1-score": 0.7337076739833248,
+      "support": 2976.0
+    },
+    "NOT ENOUGH INFO": {
+      "precision": 0.6833213515456507,
+      "recall": 0.5374611252473848,
+      "f1-score": 0.6016774806140212,
+      "support": 3537.0
+    },
+    "accuracy": 0.7785419532324622,
+    "macro avg": {
+      "precision": 0.7488475698718343,
+      "recall": 0.7222482397310289,
+      "f1-score": 0.7319087686610911,
+      "support": 14540.0
+    },
+    "weighted avg": {
+      "precision": 0.7710469501867042,
+      "recall": 0.7785419532324622,
+      "f1-score": 0.7714997048748974,
+      "support": 14540.0
+    }
+  },
+  "confusion_matrix": {
+    "labels": [
+      "SUPPORTS",
+      "REFUTES",
+      "NOT ENOUGH INFO"
+    ],
+    "values": [
+      [
+        7263,
+        263,
+        501
+      ],
+      [
+        440,
+        2156,
+        380
+      ],
+      [
+        1154,
+        482,
+        1901
+      ]
+    ]
+  },
+  "confidence": {
+    "mean": 0.8235240251010353,
+    "median": 0.8962656259536743,
+    "minimum": 0.3378499150276184,
+    "maximum": 0.9928285479545593,
+    "mean_correct": 0.8630101887476318,
+    "mean_incorrect": 0.6847093131508887
+  },
+  "calibration": {
+    "expected_calibration_error": 0.045843181456791456,
+    "bin_count": 15,
+    "bins": [
+      {
+        "lower_bound": 0.3333333333333333,
+        "upper_bound": 0.4,
+        "count": 127,
+        "average_confidence": 0.37734021164300874,
+        "accuracy": 0.3700787425041199
+      },
+      {
+        "lower_bound": 0.4,
+        "upper_bound": 0.4666666666666667,
+        "count": 365,
+        "average_confidence": 0.437642851920977,
+        "accuracy": 0.4547945261001587
+      },
+      {
+        "lower_bound": 0.4666666666666667,
+        "upper_bound": 0.5333333333333333,
+        "count": 905,
+        "average_confidence": 0.5024536524359033,
+        "accuracy": 0.47734805941581726
+      },
+      {
+        "lower_bound": 0.5333333333333333,
+        "upper_bound": 0.6,
+        "count": 922,
+        "average_confidence": 0.565253172869796,
+        "accuracy": 0.5
+      },
+      {
+        "lower_bound": 0.6,
+        "upper_bound": 0.6666666666666666,
+        "count": 918,
+        "average_confidence": 0.6329284318132338,
+        "accuracy": 0.5729847550392151
+      },
+      {
+        "lower_bound": 0.6666666666666666,
+        "upper_bound": 0.7333333333333333,
+        "count": 930,
+        "average_confidence": 0.7001317041535531,
+        "accuracy": 0.6225806474685669
+      },
+      {
+        "lower_bound": 0.7333333333333333,
+        "upper_bound": 0.8,
+        "count": 1013,
+        "average_confidence": 0.7680536813349973,
+        "accuracy": 0.7068114280700684
+      },
+      {
+        "lower_bound": 0.8,
+        "upper_bound": 0.8666666666666667,
+        "count": 1262,
+        "average_confidence": 0.836300671950762,
+        "accuracy": 0.7646592855453491
+      },
+      {
+        "lower_bound": 0.8666666666666667,
+        "upper_bound": 0.9333333333333333,
+        "count": 2293,
+        "average_confidence": 0.9039618914115912,
+        "accuracy": 0.8412560224533081
+      },
+      {
+        "lower_bound": 0.9333333333333333,
+        "upper_bound": 1.0,
+        "count": 5805,
+        "average_confidence": 0.9736620614694994,
+        "accuracy": 0.94728684425354
+      }
+    ]
+  },
+  "model": "FacebookAI/roberta-base",
+  "model_directory": "D:\\COMEBACK\\PROJECTS\\Multimodal Misinformation Verifier\\models\\roberta_fever_baseline\\best_model",
+  "validation_file": "D:\\COMEBACK\\PROJECTS\\Multimodal Misinformation Verifier\\data\\processed\\transformer\\validation.jsonl",
+  "device": "cuda",
+  "max_length": 512,
+  "top_k": 5,
+  "batch_size": 2,
+  "elapsed_seconds": 80.8953754901886
+}

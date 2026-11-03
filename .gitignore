@@ -74,3 +74,6 @@ data/processed/fever_train_retrieved_evidence*.jsonl
 # Detailed, regenerable EDA outputs
 reports/eda/*conflicting_claims.csv
 reports/eda/train_dev_claim_overlap.csv
+# Transformer training artifacts
+data/processed/transformer/
+models/roberta_fever_baseline/
