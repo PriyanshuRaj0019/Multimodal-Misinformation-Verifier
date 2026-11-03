@@ -1,70 +1,94 @@
 ﻿# Multimodal Misinformation Verifier
 
-An evidence-grounded misinformation verification system designed to evaluate claims using supporting and contradicting evidence, with a long-term goal of extending verification across text, images, audio, and video.
+An evidence-grounded misinformation verification project that retrieves relevant source passages and evaluates whether they support, refute, or provide insufficient information about a claim. The long-term system direction includes text, image, audio, and video evidence; the implemented milestone currently focuses on **text-based evidence retrieval and Transformer verification**.
 
-**Project status:** Active development — FEVER dataset analysis, evidence-reference validation, Wikipedia indexing, evidence retrieval experiments, claim-only baseline classification, and initial automated testing infrastructure have been completed.
+**Project status:** Phase 5 complete — evidence-conditioned RoBERTa verifier implemented, evaluated, audited, and documented. Multimodal processing, user-facing application, API, and production deployment remain future work.
 
 ## Project Overview
 
-Misinformation verification requires more than classifying a statement as true or false. A reliable system must retrieve relevant evidence, assess whether that evidence supports or contradicts a claim, and communicate uncertainty when the available information is insufficient.
+Misinformation verification requires more than classifying a statement as true or false. A useful verifier must:
 
-This project explores an evidence-grounded verification pipeline using the [FEVER dataset](https://fever.ai/).
+1. Retrieve potentially relevant evidence from a knowledge source.
+2. Compare the claim with the retrieved passages.
+3. Predict whether the evidence supports, refutes, or is insufficient to verify the claim.
+4. Preserve evidence provenance and expose model uncertainty and failure cases.
 
-The current implementation focuses on dataset analysis, Wikipedia evidence indexing, retrieval evaluation, and baseline claim classification. Evidence-conditioned verification and multimodal extensions remain under development.
+This project uses the [FEVER dataset](https://fever.ai/) and a Wikipedia sentence corpus to develop and evaluate this pipeline incrementally. It includes dataset auditing, SQLite-based evidence indexing, BM25 and title-aware retrieval, Reciprocal Rank Fusion (RRF), classical baselines, and an evidence-conditioned Transformer verifier.
+
+The project is an experimental research and engineering implementation, not a production fact-checking service.
 
 ## Current Capabilities
 
-| Component                               | Implementation status                 |
-| --------------------------------------- | ------------------------------------- |
-| FEVER dataset exploration and audit     | Complete                              |
-| Wikipedia corpus inspection             | Complete                              |
-| SQLite sentence index                   | Built                                 |
-| SQLite title index                      | Built                                 |
-| Evidence-reference validation           | Complete                              |
-| BM25 evidence retrieval                 | Implemented and evaluated             |
-| Title-aware retrieval reranking         | Implemented and evaluated             |
-| Reciprocal Rank Fusion experiment       | Evaluated on FEVER training data      |
-| TF-IDF + Logistic Regression baseline   | Trained and evaluated                 |
-| Automated retrieval tests               | Implemented; 65 tests passing locally |
-| Ruff linting and formatting             | Configured and passing locally        |
-| GitHub Actions CI                       | Configured; remote execution pending  |
-| Evidence-conditioned verification model | Planned                               |
-| Transformer-based verification          | Planned                               |
-| Image, audio, and video verification    | Planned                               |
-| API and production deployment           | Planned                               |
+| Component                                              | Status                                           |
+| ------------------------------------------------------ | ------------------------------------------------ |
+| FEVER dataset exploration and evidence-reference audit | Complete                                         |
+| Wikipedia sentence and title indexes (SQLite / FTS5)   | Built locally                                    |
+| BM25 evidence retrieval                                | Implemented and evaluated                        |
+| Title-aware candidate reranking                        | Implemented and evaluated                        |
+| Reciprocal Rank Fusion                                 | Implemented and evaluated on FEVER training data |
+| TF-IDF + Logistic Regression claim-only baselines      | Trained and evaluated                            |
+| Evidence-aware Transformer dataset preparation         | Complete                                         |
+| Evidence-conditioned RoBERTa verifier                  | Trained and evaluated                            |
+| Transformer inference pipeline                         | Implemented                                      |
+| Classification error and evidence-alignment audits     | Complete                                         |
+| Phase 1–5 technical documentation                     | Published in `docs/`                           |
+| Image, audio, and video verification                   | Not implemented                                  |
+| Frontend, public API, and production deployment        | Not implemented                                  |
 
-## System Direction
+## Implemented Verification Pipeline
 
-The intended verification workflow is:
+The current text-based workflow is:
 
-1. **Claim input:** Receive a textual claim or supported multimodal input.
-2. **Evidence retrieval:** Retrieve potentially relevant evidence from an indexed knowledge source.
-3. **Evidence assessment:** Evaluate whether retrieved evidence supports, refutes, or provides insufficient information about the claim.
-4. **Verification output:** Produce a prediction with supporting evidence, contradictions, and uncertainty.
-5. **Multimodal extension:** Extend the pipeline to process image, audio, and video evidence.
+```text
+FEVER claim
+    |
+    v
+BM25 retrieval + title-aware retrieval
+    |
+    v
+Reciprocal Rank Fusion (RRF)
+    |
+    v
+Top-k retrieved Wikipedia passages
+    |
+    v
+Claim + evidence serialization
+    |
+    v
+RoBERTa sequence classifier
+    |
+    v
+SUPPORTS / REFUTES / NOT ENOUGH INFO
+    |
+    v
+Evaluation, error analysis, and evidence audit
+```
 
-The currently implemented pipeline covers important dataset, indexing, retrieval, and baseline-classification stages. It does not yet implement the complete workflow above.
+The Transformer receives the claim and up to five retrieved passages, including page titles and sentence text. The model predicts one of three FEVER labels. Gold evidence is retained for evaluation and auditing; it is **not used as model input**.
 
-## Dataset
+This is a text-only implementation of part of the broader project architecture. It does not yet verify image, audio, or video content, nor does it provide a deployed end-user service.
+
+## Dataset and Evidence Corpus
 
 ### FEVER
 
-The project uses the [FEVER dataset](https://fever.ai/), which contains claims annotated with evidence and one of three labels:
+The project uses [FEVER](https://fever.ai/), whose claims are labeled:
 
 - `SUPPORTS`
 - `REFUTES`
-- `NOT ENOUGH INFO` (NEI)
+- `NOT ENOUGH INFO` (`NEI`)
 
-| Split       | Records |
-| ----------- | ------: |
-| Train       | 145,449 |
-| Development |  19,998 |
+| Split / artifact                      | Records |
+| ------------------------------------- | ------: |
+| FEVER training set                    | 145,449 |
+| FEVER development set                 |  19,998 |
+| Internal Transformer validation split |  14,540 |
 
-The development set contains 6,666 examples per class.
+The Transformer validation split is an internal grouped split prepared from the training data. It is **not** the official FEVER development or test benchmark. Exact-claim grouping was used during split preparation to reduce duplicate-claim leakage.
 
-### Wikipedia Evidence Corpus
+### Wikipedia evidence corpus
 
-The Wikipedia corpus was inspected and indexed to support evidence retrieval.
+The local corpus inspection and indexing process reported:
 
 | Measurement                  |                 Result |
 | ---------------------------- | ---------------------: |
@@ -75,17 +99,17 @@ The Wikipedia corpus was inspected and indexed to support evidence retrieval.
 | Malformed JSON records       |                      0 |
 | SQLite sentence index size   | Approximately 6.11 GiB |
 
-The sentence index uses SQLite FTS5 with Unicode tokenization.
+The sentence index uses SQLite FTS5. A separate title index supports title-aware retrieval. The corpus and indexes are large local artifacts and are not included in this Git repository.
 
-### Evidence Reference Validation
+### Evidence-reference validation
 
-The evidence-mapping validation process achieved:
+The evidence mapping audit reported:
 
 - 14,533 of 14,533 gold evidence pages matched.
 - 40,930 of 40,930 unique page/sentence references matched.
 - 100% reference-mapping coverage after Unicode normalization.
 
-This validates the mapping between FEVER annotations and the indexed corpus. It does not imply that the retrieval system successfully retrieves every gold evidence sentence.
+This validates the mapping between FEVER annotations and the indexed corpus. It does not mean the retrieval system retrieves every gold evidence sentence.
 
 ## Evidence Retrieval Experiments
 
@@ -95,24 +119,24 @@ This validates the mapping between FEVER annotations and the indexed corpus. It 
 
 - Uses SQLite FTS5 BM25 ranking.
 - Filters short and common claim tokens.
-- Uses iterative AND queries with progressively relaxed token sets when a query returns no results.
+- Uses progressively relaxed token queries when a strict query returns no candidates.
 
 **Title-aware reranking**
 
-- Starts with BM25 candidate retrieval.
-- Normalizes Unicode, punctuation, underscores, and Wikipedia parenthetical title markup.
+- Starts from BM25 candidate retrieval.
+- Normalizes Unicode, punctuation, underscores, and Wikipedia title markup.
 - Promotes candidates whose normalized page-title phrase appears in the claim.
 - Preserves BM25 ordering within candidate groups.
 
-This is a deterministic title-matching heuristic, not a full entity-linking system. It cannot recover relevant pages that are absent from the BM25 candidate pool.
+This is a deterministic title-matching heuristic, not a full entity-linking system. It cannot retrieve relevant pages that are absent from the BM25 candidate pool.
 
 **Reciprocal Rank Fusion (RRF)**
 
-An experimental fusion approach combines BM25 and title-based candidate rankings. The current reported full-training-set experiment uses an RRF constant of 60.
+Combines BM25 and title-based rankings. The reported full-training-set experiment uses an RRF constant of 60.
 
 ### FEVER development-set results
 
-The following results are from the full development set of 19,998 claims.
+Results below are from the official development split of 19,998 claims.
 
 | Metric    |   BM25 | Title-aware |
 | --------- | -----: | ----------: |
@@ -128,11 +152,9 @@ Complete evidence-group retrieval:
 | CompleteEvidenceGroup@5  | 24.11% |      30.05% |
 | CompleteEvidenceGroup@10 | 26.35% |      30.77% |
 
-Title-aware reranking improves retrieval recall across the reported cutoffs. However, retrieval performance remains limited, particularly for claims requiring multiple evidence sentences.
-
 ### FEVER training-set fusion experiment
 
-The following results are from a separate experiment on the full training set of 145,449 claims.
+This is a separate experiment on all 145,449 training claims, not a held-out evaluation.
 
 | Metric    |   BM25 | Title-based | Fused RRF |
 | --------- | -----: | ----------: | --------: |
@@ -148,82 +170,139 @@ Complete evidence-group retrieval:
 | CompleteEvidenceGroup@5  | 19.66% |      31.96% |    39.17% |
 | CompleteEvidenceGroup@10 | 21.26% |      35.17% |    45.12% |
 
-These are training-set experiment results, not held-out evaluation results. They should not be compared directly with the development-set benchmark as if they were measured under identical conditions.
+Training-set results are exploratory and must not be compared with development-set results as if they were measured on the same split.
 
-Detailed methodology and results: [`reports/retrieval/README.md`](reports/retrieval/README.md).
+Detailed methodology: [`reports/retrieval/README.md`](reports/retrieval/README.md).
 
-## Claim Classification Baseline
+## Model Experiments
 
-A claim-only text classification baseline was trained using TF-IDF features and Logistic Regression.
+### Claim-only classical baseline
 
-The model does not retrieve or reason over evidence. It serves as a reference point for subsequent evidence-conditioned models.
+TF-IDF + Logistic Regression models provide a reference point. They classify claim text without retrieving or reasoning over evidence.
 
-### Development-set results
+Development-set results:
 
-| Model                                       |         Accuracy |         Macro-F1 |
-| ------------------------------------------- | ---------------: | ---------------: |
-| Majority-class baseline                     |           33.33% |           16.67% |
-| TF-IDF + Logistic Regression                |           52.39% |           50.66% |
-| Class-balanced TF-IDF + Logistic Regression | **55.38%** | **55.44%** |
+| Model                                       | Accuracy | Macro-F1 |
+| ------------------------------------------- | -------: | -------: |
+| Majority-class baseline                     |   33.33% |   16.67% |
+| TF-IDF + Logistic Regression                |   52.39% |   50.66% |
+| Class-balanced TF-IDF + Logistic Regression |   55.38% |   55.44% |
 
-The class-balanced model is the current preferred claim-only baseline.
-
-Its per-class F1 scores are:
-
-| Label    | Precision | Recall |     F1 |
-| -------- | --------: | -----: | -----: |
-| SUPPORTS |    51.56% | 57.94% | 54.56% |
-| REFUTES  |    65.60% | 60.40% | 62.89% |
-| NEI      |    50.01% | 47.79% | 48.88% |
-
-Evaluation uses the FEVER development split. These results do not represent evidence-grounded verification performance or final test-set performance.
+The class-balanced model's per-class F1 scores were 54.56% for SUPPORTS, 62.89% for REFUTES, and 48.88% for NEI. These are claim-only baseline results, not evidence-grounded verification results.
 
 Detailed results: [`reports/retrieval/baseline_verifier.md`](reports/retrieval/baseline_verifier.md).
+
+### Evidence-conditioned Transformer verifier
+
+**Model:** `FacebookAI/roberta-base` with a three-class sequence-classification head.
+
+**Input:** Claim text plus the top five retrieved evidence passages, serialized with page titles and sentence text.
+
+**Labels:** SUPPORTS, REFUTES, NOT ENOUGH INFO.
+
+**Training configuration (recorded run):**
+
+| Setting                  |   Value |
+| ------------------------ | ------: |
+| Maximum sequence length  |     512 |
+| Top retrieved passages   |       5 |
+| Batch size               |       2 |
+| Gradient accumulation    |       8 |
+| Learning rate            |    2e-5 |
+| Mixed precision          |    FP16 |
+| Gradient checkpointing   | Enabled |
+| Recorded training epochs |       1 |
+
+The best recorded validation Macro-F1 was 73.19%. The run used an NVIDIA RTX 4060 Laptop GPU. The model checkpoint and prepared Transformer datasets remain local and are excluded from the repository.
+
+### Internal validation results
+
+The model was evaluated on 14,540 examples in the internal grouped validation split.
+
+| Metric                               |           Result |
+| ------------------------------------ | ---------------: |
+| Accuracy                             | **77.85%** |
+| Macro Precision                      |           74.88% |
+| Macro Recall                         |           72.22% |
+| Macro-F1                             | **73.19%** |
+| Weighted F1                          |           77.15% |
+| Expected Calibration Error (15 bins) |           0.0458 |
+
+Per-class results:
+
+| Label           | Precision | Recall |     F1 | Support |
+| --------------- | --------: | -----: | -----: | ------: |
+| SUPPORTS        |    82.00% | 90.48% | 86.03% |   8,027 |
+| REFUTES         |    74.32% | 72.45% | 73.37% |   2,976 |
+| NOT ENOUGH INFO |    68.33% | 53.75% | 60.17% |   3,537 |
+
+Confusion matrix (rows = actual labels, columns = predicted labels; order: SUPPORTS, REFUTES, NEI):
+
+```text
+                 Predicted
+               SUP   REF   NEI
+Actual SUP    7263   263   501
+       REF     440  2156   380
+       NEI    1154   482  1901
+```
+
+These metrics describe an internal validation experiment, not the official FEVER leaderboard or an independent real-world misinformation benchmark. Softmax confidence is not a calibrated probability; ECE is a diagnostic, not proof of calibration.
+
+### Retrieval alignment audit
+
+A corrected audit joined the 14,540 validation IDs back to the original evidence-aware source records and compared exact evidence identities `(page_title, sentence_id)` among the top five retrieved passages.
+
+| Actual class | Examples | Exact gold evidence Recall@5 | Any gold evidence hit rate |
+| ------------ | -------: | ---------------------------: | -------------------------: |
+| SUPPORTS     |    8,027 |                       33.98% |                     55.00% |
+| REFUTES      |    2,976 |                       27.20% |                     45.16% |
+| NEI          |    3,537 |               Not applicable |             Not applicable |
+
+NEI examples have no gold evidence annotations and are excluded from evidence-recall calculations. Exact identity matching does not establish semantic entailment: a passage that is not an exact annotated match may still be relevant, and an exact match does not by itself prove that the model reasoned correctly.
+
+The audit found higher exact evidence coverage among correctly classified examples than incorrectly classified examples. This is an association, not evidence that retrieval coverage alone caused the classification outcome.
+
+Detailed outputs:
+
+- [Transformer evaluation metrics](reports/transformer_evaluation/evaluation_metrics.json)
+- [Error analysis](reports/transformer_evaluation/error_analysis/)
+- [Evidence alignment audit](reports/transformer_evaluation/evidence_alignment_audit/)
+- [Corrected full-validation retrieval audit](reports/transformer_evaluation/full_validation_retrieval_audit_v2/)
 
 ## Repository Structure
 
 ```text
 Multimodal-Misinformation-Verifier/
-│
 ├── .github/
 │   └── workflows/
-│       └── tests.yml
-│
 ├── configs/
-│
 ├── data/
-│   ├── raw/
-│   ├── interim/
+│   ├── raw/                         # Local source datasets; not committed
 │   └── processed/
-│
+│       └── example_claim.json
 ├── docs/
-│   ├── architecture.md
-│   ├── data-card.md
-│   ├── model-card.md
-│   └── requirements-specification.md
-│
-├── notebooks/
-│
+│   ├── PHASE_1_DATA_PREPARATION.md
+│   ├── PHASE_2_RETRIEVAL_INFRASTRUCTURE.md
+│   ├── PHASE_3_EVIDENCE_AWARE_DATASETS.md
+│   ├── PHASE_4_CLASSICAL_BASELINE.md
+│   └── PHASE_5_TRANSFORMER_VERIFIER.md
 ├── reports/
 │   ├── audit/
 │   ├── eda/
-│   └── retrieval/
-│
+│   ├── retrieval/
+│   └── transformer_evaluation/
 ├── scripts/
-│   ├── eda_fever.py
-│   ├── audit_fever.py
-│   ├── build_wiki_sentence_index.py
-│   ├── build_wiki_title_index.py
-│   ├── evaluate_bm25_retrieval.py
-│   ├── evaluate_title_aware_retrieval.py
-│   ├── train_baseline_verifier.py
-│   └── ...
-│
+│   ├── prepare_transformer_dataset.py
+│   ├── train_transformer_verifier.py
+│   ├── predict_transformer_verifier.py
+│   ├── evaluate_transformer_verifier.py
+│   ├── analyze_transformer_errors.py
+│   ├── audit_transformer_error_evidence.py
+│   └── audit_full_validation_retrieval_v2.py
 ├── src/
 │   └── misinfo_verifier/
-│
+│       └── transformer_data.py
 ├── tests/
-│
 ├── .gitignore
 ├── pyproject.toml
 ├── requirements.txt
@@ -231,84 +310,75 @@ Multimodal-Misinformation-Verifier/
 └── README.md
 ```
 
-Large raw datasets, generated indexes, and other local artifacts are not included in the repository.
+Large source datasets, generated SQLite indexes, prepared Transformer datasets, and model checkpoints are not distributed in this repository. See `.gitignore` for the local artifact exclusions.
 
 ## Getting Started
 
 ### Requirements
 
 - Python 3.12
-- pip
 - Git
+- pip
 
-Runtime dependencies are pinned in `requirements.txt`. Development dependencies, including pytest, pytest-cov, and Ruff, are defined in `requirements-dev.txt`.
-
-### Environment setup
-
-Create and activate a virtual environment:
+Create and activate a virtual environment in PowerShell:
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
 ```
 
-Install runtime dependencies:
+Install the project's base dependencies:
 
 ```powershell
 python -m pip install -r requirements.txt
 ```
 
-For development, testing, and code-quality checks, install:
+For development tools:
 
 ```powershell
 python -m pip install -r requirements-dev.txt
 ```
 
-### Running existing experiments
+**Transformer environment:** The recorded Transformer run used PyTorch with CUDA, Transformers, Accelerate, Datasets, and the dependencies required by the training scripts. Check the current script imports and your hardware before reproducing the run; the base requirements installation alone may not provision a compatible CUDA-enabled PyTorch build.
 
-Run the following commands from the repository root.
+### Data prerequisites
 
-**FEVER exploratory data analysis:**
+The full retrieval and training workflows require the FEVER source data, Wikipedia corpus, and locally generated SQLite indexes. These large assets are not committed. The Transformer preparation and training scripts also expect the evidence-aware V2 input dataset described in the Phase 3–5 documentation.
 
-```powershell
-python scripts/eda_fever.py
-```
+### Transformer workflow
 
-**Dataset audit:**
+Run commands from the repository root after preparing the required local datasets and indexes.
 
-```powershell
-python scripts/audit_fever.py
-```
-
-**Evidence-aware dataset audit:**
+Prepare the internal Transformer train/validation files:
 
 ```powershell
-python scripts/audit_evidence_dataset.py
+python scripts/prepare_transformer_dataset.py
 ```
 
-**BM25 retrieval evaluation:**
+Train the verifier:
 
 ```powershell
-python scripts/evaluate_bm25_retrieval.py
+python scripts/train_transformer_verifier.py
 ```
 
-**Title-aware retrieval evaluation:**
+Run evaluation:
 
 ```powershell
-python scripts/evaluate_title_aware_retrieval.py
+python scripts/evaluate_transformer_verifier.py
 ```
 
-**Claim-only baseline verification:**
+Run error analysis:
 
 ```powershell
-python scripts/train_baseline_verifier.py
+python scripts/analyze_transformer_errors.py
 ```
 
-**Data prerequisites:** These workflows depend on the FEVER dataset and, for retrieval experiments, the locally prepared Wikipedia corpus and SQLite indexes. The large source datasets and indexes are not distributed through this repository. Consult the project documentation and retrieval report for the required data preparation and execution details.
+The prediction module is available at `scripts/predict_transformer_verifier.py`; inspect its command-line interface and input schema before invoking it. The exact data paths, model output location, and options are defined in the scripts and phase documentation.
 
-### Running tests and quality checks
+### Tests and code quality
 
-Run the automated test suite:
+Run the test suite:
 
 ```powershell
 python -m pytest -v
@@ -320,64 +390,66 @@ Run Ruff lint checks:
 python -m ruff check scripts tests
 ```
 
-Verify code formatting:
+Check formatting:
 
 ```powershell
 python -m ruff format --check scripts tests
 ```
 
-The repository includes GitHub Actions CI configured to run linting, formatting, and automated tests on pushes and pull requests targeting `main`.
+The earlier retrieval test run reported 65 passing tests and 94% coverage across the two core retrieval modules. Those figures describe that recorded test run; they are not a claim that every later Transformer workflow has been covered by the same test suite. GitHub Actions is configured, but successful remote workflow execution has not been verified here.
 
-The current local test suite contains 65 passing tests. Coverage is 94% across the two core retrieval modules.
+## Documentation
 
-Remote GitHub Actions execution has not yet been verified.
+| Document                                                                       | Scope                                                          |
+| ------------------------------------------------------------------------------ | -------------------------------------------------------------- |
+| [Phase 1 — Data Preparation](docs/PHASE_1_DATA_PREPARATION.md)                 | Dataset preparation and audit                                  |
+| [Phase 2 — Retrieval Infrastructure](docs/PHASE_2_RETRIEVAL_INFRASTRUCTURE.md) | Wikipedia indexing and retrieval                               |
+| [Phase 3 — Evidence-Aware Datasets](docs/PHASE_3_EVIDENCE_AWARE_DATASETS.md)   | Evidence-aware data construction                               |
+| [Phase 4 — Classical Baseline](docs/PHASE_4_CLASSICAL_BASELINE.md)             | Classical claim classification baseline                        |
+| [Phase 5 — Transformer Verifier](docs/PHASE_5_TRANSFORMER_VERIFIER.md)         | Evidence-conditioned Transformer implementation and evaluation |
 
-## Documentation and Experiment Reports
-
-| Document                                                                            | Description                           |
-| ----------------------------------------------------------------------------------- | ------------------------------------- |
-| [`docs/architecture.md`](docs/architecture.md)                                     | System architecture                   |
-| [`docs/requirements-specification.md`](docs/requirements-specification.md)         | Functional and technical requirements |
-| [`docs/data-card.md`](docs/data-card.md)                                           | Dataset documentation                 |
-| [`docs/model-card.md`](docs/model-card.md)                                         | Model documentation                   |
-| [`reports/retrieval/README.md`](reports/retrieval/README.md)                       | Retrieval methodology and evaluation  |
-| [`reports/retrieval/baseline_verifier.md`](reports/retrieval/baseline_verifier.md) | Baseline classification results       |
+The phase documents record implementation decisions and results. A single comprehensive project document will be prepared when the full project is complete.
 
 ## Current Limitations
 
-- BM25 and title-aware retrieval do not consistently retrieve complete gold evidence groups.
-- Title-aware matching relies on deterministic phrase matching rather than full entity resolution.
-- The current classification baseline uses claim text alone.
-- The current experiments do not establish end-to-end evidence-grounded verification performance.
-- Training-set retrieval results are exploratory and require separate held-out evaluation.
-- Multimodal evidence processing, uncertainty calibration, and production deployment are not yet implemented.
-- Reproducibility across different environments and datasets still requires further validation.
-- GitHub Actions CI is configured, but successful remote workflow execution has not yet been verified.
+- Retrieval does not consistently recover all annotated gold evidence, especially for claims requiring multiple passages.
+- Title-aware retrieval is a deterministic matching heuristic, not full entity linking.
+- Exact evidence identity audits do not measure semantic entailment or all valid alternative evidence.
+- The Transformer evaluation uses an internal split from FEVER training data, not the official FEVER development/test benchmark.
+- NEI classification recall is lower than SUPPORTS and REFUTES recall in the current Transformer run.
+- Softmax confidence is not calibrated for operational decision-making.
+- The current implementation is text-only.
+- Image, audio, and video ingestion and cross-modal consistency checks are not implemented.
+- There is no user-facing frontend, production API, authentication layer, or deployment pipeline yet.
+- Model checkpoints and large datasets are local artifacts and are not included in Git.
 
-## Next Development Milestones
+## Future Development Direction
 
-1. Improve evidence retrieval and evaluate retrieval strategies on held-out data.
-2. Build and evaluate evidence-conditioned verification models.
-3. Establish robust evaluation protocols and error analysis.
-4. Explore transformer-based verification architectures.
-5. Extend the system to image, audio, and video evidence.
-6. Develop an API, production deployment workflow, and operational monitoring.
+The broader architecture is intended to grow toward:
+
+1. Improving evidence retrieval, ranking, and semantic evidence coverage.
+2. Strengthening claim–evidence verification, uncertainty handling, and evaluation.
+3. Adding image–text consistency and multimodal fusion.
+4. Extending ingestion and verification to audio and video.
+5. Building an API and a user-facing interface with source-level explanations.
+6. Adding production security, monitoring, reproducibility, and deployment infrastructure.
+
+These are future milestones, not currently implemented capabilities.
 
 ## Author
 
 **Priyanshu Raj**
 
-AI/ML Engineering | Machine Learning | Evidence-Grounded AI Systems
+AI/ML Engineering · Machine Learning · Evidence-Grounded AI Systems
 
 - GitHub: [@PriyanshuRaj0019](https://github.com/PriyanshuRaj0019)
+- Repository: [Multimodal Misinformation Verifier](https://github.com/PriyanshuRaj0019/Multimodal-Misinformation-Verifier)
 
 ## License
 
-This project is licensed under the Apache License 2.0.
-See the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache License 2.0. See [LICENSE](LICENSE) for details.
 
-Third-party datasets, pretrained models, and external resources
-remain subject to their respective licenses and terms of use.
+Third-party datasets, pretrained models, and external resources remain subject to their respective licenses and terms of use.
 
 ---
 
