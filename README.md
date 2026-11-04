@@ -1,92 +1,188 @@
 ﻿# Multimodal Misinformation Verifier
 
-An evidence-grounded misinformation verification project that retrieves relevant source passages and evaluates whether they support, refute, or provide insufficient information about a claim. The long-term system direction includes text, image, audio, and video evidence; the implemented milestone currently focuses on **text-based evidence retrieval and Transformer verification**.
+An evidence-grounded misinformation verification system designed to analyze claims against relevant evidence from text and, progressively, other modalities such as images, audio, and video.
 
-**Project status:** Phase 5 complete — evidence-conditioned RoBERTa verifier implemented, evaluated, audited, and documented. Multimodal processing, user-facing application, API, and production deployment remain future work.
+The project follows an incremental research and engineering approach, beginning with evidence retrieval and Transformer-based text verification before expanding into image understanding and multimodal evidence analysis.
+
+**Project status:** Phases 1–5 complete. Phase 6 complete as an experimental image-understanding pilot. Full multimodal fusion, audio/video verification, user-facing application, production API, and deployment remain future work.
+
+---
 
 ## Project Overview
 
-Misinformation verification requires more than classifying a statement as true or false. A useful verifier must:
+Misinformation verification requires more than classifying a statement as true or false. A reliable system should:
 
-1. Retrieve potentially relevant evidence from a knowledge source.
-2. Compare the claim with the retrieved passages.
-3. Predict whether the evidence supports, refutes, or is insufficient to verify the claim.
-4. Preserve evidence provenance and expose model uncertainty and failure cases.
+1. Extract claims from submitted content.
+2. Retrieve potentially relevant evidence.
+3. Compare claims against retrieved evidence.
+4. Identify supporting, contradicting, or insufficient evidence.
+5. Analyze image content and its relationship with associated text.
+6. Preserve evidence provenance and explain the reasoning behind predictions.
+7. Communicate uncertainty instead of presenting unsupported conclusions.
 
-This project uses the [FEVER dataset](https://fever.ai/) and a Wikipedia sentence corpus to develop and evaluate this pipeline incrementally. It includes dataset auditing, SQLite-based evidence indexing, BM25 and title-aware retrieval, Reciprocal Rank Fusion (RRF), classical baselines, and an evidence-conditioned Transformer verifier.
+This project uses the [FEVER dataset](https://fever.ai/) and a Wikipedia sentence corpus for text-based verification. It also uses the [Fakeddit dataset](https://github.com/entitize/Fakeddit) for an experimental image-understanding pilot.
 
-The project is an experimental research and engineering implementation, not a production fact-checking service.
+The implementation includes dataset auditing, SQLite-based evidence indexing, BM25 retrieval, title-aware retrieval, Reciprocal Rank Fusion (RRF), classical machine learning baselines, an evidence-conditioned RoBERTa verifier, image preprocessing, CLIP embeddings, OCR, image–text consistency signals, and text-to-image evidence retrieval.
+
+**This is an experimental research and engineering project, not a production fact-checking service.**
+
+## Project Status
+
+| Phase   | Description                                     | Status                         |
+| ------- | ----------------------------------------------- | ------------------------------ |
+| Phase 1 | Data preparation and exploration                | Complete                       |
+| Phase 2 | Evidence retrieval infrastructure               | Complete                       |
+| Phase 3 | Evidence-aware dataset preparation              | Complete                       |
+| Phase 4 | Classical machine learning baseline             | Complete                       |
+| Phase 5 | Transformer-based text verifier                 | Complete                       |
+| Phase 6 | Image understanding and image–text consistency | Complete — experimental pilot |
+| Phase 7 | Multimodal evidence fusion and risk assessment  | Not started                    |
 
 ## Current Capabilities
 
-| Component                                              | Status                                           |
-| ------------------------------------------------------ | ------------------------------------------------ |
-| FEVER dataset exploration and evidence-reference audit | Complete                                         |
-| Wikipedia sentence and title indexes (SQLite / FTS5)   | Built locally                                    |
-| BM25 evidence retrieval                                | Implemented and evaluated                        |
-| Title-aware candidate reranking                        | Implemented and evaluated                        |
-| Reciprocal Rank Fusion                                 | Implemented and evaluated on FEVER training data |
-| TF-IDF + Logistic Regression claim-only baselines      | Trained and evaluated                            |
-| Evidence-aware Transformer dataset preparation         | Complete                                         |
-| Evidence-conditioned RoBERTa verifier                  | Trained and evaluated                            |
-| Transformer inference pipeline                         | Implemented                                      |
-| Classification error and evidence-alignment audits     | Complete                                         |
-| Phase 1–5 technical documentation                     | Published in `docs/`                           |
-| Image, audio, and video verification                   | Not implemented                                  |
-| Frontend, public API, and production deployment        | Not implemented                                  |
+| Component                                              | Status                                          |
+| ------------------------------------------------------ | ----------------------------------------------- |
+| FEVER dataset exploration and evidence-reference audit | Complete                                        |
+| Wikipedia sentence and title indexes (SQLite / FTS5)   | Built locally                                   |
+| BM25 evidence retrieval                                | Implemented and evaluated                       |
+| Title-aware candidate reranking                        | Implemented and evaluated                       |
+| Reciprocal Rank Fusion                                 | Implemented and evaluated                       |
+| TF-IDF + Logistic Regression baselines                 | Trained and evaluated                           |
+| Evidence-aware Transformer dataset preparation         | Complete                                        |
+| Evidence-conditioned RoBERTa verifier                  | Trained and evaluated                           |
+| Transformer inference pipeline                         | Implemented                                     |
+| Classification error and evidence-alignment audits     | Complete                                        |
+| Image validation and preprocessing                     | Implemented and tested                          |
+| Fakeddit metadata audit and image pilot                | Complete — 500 selected, 476 images downloaded |
+| CLIP image and text embeddings                         | Generated and analyzed                          |
+| OCR extraction                                         | Implemented — 476 images processed             |
+| Image–text consistency signals                        | Implemented — preliminary signals only         |
+| Text-to-image evidence retrieval                       | Implemented and smoke-tested                    |
+| Phase 1–6 technical documentation                     | Available in `docs/`                          |
+| Full multimodal evidence fusion                        | Not implemented                                 |
+| Audio and video verification                           | Not implemented                                 |
+| Frontend and public API                                | Not implemented                                 |
+| Production deployment and monitoring                   | Not implemented                                 |
 
-## Implemented Verification Pipeline
+---
 
-The current text-based workflow is:
+## Architecture
+
+The project is being developed toward a larger multimodal verification architecture.
+
+### Current text-based verification workflow
 
 ```text
-FEVER claim
-    |
-    v
-BM25 retrieval + title-aware retrieval
-    |
-    v
-Reciprocal Rank Fusion (RRF)
-    |
-    v
-Top-k retrieved Wikipedia passages
-    |
-    v
-Claim + evidence serialization
-    |
-    v
-RoBERTa sequence classifier
-    |
-    v
-SUPPORTS / REFUTES / NOT ENOUGH INFO
-    |
-    v
-Evaluation, error analysis, and evidence audit
+                FEVER Claim
+                     |
+                     v
+             BM25 Evidence Retrieval
+                     |
+                     v
+            Title-Aware Retrieval
+                     |
+                     v
+       Reciprocal Rank Fusion (RRF)
+                     |
+                     v
+          Top-k Wikipedia Passages
+                     |
+                     v
+          Claim + Evidence Serialization
+                     |
+                     v
+           RoBERTa Verifier
+                     |
+                     v
+          SUPPORTS / REFUTES / NEI
+                     |
+                     v
+          Evaluation and Error Analysis
 ```
 
-The Transformer receives the claim and up to five retrieved passages, including page titles and sentence text. The model predicts one of three FEVER labels. Gold evidence is retained for evaluation and auditing; it is **not used as model input**.
+The Transformer receives the claim and up to five retrieved evidence passages, including page titles and sentence text.
 
-This is a text-only implementation of part of the broader project architecture. It does not yet verify image, audio, or video content, nor does it provide a deployed end-user service.
+Gold evidence annotations are retained for evaluation and auditing. They are not supplied as model input.
+
+### Phase 6 image-understanding workflow
+
+```text
+              Fakeddit Metadata
+                     |
+                     v
+             Pilot Image Manifest
+                     |
+                     v
+              Image Download
+                     |
+                     v
+            Image Validation
+                     |
+          +----------+----------+
+          |                     |
+          v                     v
+      CLIP Image             OCR Extraction
+      Embeddings                 |
+          |                      |
+          v                      v
+      Image–Text             Extracted Text
+      Similarity                 |
+          |                      |
+          +----------+-----------+
+                     |
+                     v
+          Preliminary Consistency
+                  Signals
+                     |
+                     v
+             Analysis Outputs
+```
+
+The image pipeline currently operates as an experimental workflow separate from the FEVER text verifier. The two pipelines have not yet been integrated into a unified multimodal decision system.
+
+### Long-term architecture direction
+
+The intended architecture progressively includes:
+
+- Text, image, audio, video, URL, and metadata ingestion.
+- Claim extraction and normalization.
+- Evidence retrieval from trusted and traceable sources.
+- Text and visual encoders.
+- OCR and image captioning.
+- Evidence-grounded claim verification.
+- Image–text consistency analysis.
+- Multimodal evidence fusion.
+- Uncertainty estimation and calibrated risk assessment.
+- Explainable results with evidence provenance.
+- API, frontend, database, deployment, and monitoring infrastructure.
+
+See [`docs/architecture.md`](docs/architecture.md) for the architecture specification.
+
+---
 
 ## Dataset and Evidence Corpus
 
 ### FEVER
 
-The project uses [FEVER](https://fever.ai/), whose claims are labeled:
+The project uses [FEVER](https://fever.ai/), a fact extraction and verification dataset.
+
+Its three labels are:
 
 - `SUPPORTS`
 - `REFUTES`
 - `NOT ENOUGH INFO` (`NEI`)
 
-| Split / artifact                      | Records |
+| Split / Artifact                      | Records |
 | ------------------------------------- | ------: |
 | FEVER training set                    | 145,449 |
 | FEVER development set                 |  19,998 |
 | Internal Transformer validation split |  14,540 |
 
-The Transformer validation split is an internal grouped split prepared from the training data. It is **not** the official FEVER development or test benchmark. Exact-claim grouping was used during split preparation to reduce duplicate-claim leakage.
+The Transformer validation split is an internal grouped split prepared from the training data. It is not the official FEVER development or test benchmark.
 
-### Wikipedia evidence corpus
+Exact-claim grouping was used during split preparation to reduce duplicate-claim leakage.
+
+### Wikipedia Evidence Corpus
 
 The local corpus inspection and indexing process reported:
 
@@ -99,7 +195,9 @@ The local corpus inspection and indexing process reported:
 | Malformed JSON records       |                      0 |
 | SQLite sentence index size   | Approximately 6.11 GiB |
 
-The sentence index uses SQLite FTS5. A separate title index supports title-aware retrieval. The corpus and indexes are large local artifacts and are not included in this Git repository.
+The sentence index uses SQLite FTS5. A separate title index supports title-aware retrieval.
+
+The corpus and indexes are large local artifacts and are not included in this Git repository.
 
 ### Evidence-reference validation
 
@@ -110,6 +208,39 @@ The evidence mapping audit reported:
 - 100% reference-mapping coverage after Unicode normalization.
 
 This validates the mapping between FEVER annotations and the indexed corpus. It does not mean the retrieval system retrieves every gold evidence sentence.
+
+### Fakeddit
+
+Phase 6 uses [Fakeddit](https://github.com/entitize/Fakeddit) for a small multimodal image-understanding pilot.
+
+Three metadata files were downloaded:
+
+- `multimodal_train.tsv`
+- `multimodal_validate.tsv`
+- `multimodal_test_public.tsv`
+
+| Split           |           Records | Missing Image URLs | Duplicate IDs |
+| --------------- | ----------------: | -----------------: | ------------: |
+| Train           |           564,000 |              1,534 |             0 |
+| Validation      |            59,342 |                173 |             0 |
+| Public test     |            59,319 |                156 |             0 |
+| **Total** | **682,661** |    **1,863** |   **0** |
+
+No overlapping IDs were found across the three splits.
+
+A balanced 500-record training pilot was selected using random seed `42`:
+
+| Fakeddit 2-way label | Selected records |
+| -------------------- | ---------------: |
+| 0                    |              250 |
+| 1                    |              250 |
+| **Total**      |    **500** |
+
+The full 102 GB image archive was not downloaded. Images were selectively retrieved using the metadata image URLs.
+
+**Important:** Fakeddit labels are dataset-provided labels. They are not independent factual truth labels or image–text consistency ground truth.
+
+---
 
 ## Evidence Retrieval Experiments
 
@@ -174,6 +305,8 @@ Training-set results are exploratory and must not be compared with development-s
 
 Detailed methodology: [`reports/retrieval/README.md`](reports/retrieval/README.md).
 
+---
+
 ## Model Experiments
 
 ### Claim-only classical baseline
@@ -188,7 +321,13 @@ Development-set results:
 | TF-IDF + Logistic Regression                |   52.39% |   50.66% |
 | Class-balanced TF-IDF + Logistic Regression |   55.38% |   55.44% |
 
-The class-balanced model's per-class F1 scores were 54.56% for SUPPORTS, 62.89% for REFUTES, and 48.88% for NEI. These are claim-only baseline results, not evidence-grounded verification results.
+The class-balanced model's per-class F1 scores were:
+
+- SUPPORTS: 54.56%
+- REFUTES: 62.89%
+- NEI: 48.88%
+
+These are claim-only baseline results, not evidence-grounded verification results.
 
 Detailed results: [`reports/retrieval/baseline_verifier.md`](reports/retrieval/baseline_verifier.md).
 
@@ -213,244 +352,412 @@ Detailed results: [`reports/retrieval/baseline_verifier.md`](reports/retrieval/b
 | Gradient checkpointing   | Enabled |
 | Recorded training epochs |       1 |
 
-The best recorded validation Macro-F1 was 73.19%. The run used an NVIDIA RTX 4060 Laptop GPU. The model checkpoint and prepared Transformer datasets remain local and are excluded from the repository.
+The best recorded validation Macro-F1 was 73.19%.
+
+The run used an NVIDIA RTX 4060 Laptop GPU. The model checkpoint and prepared Transformer datasets remain local and are excluded from the repository.
 
 ### Internal validation results
 
 The model was evaluated on 14,540 examples in the internal grouped validation split.
 
-| Metric                               |           Result |
-| ------------------------------------ | ---------------: |
-| Accuracy                             | **77.85%** |
-| Macro Precision                      |           74.88% |
-| Macro Recall                         |           72.22% |
-| Macro-F1                             | **73.19%** |
-| Weighted F1                          |           77.15% |
-| Expected Calibration Error (15 bins) |           0.0458 |
+The validation results and detailed evaluation methodology are documented in:
 
-Per-class results:
+[`docs/PHASE_5_TRANSFORMER_VERIFIER.md`](docs/PHASE_5_TRANSFORMER_VERIFIER.md).
 
-| Label           | Precision | Recall |     F1 | Support |
-| --------------- | --------: | -----: | -----: | ------: |
-| SUPPORTS        |    82.00% | 90.48% | 86.03% |   8,027 |
-| REFUTES         |    74.32% | 72.45% | 73.37% |   2,976 |
-| NOT ENOUGH INFO |    68.33% | 53.75% | 60.17% |   3,537 |
+These results should be interpreted as internal experimental results, not as a claim of production-grade fact-checking accuracy.
 
-Confusion matrix (rows = actual labels, columns = predicted labels; order: SUPPORTS, REFUTES, NEI):
+---
 
-```text
-                 Predicted
-               SUP   REF   NEI
-Actual SUP    7263   263   501
-       REF     440  2156   380
-       NEI    1154   482  1901
-```
+## Phase 6 — Image Understanding and Image–Text Consistency
 
-These metrics describe an internal validation experiment, not the official FEVER leaderboard or an independent real-world misinformation benchmark. Softmax confidence is not a calibrated probability; ECE is a diagnostic, not proof of calibration.
+Phase 6 establishes an experimental image-processing pipeline using a 500-record Fakeddit training pilot.
 
-### Retrieval alignment audit
+### 1. Image processing foundation
 
-A corrected audit joined the 14,540 validation IDs back to the original evidence-aware source records and compared exact evidence identities `(page_title, sentence_id)` among the top five retrieved passages.
+Implemented in:
 
-| Actual class | Examples | Exact gold evidence Recall@5 | Any gold evidence hit rate |
-| ------------ | -------: | ---------------------------: | -------------------------: |
-| SUPPORTS     |    8,027 |                       33.98% |                     55.00% |
-| REFUTES      |    2,976 |                       27.20% |                     45.16% |
-| NEI          |    3,537 |               Not applicable |             Not applicable |
+- `src/misinfo_verifier/image_processing.py`
+- `tests/test_image_processing.py`
 
-NEI examples have no gold evidence annotations and are excluded from evidence-recall calculations. Exact identity matching does not establish semantic entailment: a passage that is not an exact annotated match may still be relevant, and an exact match does not by itself prove that the model reasoned correctly.
+Capabilities:
 
-The audit found higher exact evidence coverage among correctly classified examples than incorrectly classified examples. This is an association, not evidence that retrieval coverage alone caused the classification outcome.
+- JPEG, PNG, and WEBP validation.
+- Maximum file-size limit of 15 MB.
+- Maximum pixel count of 25 million.
+- Image metadata extraction.
+- SHA-256 hashing.
+- EXIF orientation correction.
+- RGB conversion.
+- Transparent-background compositing.
+- LANCZOS image resizing.
 
-Detailed outputs:
+### 2. Image download and integrity
 
-- [Transformer evaluation metrics](reports/transformer_evaluation/evaluation_metrics.json)
-- [Error analysis](reports/transformer_evaluation/error_analysis/)
-- [Evidence alignment audit](reports/transformer_evaluation/evidence_alignment_audit/)
-- [Corrected full-validation retrieval audit](reports/transformer_evaluation/full_validation_retrieval_audit_v2/)
+| Measurement             |                 Result |
+| ----------------------- | ---------------------: |
+| Pilot records           |                    500 |
+| Successfully downloaded |                    476 |
+| Failed downloads        |                     24 |
+| Download success rate   |                  95.2% |
+| Total downloaded size   | Approximately 47.12 MB |
+| Valid images            |                    476 |
+| JPEG                    |                    460 |
+| PNG                     |                     16 |
+| Unique image hashes     |                    471 |
+
+The 24 download failures consisted of 23 HTTP 404 responses and one HTTP 500 response.
+
+One duplicate-image group contained six records. Duplicate-image handling and leakage prevention must be considered in future formal evaluation.
+
+Download availability differed between the labels:
+
+- Label 0: 244 of 250 downloaded.
+- Label 1: 232 of 250 downloaded.
+
+This may introduce sampling bias into pilot observations.
+
+### 3. CLIP image and text embeddings
+
+**Model:** `openai/clip-vit-base-patch32`
+
+The model generated normalized 512-dimensional image and text embeddings for all 476 downloaded images.
+
+| Output           | Shape          |
+| ---------------- | -------------- |
+| Image embeddings | `(476, 512)` |
+| Text embeddings  | `(476, 512)` |
+
+Cosine similarity statistics:
+
+| Statistic          | Similarity |
+| ------------------ | ---------: |
+| Mean               |     0.2713 |
+| Standard deviation |     0.0541 |
+| Minimum            |     0.1273 |
+| 25th percentile    |     0.2298 |
+| Median             |     0.2778 |
+| 75th percentile    |     0.3122 |
+| Maximum            |     0.3874 |
+
+Similarity grouped by Fakeddit label:
+
+| Label | Samples |   Mean | Median |
+| ----- | ------: | -----: | -----: |
+| 0     |     244 | 0.2443 | 0.2349 |
+| 1     |     232 | 0.2997 | 0.3024 |
+
+These are descriptive observations from the pilot. They do not demonstrate that either label is more truthful or that the images are more consistent with their associated text.
+
+CLIP similarity is not a probability of truth or authenticity.
+
+### 4. OCR extraction
+
+OCR was implemented using RapidOCR.
+
+| OCR outcome       |        Images |
+| ----------------- | ------------: |
+| Text detected     |           188 |
+| No text detected  |           288 |
+| Processing errors |             0 |
+| **Total**   | **476** |
+
+The extracted text and associated processing information are saved locally.
+
+Image captioning was considered in the initial plan but was deferred and is not implemented.
+
+### 5. Image–text consistency signals
+
+The consistency analysis combines:
+
+- CLIP image–text cosine similarity.
+- OCR text extraction.
+- Title/OCR token overlap.
+- Shared token count.
+- Title-token recall.
+- OCR-token precision.
+- Jaccard similarity.
+- OCR evidence availability.
+
+Pilot observations:
+
+| Signal                      | Samples |
+| --------------------------- | ------: |
+| OCR text available          |     188 |
+| No OCR text detected        |     288 |
+| Lexical overlap observed    |      32 |
+| No lexical overlap observed |     129 |
+| Not assessable              |     315 |
+
+A lack of lexical overlap does not mean that an image contradicts its title or claim. Similarly, lexical overlap does not establish semantic agreement.
+
+These are preliminary analysis signals, not final verification decisions.
+
+### 6. Text-to-image evidence retrieval
+
+The script `scripts/search_fakeddit_image_evidence.py` provides text-to-image retrieval using the CLIP text encoder and stored image embeddings.
+
+Example queries:
+
+**Query:** `a historical British army poster`
+
+Top result:
+
+- Image ID: `3milfm`
+- Similarity: `0.3213`
+
+**Query:** `a person holding a Pepsi can`
+
+Top result:
+
+- Image ID: `1113mn`
+- Similarity: `0.3131`
+- Associated title: `my sister in a field holding a can of pepsi`
+
+These are functional smoke tests, not a formal retrieval benchmark.
+
+### Phase 6 limitations
+
+- Fakeddit labels are not factual truth or image–text consistency ground truth.
+- The pilot is small and uses training-split samples.
+- Differential download failures may introduce bias.
+- Duplicate images may cause evaluation leakage.
+- CLIP similarity is not a truth probability.
+- OCR cannot capture all visual information.
+- Lexical overlap is not semantic agreement.
+- Retrieval has not yet been evaluated using a formal labeled benchmark.
+- Image captioning is deferred.
+- No unified multimodal evidence fusion is implemented.
+- No calibrated misinformation risk score is produced.
+- No production image API or user-facing interface is included.
+
+Detailed methodology, results, and validation: [`docs/PHASE_6_IMAGE_UNDERSTANDING_AND_CONSISTENCY.md`](docs/PHASE_6_IMAGE_UNDERSTANDING_AND_CONSISTENCY.md).
+
+---
 
 ## Repository Structure
 
 ```text
 Multimodal-Misinformation-Verifier/
-├── .github/
-│   └── workflows/
-├── configs/
+│
 ├── data/
-│   ├── raw/                         # Local source datasets; not committed
+│   ├── raw/
+│   │   └── fakeddit/                 # Local dataset; not committed
 │   └── processed/
-│       └── example_claim.json
+│       ├── fever/                    # FEVER processing artifacts
+│       ├── transformer/              # Local Transformer artifacts
+│       └── fakeddit/                 # Local CLIP/OCR outputs
+│
 ├── docs/
+│   ├── architecture.md
+│   ├── requirements-specification.md
+│   ├── data-card.md
+│   ├── model-card.md
 │   ├── PHASE_1_DATA_PREPARATION.md
 │   ├── PHASE_2_RETRIEVAL_INFRASTRUCTURE.md
 │   ├── PHASE_3_EVIDENCE_AWARE_DATASETS.md
 │   ├── PHASE_4_CLASSICAL_BASELINE.md
-│   └── PHASE_5_TRANSFORMER_VERIFIER.md
+│   ├── PHASE_5_TRANSFORMER_VERIFIER.md
+│   └── PHASE_6_IMAGE_UNDERSTANDING_AND_CONSISTENCY.md
+│
+├── models/
+│   └── roberta_fever_baseline/       # Local model checkpoint
+│
 ├── reports/
-│   ├── audit/
 │   ├── eda/
 │   ├── retrieval/
-│   └── transformer_evaluation/
+│   └── phase6_*                      # Local pilot analysis outputs
+│
 ├── scripts/
-│   ├── prepare_transformer_dataset.py
-│   ├── train_transformer_verifier.py
-│   ├── predict_transformer_verifier.py
-│   ├── evaluate_transformer_verifier.py
-│   ├── analyze_transformer_errors.py
-│   ├── audit_transformer_error_evidence.py
-│   └── audit_full_validation_retrieval_v2.py
+│   ├── audit_fakeddit_metadata.py
+│   ├── audit_fakeddit_pilot_images.py
+│   ├── analyze_fakeddit_clip_similarity.py
+│   ├── analyze_fakeddit_image_text_consistency.py
+│   ├── check_clip_environment.py
+│   ├── create_fakeddit_pilot_manifest.py
+│   ├── download_fakeddit_pilot_images.py
+│   ├── extract_fakeddit_clip_embeddings.py
+│   ├── extract_fakeddit_ocr.py
+│   ├── inspect_fakeddit_metadata.py
+│   └── search_fakeddit_image_evidence.py
+│
 ├── src/
 │   └── misinfo_verifier/
-│       └── transformer_data.py
+│       └── image_processing.py
+│
 ├── tests/
+│   └── test_image_processing.py
+│
 ├── .gitignore
-├── pyproject.toml
-├── requirements.txt
-├── requirements-dev.txt
-└── README.md
+├── README.md
+└── requirements.txt
 ```
 
-Large source datasets, generated SQLite indexes, prepared Transformer datasets, and model checkpoints are not distributed in this repository. See `.gitignore` for the local artifact exclusions.
-
-## Getting Started
-
-### Requirements
-
-- Python 3.12
-- Git
-- pip
-
-Create and activate a virtual environment in PowerShell:
-
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-```
-
-Install the project's base dependencies:
-
-```powershell
-python -m pip install -r requirements.txt
-```
-
-For development tools:
-
-```powershell
-python -m pip install -r requirements-dev.txt
-```
-
-**Transformer environment:** The recorded Transformer run used PyTorch with CUDA, Transformers, Accelerate, Datasets, and the dependencies required by the training scripts. Check the current script imports and your hardware before reproducing the run; the base requirements installation alone may not provision a compatible CUDA-enabled PyTorch build.
-
-### Data prerequisites
-
-The full retrieval and training workflows require the FEVER source data, Wikipedia corpus, and locally generated SQLite indexes. These large assets are not committed. The Transformer preparation and training scripts also expect the evidence-aware V2 input dataset described in the Phase 3–5 documentation.
-
-### Transformer workflow
-
-Run commands from the repository root after preparing the required local datasets and indexes.
-
-Prepare the internal Transformer train/validation files:
-
-```powershell
-python scripts/prepare_transformer_dataset.py
-```
-
-Train the verifier:
-
-```powershell
-python scripts/train_transformer_verifier.py
-```
-
-Run evaluation:
-
-```powershell
-python scripts/evaluate_transformer_verifier.py
-```
-
-Run error analysis:
-
-```powershell
-python scripts/analyze_transformer_errors.py
-```
-
-The prediction module is available at `scripts/predict_transformer_verifier.py`; inspect its command-line interface and input schema before invoking it. The exact data paths, model output location, and options are defined in the scripts and phase documentation.
-
-### Tests and code quality
-
-Run the test suite:
-
-```powershell
-python -m pytest -v
-```
-
-Run Ruff lint checks:
-
-```powershell
-python -m ruff check scripts tests
-```
-
-Check formatting:
-
-```powershell
-python -m ruff format --check scripts tests
-```
-
-The earlier retrieval test run reported 65 passing tests and 94% coverage across the two core retrieval modules. Those figures describe that recorded test run; they are not a claim that every later Transformer workflow has been covered by the same test suite. GitHub Actions is configured, but successful remote workflow execution has not been verified here.
-
-## Documentation
-
-| Document                                                                       | Scope                                                          |
-| ------------------------------------------------------------------------------ | -------------------------------------------------------------- |
-| [Phase 1 — Data Preparation](docs/PHASE_1_DATA_PREPARATION.md)                 | Dataset preparation and audit                                  |
-| [Phase 2 — Retrieval Infrastructure](docs/PHASE_2_RETRIEVAL_INFRASTRUCTURE.md) | Wikipedia indexing and retrieval                               |
-| [Phase 3 — Evidence-Aware Datasets](docs/PHASE_3_EVIDENCE_AWARE_DATASETS.md)   | Evidence-aware data construction                               |
-| [Phase 4 — Classical Baseline](docs/PHASE_4_CLASSICAL_BASELINE.md)             | Classical claim classification baseline                        |
-| [Phase 5 — Transformer Verifier](docs/PHASE_5_TRANSFORMER_VERIFIER.md)         | Evidence-conditioned Transformer implementation and evaluation |
-
-The phase documents record implementation decisions and results. A single comprehensive project document will be prepared when the full project is complete.
-
-## Current Limitations
-
-- Retrieval does not consistently recover all annotated gold evidence, especially for claims requiring multiple passages.
-- Title-aware retrieval is a deterministic matching heuristic, not full entity linking.
-- Exact evidence identity audits do not measure semantic entailment or all valid alternative evidence.
-- The Transformer evaluation uses an internal split from FEVER training data, not the official FEVER development/test benchmark.
-- NEI classification recall is lower than SUPPORTS and REFUTES recall in the current Transformer run.
-- Softmax confidence is not calibrated for operational decision-making.
-- The current implementation is text-only.
-- Image, audio, and video ingestion and cross-modal consistency checks are not implemented.
-- There is no user-facing frontend, production API, authentication layer, or deployment pipeline yet.
-- Model checkpoints and large datasets are local artifacts and are not included in Git.
-
-## Future Development Direction
-
-The broader architecture is intended to grow toward:
-
-1. Improving evidence retrieval, ranking, and semantic evidence coverage.
-2. Strengthening claim–evidence verification, uncertainty handling, and evaluation.
-3. Adding image–text consistency and multimodal fusion.
-4. Extending ingestion and verification to audio and video.
-5. Building an API and a user-facing interface with source-level explanations.
-6. Adding production security, monitoring, reproducibility, and deployment infrastructure.
-
-These are future milestones, not currently implemented capabilities.
-
-## Author
-
-**Priyanshu Raj**
-
-AI/ML Engineering · Machine Learning · Evidence-Grounded AI Systems
-
-- GitHub: [@PriyanshuRaj0019](https://github.com/PriyanshuRaj0019)
-- Repository: [Multimodal Misinformation Verifier](https://github.com/PriyanshuRaj0019/Multimodal-Misinformation-Verifier)
-
-## License
-
-This project is licensed under the Apache License 2.0. See [LICENSE](LICENSE) for details.
-
-Third-party datasets, pretrained models, and external resources remain subject to their respective licenses and terms of use.
+This is a high-level representation of the repository. Local datasets, indexes, checkpoints, and generated outputs are not necessarily tracked by Git.
 
 ---
 
-This project is under active development. Reported metrics describe specific experiments and should not be interpreted as claims of production-ready misinformation detection.
+## Technology Stack
+
+| Area                       | Technologies               |
+| -------------------------- | -------------------------- |
+| Programming language       | Python                     |
+| Data processing            | NumPy, pandas              |
+| Classical machine learning | scikit-learn               |
+| Deep learning              | PyTorch                    |
+| NLP and Transformers       | Hugging Face Transformers  |
+| Text verification          | RoBERTa                    |
+| Evidence retrieval         | SQLite FTS5, BM25, RRF     |
+| Image understanding        | CLIP                       |
+| OCR                        | RapidOCR                   |
+| Image processing           | Pillow                     |
+| Testing                    | pytest                     |
+| Version control            | Git and GitHub             |
+| Hardware used              | NVIDIA RTX 4060 Laptop GPU |
+
+---
+
+## Environment and Setup
+
+### Prerequisites
+
+- Python 3.12
+- Git
+- A compatible PyTorch installation
+- NVIDIA GPU with compatible CUDA support for GPU acceleration (optional for CPU-based workflows)
+
+### Clone the repository
+
+```powershell
+git clone https://github.com/PriyanshuRaj0019/Multimodal-Misinformation-Verifier.git
+
+cd Multimodal-Misinformation-Verifier
+```
+
+### Create a virtual environment
+
+```powershell
+python -m venv .venv
+
+.\.venv\Scripts\Activate.ps1
+```
+
+### Install dependencies
+
+```powershell
+python -m pip install --upgrade pip
+
+pip install -r requirements.txt
+```
+
+Some experimental workflows, such as CLIP and OCR, require their corresponding optional dependencies and pretrained model downloads. Follow the phase documentation for the exact environment requirements.
+
+### Run tests
+
+```powershell
+python -m pytest -q
+```
+
+### Compile Python files
+
+```powershell
+python -m compileall -q src scripts tests
+```
+
+---
+
+## Validation Summary
+
+The Phase 6 final project validation reported:
+
+| Validation               | Result                           |
+| ------------------------ | -------------------------------- |
+| Full pytest suite        | 77 passed                        |
+| Python compilation       | Passed                           |
+| Git whitespace check     | Passed                           |
+| Image integrity audit    | 476 valid images                 |
+| CLIP embedding integrity | Passed                           |
+| OCR extraction           | 476 records, 0 processing errors |
+| Image–text analysis     | 476 joined records               |
+| Retrieval smoke tests    | Executed successfully            |
+
+The validation results reflect the recorded local development environment and pilot data. They do not establish production readiness.
+
+---
+
+## Documentation
+
+Technical documentation is maintained in `docs/`.
+
+| Document                                                                                                 | Description                                      |
+| -------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| [`architecture.md`](docs/architecture.md)                                                               | Long-term system architecture                    |
+| [`requirements-specification.md`](docs/requirements-specification.md)                                   | Project requirements                             |
+| [`PHASE_1_DATA_PREPARATION.md`](docs/PHASE_1_DATA_PREPARATION.md)                                       | Dataset preparation                              |
+| [`PHASE_2_RETRIEVAL_INFRASTRUCTURE.md`](docs/PHASE_2_RETRIEVAL_INFRASTRUCTURE.md)                       | Evidence indexing and retrieval                  |
+| [`PHASE_3_EVIDENCE_AWARE_DATASETS.md`](docs/PHASE_3_EVIDENCE_AWARE_DATASETS.md)                         | Evidence-aware dataset preparation               |
+| [`PHASE_4_CLASSICAL_BASELINE.md`](docs/PHASE_4_CLASSICAL_BASELINE.md)                                   | Classical machine learning baselines             |
+| [`PHASE_5_TRANSFORMER_VERIFIER.md`](docs/PHASE_5_TRANSFORMER_VERIFIER.md)                               | Transformer verifier                             |
+| [`PHASE_6_IMAGE_UNDERSTANDING_AND_CONSISTENCY.md`](docs/PHASE_6_IMAGE_UNDERSTANDING_AND_CONSISTENCY.md) | Image processing, CLIP, OCR, and image retrieval |
+
+---
+
+## Research and Engineering Principles
+
+The project follows these principles:
+
+- Evidence-grounded predictions instead of unsupported classification.
+- Separation of training, validation, and test data.
+- Explicit distinction between exploratory results and held-out evaluation.
+- Preservation of evidence provenance.
+- Reproducible experiments and documented configurations.
+- Evaluation of model errors and failure cases.
+- Honest uncertainty and limitations.
+- Incremental implementation with automated testing.
+- No claims of factual verification without suitable evidence and evaluation.
+
+---
+
+## Limitations
+
+The current implementation is experimental.
+
+It does not yet provide:
+
+- Complete multimodal claim verification.
+- Unified text–image evidence fusion.
+- Audio and video verification.
+- A calibrated misinformation risk score.
+- Production-grade source credibility assessment.
+- A public-facing web application.
+- Authentication and user data isolation.
+- A deployed API or cloud infrastructure.
+- Production monitoring and model-drift detection.
+
+These capabilities are part of the longer-term engineering direction, not completed features.
+
+---
+
+## Future Development
+
+The next planned development milestone is:
+
+**Phase 7 — Multimodal Evidence Fusion and Risk Assessment**
+
+Potential work includes:
+
+1. Integrating the existing text verifier and image-understanding pipeline.
+2. Combining text, visual, OCR, and evidence-retrieval signals.
+3. Developing claim–evidence and image–claim consistency models.
+4. Designing an explicit uncertainty and abstention mechanism.
+5. Evaluating fusion strategies against appropriate labeled datasets.
+6. Developing interpretable evidence-grounded risk assessments.
+
+Subsequent engineering milestones will address the application layer, API, database integration, authentication, deployment, monitoring, and operational security.
+
+---
+
+## Repository
+
+**GitHub:** [PriyanshuRaj0019/Multimodal-Misinformation-Verifier](https://github.com/PriyanshuRaj0019/Multimodal-Misinformation-Verifier)
+
+The repository is developed incrementally, with implementation, experiments, limitations, and technical documentation maintained as the project evolves.

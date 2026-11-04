@@ -77,3 +77,10 @@ reports/eda/train_dev_claim_overlap.csv
 # Transformer training artifacts
 data/processed/transformer/
 models/roberta_fever_baseline/
+
+# Phase 6 generated Fakeddit processing artifacts
+data/processed/fakeddit/
+
+# Phase 6 generated pilot analysis reports
+reports/phase6_clip_pilot_analysis/
+reports/phase6_image_text_consistency/
