@@ -532,6 +532,22 @@ These are functional smoke tests, not a formal retrieval benchmark.
 
 Detailed methodology, results, and validation: [`docs/PHASE_6_IMAGE_UNDERSTANDING_AND_CONSISTENCY.md`](docs/PHASE_6_IMAGE_UNDERSTANDING_AND_CONSISTENCY.md).
 
+### Phase 7 — Multimodal Evidence Fusion
+
+**Status: Experimental pilot baseline implemented; automated tests passing.**
+
+Integrated Phase 6 image-text signals into an explainable, rule-based review baseline using CLIP similarity and OCR-derived lexical signals.
+
+- Processed 476 Fakeddit pilot samples.
+- Generated per-sample fusion categories and review priorities.
+- Identified 49 samples for high-priority manual review.
+- Added dedicated fusion tests; full test suite: 83 passed.
+- Documented methodology, validation, and scientific limitations.
+
+**Important:** This is an experimental review aid, not a verified misinformation classifier. It does not claim calibrated risk scores or measured improvement over the Phase 5 FEVER verifier.
+
+See [`docs/PHASE_7_MULTIMODAL_EVIDENCE_FUSION.md`](PHASE_7_MULTIMODAL_EVIDENCE_FUSION.md).
+
 ---
 
 ## Repository Structure
